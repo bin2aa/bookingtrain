@@ -10,25 +10,26 @@
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Edit Train</h1>
-        <form th:action="@{/trains/save}" th:object="${train}" method="post">
+        <form th:action="@{/trains/save}" th:object="${train}" method="post" enctype="multipart/form-data">>
             <input type="hidden" id="trainId" class="form-control" th:field="*{trainId}" />
 
             <div class="mb-3">
-                <label for="username" class="form-label">Train Name</label>
-                <input type="text" id="username" class="form-control" th:field="*{trainName}" />
+                <label for="trainname" class="form-label">Train Name</label>
+                <input type="text" id="trainname" class="form-control" th:field="*{trainName}" />
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Train Code</label>
-                <input type="text" id="email" class="form-control" th:field="*{trainCode}" />
+                <label for="traincode" class="form-label">Train Code</label>
+                <input type="text" id="traincode" class="form-control" th:field="*{trainCode}" />
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Train Image</label>
-                <input type="text" id="email" class="form-control" th:field="*{image}" />
+                <label for="Description" class="form-label">Train Description</label>
+                <input type="text" id="Description" class="form-control" th:field="*{description}" />
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Train Description</label>
-                <input type="text" id="email" class="form-control" th:field="*{description}" />
+                <label for="imageFile" class="form-label">Train Image</label>
+                <input type="file" id="imageFile" name="imageFile" accept="image/png, image/jpeg" class="form-control" required>
             </div>
+
 
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

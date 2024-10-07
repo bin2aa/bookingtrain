@@ -27,8 +27,8 @@
                     <td th:text="${train.trainId}"></td>
                     <td th:text="${train.trainCode}"></td>
                     <td th:text="${train.trainName}"></td>
-                    <td th:text="${train.image}"></td>
-                    <td th:text="${train.description}"></td>
+                    <td><img th:src="@{${train.photosImagePath}}" width="115px"></td>
+                    <td th:text="${train.getPhotosImagePath}"></td>
                     <td>
                         <a th:href="@{/trains/edit/{trainID}(trainID=${train.trainId})}" class="btn btn-primary btn-sm">Edit</a>
                         <a th:href="@{/trains/delete/{id}(id=${train.trainId})}" class="btn btn-danger btn-sm"

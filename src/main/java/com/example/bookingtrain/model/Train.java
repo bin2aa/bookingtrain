@@ -32,6 +32,13 @@ public class Train {
         this.description = description;
     }
 
+    @Transient
+    public String getPhotosImagePath() {
+        if (image == null || trainId == null) return null;
+
+        return "/images/trainPhotos/" + trainId + "/" + image;
+    }
+
     public Long getTrainId() {
         return trainId;
     }

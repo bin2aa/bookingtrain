@@ -10,26 +10,26 @@
 <body>
     <div class="container">
         <h2 class="mb-4">Add New Train</h2>
-        <form th:action="@{/trains/save}" th:object="${train}" method="post">
+        <form th:action="@{/trains/save}" th:object="${train}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="carriageID" class="form-label">ID:</label>
+                <label for="trainID" class="form-label">ID:</label>
                 <input type="text" id="trainId" th:field="*{trainId}" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="carriageTypeID" class="form-label">Train Name:</label>
+                <label for="trainName" class="form-label">Train Name:</label>
                 <input type="text" id="trainName" th:field="*{trainName}" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="carriageCode" class="form-label">Train Code</label>
+                <label for="trainCode" class="form-label">Train Code</label>
                 <input type="text" id="trainCode" th:field="*{trainCode}" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="carriageName" class="form-label">Train Description:</label>
+                <label for="description" class="form-label">Train Description:</label>
                 <input type="text" id="description" th:field="*{description}" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="carriageName" class="form-label">Train Image URL:</label>
-                <input type="text" id="image" th:field="*{image}"  class="form-control" required>
+                <label class="form-label">Train Image:</label>
+                <input type="file" name="imageFile" accept="image/png, image/jpeg" class="form-control" required>
             </div>
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Add Train</button>

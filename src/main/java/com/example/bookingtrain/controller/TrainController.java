@@ -2,11 +2,15 @@ package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.TrainService;
+import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -35,9 +39,16 @@ public class TrainController {
     }
 
     @PostMapping("/save")
-    public String saveTrain(@ModelAttribute("train") Train train) {
-        // Lay model co ten la train tu create form ra
-        trainService.create(train);
+    public String saveTrain(@RequestParam(name="imageFile") MultipartFile multipartFile,
+            @ModelAttribute("train") Train train) throws IOException {
+        // Lay file goc
+        String fileURL = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        train.setImage(fileURL);
+        Train temp = trainService.create(train);
+
+        String uploadDir = "static/images/trainPhotos/" + temp.getTrainId();
+        FileUploadUtil.saveFile(uploadDir, fileURL, multipartFile);
+
         return "redirect:/trains";
     }
 
