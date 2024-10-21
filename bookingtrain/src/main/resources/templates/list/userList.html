@@ -26,7 +26,11 @@
                     <td th:text="${user.userID}"></td>
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${user.roleID}"></td>
+                    <!-- <td th:text="${user.roleId}"></td> -->
+                    <td th:text="${user.role.roleName}"></td> 
+                    
+
+
                     <td>
                         <a th:href="@{/users/editUser/{userID}(userID=${user.userID})}" class="btn btn-warning btn-sm">Edit</a>
                         <a th:href="@{/users/deleteUser/{id}(id=${user.userID})}" class="btn btn-danger btn-sm" 

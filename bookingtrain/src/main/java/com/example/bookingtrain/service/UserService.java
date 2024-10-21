@@ -17,10 +17,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // public Optional<User> getUserById(Long id) {
-    // return userRepository.findById(id);
-    // }
-
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
@@ -30,7 +26,7 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        return userRepository.save(user);
+        return userRepository.saveAndFlush(user);
     }
 
     public void deleteUser(Long id) {

@@ -1,38 +1,36 @@
 package com.example.bookingtrain.model;
 
 import javax.persistence.*;
+import java.util.Date;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "tickets")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer orderId;
+    private Integer ticketId;
 
     @Column(nullable = false)
-    private Integer scheduleId;
+    private Integer passengerId;
 
-    public Ticket() {
-    }
+    @Column(nullable = false)
+    private Integer legId;
 
-    public Ticket(Integer orderId, Integer scheduleId) {
-        this.orderId = orderId;
-        this.scheduleId = scheduleId;
-    }
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeOfBooking;
 
-    public Integer getOrderId() {
-        return orderId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "passengerId", insertable = false, updatable = false)
+    private Passenger passenger;
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    public Integer getScheduleId() {
-        return scheduleId;
-    }
-
-    public void setScheduleId(Integer scheduleId) {
-        this.scheduleId = scheduleId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "legId", insertable = false, updatable = false)
+    private Leg leg;
 }

@@ -173,3 +173,11 @@ Bảng trains (Tàu):
 
 Lưu thông tin về các đoàn tàu
 Các trường: trainId (khóa chính), trainCode, trainName, image, description
+
+
+-----------------------------
+Quyền Add New Role Operation chọn quyền group các bảng lại tạo một màng hình mới để bật tắt trạng thái các quyền
+
+
+HTtrack,
+momo dung http, localhost --> ngrok

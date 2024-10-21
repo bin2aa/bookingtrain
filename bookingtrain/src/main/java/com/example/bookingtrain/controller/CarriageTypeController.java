@@ -26,7 +26,7 @@ public class CarriageTypeController {
 
     @GetMapping("/newCarriageType")
     public String addCarriageTypeForm(Model model) {
-        model.addAttribute("CarriageType", new CarriageType());
+        model.addAttribute("carriageTypes", new CarriageType());
         return "add/addCarriageType";
     }
 
