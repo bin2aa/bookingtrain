@@ -1,6 +1,7 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.User;
+import com.example.bookingtrain.service.RoleService;
 import com.example.bookingtrain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
+
     @GetMapping // Xử lý yêu cầu GET tới đường dẫn /users
     public String getAllUsers(Model model) { // Model là một đối tượng dùng để truyền dữ liệu từ Controller tới View
         List<User> users = userService.getAllUsers(); // Lấy danh sách users từ service
@@ -27,6 +31,7 @@ public class UserController {
     @GetMapping("/newUser") // Xử lý yêu cầu GET tới đường dẫn /users/addUser
     public String addUserForm(Model model) {
         model.addAttribute("user", new User()); // Thêm một user mới vào model
+        model.addAttribute("roles", roleService.getAllRoles());
         return "add/addUser"; // Trả về template addUser.html
     }
 
@@ -40,6 +45,7 @@ public class UserController {
     public String editUserForm(@PathVariable Long userID, Model model) {
         User user = userService.getUserById(userID);
         model.addAttribute("user", user);
+        model.addAttribute("roles", roleService.getAllRoles());
         return "edit/userEdit";
     }
 

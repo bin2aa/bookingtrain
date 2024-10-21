@@ -25,7 +25,7 @@ public class CarriageTypeService {
     }
 
     public CarriageType updateCarriageType(CarriageType carriageType) {
-        return carriageTypeRepository.save(carriageType);
+        return carriageTypeRepository.saveAndFlush(carriageType);
     }
 
     public void deleteCarriageType(Long cariageID) {

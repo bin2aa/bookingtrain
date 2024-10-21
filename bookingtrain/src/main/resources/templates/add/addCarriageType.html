@@ -8,11 +8,7 @@
 
 <body>
     <h1>Add New Carriage Type</h1>
-    <form th:action="@{/carriageTypes/addCarriageType}" th:object="${CarriageType}" method="post">
-        <div>
-            <label for="carriageTypeID">ID:</label>
-            <input type="text" id="carriageTypeID" th:field="*{carriageTypeID}" required>
-        </div>
+    <form th:action="@{/carriageTypes/addCarriageType}" th:object="${carriageTypes}" method="post">
         <div>
             <label for="carriageTypeName">Carriage Type Name:</label>
             <input type="text" id="carriageTypeName" th:field="*{carriageTypeName}" required>

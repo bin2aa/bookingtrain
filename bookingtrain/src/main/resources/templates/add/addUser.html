@@ -20,11 +20,10 @@
             <input type="email" id="email" th:field="*{email}" required>
         </div>
         <div>
-            <label for="roleID">Role ID:</label>
-            <select id="roleID" th:field="*{roleID}" required>
-                <option value="1">Admin</option>
-                <option value="2">User</option>
-                <option value="3">Staff</option>
+            <label for="roleId">Role:</label>
+            <select id="roleId" th:field="*{roleId}" required>
+                <option value="">Role</option>
+                <option th:each="role : ${roles}" th:value="${role.roleId}" th:text="${role.roleName}"></option>
             </select>
         </div>
         <div>

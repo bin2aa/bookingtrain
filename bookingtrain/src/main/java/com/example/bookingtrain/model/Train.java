@@ -2,73 +2,32 @@ package com.example.bookingtrain.model;
 
 import javax.persistence.*;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 @Entity
 @Table(name = "trains")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Train {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer trainId;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String trainCode;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String trainName;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String image;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String description;
 
-    public Train() {
-    }
-
-    public Train(Integer trainId, String trainCode, String trainName, String image, String description) {
-        this.trainId = trainId;
-        this.trainCode = trainCode;
-        this.trainName = trainName;
-        this.image = image;
-        this.description = description;
-    }
-
-    public Integer getTrainId() {
-        return trainId;
-    }
-
-    public void setTrainId(Integer trainId) {
-        this.trainId = trainId;
-    }
-
-    public String getTrainCode() {
-        return trainCode;
-    }
-
-    public void setTrainCode(String trainCode) {
-        this.trainCode = trainCode;
-    }
-
-    public String getTrainName() {
-        return trainName;
-    }
-
-    public void setTrainName(String trainName) {
-        this.trainName = trainName;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    @Column(nullable = false)
+    private Integer statusTrain;
 }

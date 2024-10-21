@@ -2,49 +2,24 @@ package com.example.bookingtrain.model;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "objects")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Object {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer objectId;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String objectName;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Integer price;
 
-    public Object() {
-    }
-
-    public Object(Integer objectId, String objectName, Integer price) {
-        this.objectId = objectId;
-        this.objectName = objectName;
-        this.price = price;
-    }
-
-    public Integer getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(Integer objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
 }

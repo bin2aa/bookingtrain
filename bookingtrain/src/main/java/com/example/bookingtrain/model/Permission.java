@@ -2,37 +2,22 @@ package com.example.bookingtrain.model;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "permissions")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Permission {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer permissionId;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String permissionName;
 
-    public Permission() {
-    }
-
-    public Permission(Integer permissionId, String permissionName) {
-        this.permissionId = permissionId;
-        this.permissionName = permissionName;
-    }
-
-    public Integer getPermissionId() {
-        return permissionId;
-    }
-
-    public void setPermissionId(Integer permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public String getPermissionName() {
-        return permissionName;
-    }
-
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
-    }
 }
