@@ -17,11 +17,13 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Long id) {
+    public User getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
     }
 
     public User createUser(User user) {
+
+        user.setRoleId(1); // Mặc định là user thường khi tạo tài khoản
         return userRepository.save(user);
     }
 
@@ -29,11 +31,26 @@ public class UserService {
         return userRepository.saveAndFlush(user);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public boolean authenticate(String email, String password) {
+        User user = findByEmail(email);
+
+        return user != null && user.getPassword().equals(password); // Kiểm tra mật khẩu có khớp không
+    }
+
+    public boolean isEmailExisted(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
+
 }

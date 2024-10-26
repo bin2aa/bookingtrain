@@ -5,40 +5,72 @@
     <meta charset="UTF-8">
     <title>RoleOperation List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/toggleOnOff.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/ajaxToggle.js"></script>
 </head>
 
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">RoleOperation List</h1>
-        <a href="#" th:href="@{/roleOperations/newRoleOperation}">Thêm chứ vụ</a>
+        <a href="#" th:href="@{/roleOperations/newRoleOperation}">Thêm chức vụ</a>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Role ID</th>
-                    <th>Permission ID</th>
-                    <th>Operation ID</th>
+                    <th>RoleOperation ID</th>
+                    <th>RoleOperation name</th>
+                    <th>Permission Name</th>
+                    <th>Operation Name</th>
                     <th>Status ON/OFF</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="roleOperation : ${roleOperations}">
-                    <td th:text="${roleOperation.id.roleId}"></td>
-                    <td th:text="${roleOperation.id.permissionId}"></td>
-                    <td th:text="${roleOperation.id.operationId}"></td>
+                    <td class="role-id" th:text="${roleOperation.id.roleId}"></td>
+                    <td th:text="${roleOperation.role.roleName}"></td>
                     <td>
-                        <input type="checkbox" th:checked="${roleOperation.statusId == 1}" data-toggle="toggle" data-on="Enabled" data-off="Disabled" >
+                        <span class="permission-id" th:text="${roleOperation.id.permissionId}"
+                            style="display: none;"></span>
+                        <span th:text="${roleOperation.permission.permissionName}"></span>
                     </td>
-
                     <td>
-                        <a th:href="@{/roleOperations/editRoleOperation/{roleOperationId}(roleOperationId=${roleOperation.id.roleId})}" class="btn btn-warning btn-sm">Edit</a>
-                        <!-- <a th:href="@{/roleOperations/deleteRoleOperation/{id}(id=${roleOperation.roleOperationId})}" class="btn btn-danger btn-sm" -->
-                            <!-- onclick="return confirm('Are you sure you want to delete this roleOperation?');">Delete</a> -->
+                        <span class="operation-id" th:text="${roleOperation.id.operationId}"
+                            style="display: none;"></span>
+                        <span th:text="${roleOperation.operation.operationName}"></span>
                     </td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" class="toggle" th:checked="${roleOperation.statusId == 1}"
+                                th:data-role-id="${roleOperation.id.roleId}"
+                                th:data-permission-id="${roleOperation.id.permissionId}"
+                                th:data-operation-id="${roleOperation.id.operationId}"
+                                th:data-status="${roleOperation.statusId}">
+                            <span class="slider"></span>
+                            <span class="card-side"></span>
+                        </label>
 
+
+                        <!-- <label class="switch">
+                            <input type="checkbox" class="toggle" th:checked="${roleOperation.statusId == 1}"
+                                th:value="${roleOperation.statusId == 1 ? 1 : 2}">
+                            <span class="slider"></span>
+                            <span class="card-side"></span>
+                        </label> -->
+                    </td>
+                    <td>
+                        <a
+                            th:href="@{/roleOperations/editRoleOperation/{roleId}-{permissionId}-{operationId}(roleId=${roleOperation.id.roleId}, permissionId=${roleOperation.id.permissionId}, operationId=${roleOperation.id.operationId})}">Edit</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
+
 </body>
 
 </html>
+
+<script>
+
+</script>

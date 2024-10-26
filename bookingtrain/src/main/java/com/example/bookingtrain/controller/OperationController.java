@@ -39,7 +39,7 @@ public class OperationController {
     public String editOperationForm(@PathVariable Integer operationId, Model model) { // Đảm bảo kiểu dữ liệu là Long
         Operation operation = operationService.getOperationById(operationId);
         model.addAttribute("operation", operation);
-        return "edit/operationEdit";
+        return "edit/editOperation";
     }
 
     @PostMapping("/edit")
