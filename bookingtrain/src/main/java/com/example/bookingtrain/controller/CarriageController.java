@@ -36,24 +36,23 @@ public class CarriageController {
         return "redirect:/carriages";
     }
 
-    // @GetMapping("/editCarriage/{CarriageID}")
-    // public String editCarriageForm(@PathVariable Long CarriageID, Model model)
-    {
-        // Carriage Carriage = CarriageService.getCarriageById(CarriageID);
-        // model.addAttribute("Carriage", Carriage);
-        // return "edit/CarriageEdit";
-        // }
+    @GetMapping("/editCarriage/{CarriageID}")
+    public String editCarriageForm(@PathVariable Long CarriageID, Model model) {
+        Carriage Carriage = CarriageService.getCarriageById(CarriageID);
+        model.addAttribute("Carriage", Carriage);
+        return "edit/editCarriage";
+    }
 
-        // @PostMapping("/edit")
-        // public String editCarriage(@ModelAttribute Carriage Carriage) {
-        // CarriageService.updateCarriage(Carriage);
-        // return "redirect:/Carriages";
-        // }
+    @PostMapping("/edit")
+    public String editCarriage(@ModelAttribute Carriage Carriage) {
+        CarriageService.updateCarriage(Carriage);
+        return "redirect:/Carriages";
+    }
 
-        // @GetMapping("/deleteCarriage/{id}")
-        // public String deleteCarriage(@PathVariable Long id) {
-        // CarriageService.deleteCarriage(id);
-        // return "redirect:/Carriages";
+    @GetMapping("/deleteCarriage/{id}")
+    public String deleteCarriage(@PathVariable Long id) {
+        CarriageService.deleteCarriage(id);
+        return "redirect:/Carriages";
     }
 
 }

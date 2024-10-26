@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userID;
+    private Integer userId;
 
     @Column(nullable = false)
     private String username;
@@ -31,4 +31,7 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "roleId", insertable = false, updatable = false)
     private Role role;
+
+    @Transient // Thuộc tính này không cần ánh xạ với cột trong cơ sở dữ liệu
+    private String repeatPassword; // Thêm thuộc tính này để xác nhận mật khẩu
 }

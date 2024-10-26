@@ -43,7 +43,7 @@ public class CarriageTypeController {
     // CarriageType CarriageType =
     // CarriageTypeService.getCarriageTypeById(CarriageTypeID);
     // model.addAttribute("CarriageType", CarriageType);
-    // return "edit/CarriageTypeEdit";
+    // return "edit/editCarriageType";
     // }
 
     // @PostMapping("/edit")

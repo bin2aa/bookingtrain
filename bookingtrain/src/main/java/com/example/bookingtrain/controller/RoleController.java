@@ -42,7 +42,7 @@ public class RoleController {
     public String editRoleForm(@PathVariable Integer roleId, Model model) { // Đảm bảo kiểu dữ liệu là Long
         Role role = roleService.getRoleById(roleId);
         model.addAttribute("role", role);
-        return "edit/roleEdit";
+        return "edit/editRole";
     }
 
     @PostMapping("/edit")

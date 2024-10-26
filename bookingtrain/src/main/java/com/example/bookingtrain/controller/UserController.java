@@ -41,12 +41,12 @@ public class UserController {
         return "redirect:/users"; // Sau khi thêm user xong, chuyển hướng về trang danh sách user
     }
 
-    @GetMapping("/editUser/{userID}")
-    public String editUserForm(@PathVariable Long userID, Model model) {
-        User user = userService.getUserById(userID);
+    @GetMapping("/editUser/{userId}")
+    public String editUserForm(@PathVariable Integer userId, Model model) {
+        User user = userService.getUserById(userId);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.getAllRoles());
-        return "edit/userEdit";
+        return "edit/editUser";
     }
 
     @PostMapping("/edit")
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public String deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return "redirect:/users";
     }

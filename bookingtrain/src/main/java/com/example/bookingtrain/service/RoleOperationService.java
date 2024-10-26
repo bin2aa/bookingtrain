@@ -13,7 +13,7 @@ public class RoleOperationService {
     private RoleOperationRepository roleOperationRepository;
 
     public List<RoleOperation> getAllRoleOperations() {
-        return roleOperationRepository.findAll();
+        return roleOperationRepository.findAllOrderByRoleOperationId();
     }
 
     public RoleOperation getRoleOperationById(RoleOperationId id) {

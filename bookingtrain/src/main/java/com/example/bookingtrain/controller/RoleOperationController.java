@@ -9,11 +9,13 @@ import com.example.bookingtrain.service.RoleService;
 import com.example.bookingtrain.service.StatusRoleOperationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/roleOperations")
@@ -52,29 +54,64 @@ public class RoleOperationController {
     }
 
     @PostMapping("/addRoleOperation")
-    public String addRoleOperation(@ModelAttribute RoleOperation roleOperation) {
-        roleOperationService.createRoleOperation(roleOperation);
+    public String addRoleOperation(@ModelAttribute RoleOperation roleOperation, Model model) {
 
+        roleOperation.setRole(roleService.getRoleById(roleOperation.getId().getRoleId()));
+        roleOperation.setPermission(permissionService.getPermissionById(roleOperation.getId().getPermissionId()));
+        roleOperation.setOperation(operationService.getOperationById(roleOperation.getId().getOperationId()));
+        roleOperation.setStatusRoleOperation(
+                statusRoleOperationService.getStatusRoleOperationById(roleOperation.getStatusId()));
+
+        roleOperationService.createRoleOperation(roleOperation);
         return "redirect:/roleOperations";
     }
 
-    @GetMapping("/editRoleOperation/{roleId}")
-    public String editRoleOperationForm(@PathVariable RoleOperationId roleId, Model model) {
-        RoleOperation roleOperation = roleOperationService.getRoleOperationById(roleId);
+    @GetMapping("/editRoleOperation/{roleId}-{permissionId}-{operationId}")
+    public String editRoleOperationForm(@PathVariable Integer roleId, @PathVariable Integer permissionId,
+            @PathVariable Integer operationId, Model model) {
+        RoleOperationId roleOperationId = new RoleOperationId(roleId, permissionId, operationId);
+        RoleOperation roleOperation = roleOperationService.getRoleOperationById(roleOperationId);
         model.addAttribute("roleOperation", roleOperation);
-        return "edit/roleOperationList";
+        model.addAttribute("statusRoleOperations", statusRoleOperationService.getAllStatusRoleOperations());
+        return "edit/editRoleOperation";
     }
 
     @PostMapping("/edit")
     public String editRoleOperation(@ModelAttribute RoleOperation roleOperation) {
         roleOperationService.updateRoleOperation(roleOperation);
+
+        roleOperation.setRole(roleService.getRoleById(roleOperation.getId().getRoleId()));
+        roleOperation.setPermission(permissionService.getPermissionById(roleOperation.getId().getPermissionId()));
+        roleOperation.setOperation(operationService.getOperationById(roleOperation.getId().getOperationId()));
+        roleOperation.setStatusRoleOperation(
+                statusRoleOperationService.getStatusRoleOperationById(roleOperation.getStatusId()));
         return "redirect:/roleOperations";
     }
 
-    // @GetMapping("/deleteRoleOperation/{id}")
-    // public String deleteRoleOperation(@PathVariable Integer id) { // Đảm bảo kiểu
-    // dữ liệu là Long
-    // roleOperationService.deleteRoleOperation(id);
-    // return "redirect:/roleOperations";
-    // }
+    @PostMapping("/editJson")
+    @ResponseBody
+    public String editRoleOperation(@RequestParam Integer roleId, @RequestParam Integer permissionId,
+            @RequestParam Integer operationId, @RequestParam Integer statusId) {
+        RoleOperationId roleOperationId = new RoleOperationId(roleId, permissionId, operationId);
+        RoleOperation roleOperation = roleOperationService.getRoleOperationById(roleOperationId);
+        if (roleOperation == null) {
+            return "RoleOperation not found";
+        }
+        roleOperation.setStatusId(statusId);
+        roleOperation.setRole(roleService.getRoleById(roleId));
+        roleOperation.setPermission(permissionService.getPermissionById(permissionId));
+        roleOperation.setOperation(operationService.getOperationById(operationId));
+        roleOperation.setStatusRoleOperation(statusRoleOperationService.getStatusRoleOperationById(statusId));
+        roleOperationService.updateRoleOperation(roleOperation);
+        return "susscess";
+    }
+
+    @GetMapping("/deleteRoleOperation/{roleId}-{permissionId}-{operationId}")
+    public String deleteRoleOperation(@PathVariable Integer roleId, @PathVariable Integer permissionId,
+            @PathVariable Integer operationId) {
+        RoleOperationId roleOperationId = new RoleOperationId(roleId, permissionId, operationId);
+        roleOperationService.deleteRoleOperation(roleOperationId);
+        return "redirect:/roleOperations";
+    }
+
 }
