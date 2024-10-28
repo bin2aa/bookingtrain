@@ -1,15 +1,16 @@
 package com.example.bookingtrain.model;
 
 import javax.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Table(name = "stations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
