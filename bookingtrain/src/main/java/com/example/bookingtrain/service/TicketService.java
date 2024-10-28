@@ -2,13 +2,14 @@ package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Ticket;
 import com.example.bookingtrain.repository.TicketRepository;
+import com.example.bookingtrain.service.inter.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TicketService {
+public class TicketService implements ITicketService {
 
     private TicketRepository repo;
 //    private Passenger
@@ -27,7 +28,7 @@ public class TicketService {
         return repo.findAll();
     }
 
-    public Ticket create(Ticket ticket) {
+    public Ticket save(Ticket ticket) {
         return repo.save(ticket);
     }
 
