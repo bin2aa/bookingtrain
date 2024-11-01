@@ -1,4 +1,4 @@
-﻿package com.example.bookingtrain.service;
+package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Route;
 import com.example.bookingtrain.repository.RouteRepository;
@@ -24,5 +24,20 @@ public class RouteService implements IRouteService {
 
     public Route getById(int id) {
         return repo.findById(id).orElse(null);
+    }
+
+    public Route save(Route route) {
+        route.setIsActive(1);
+        return repo.save(route);
+    }
+
+    public Route update(Route route) {
+        return repo.save(route);
+    }
+
+    public Route delete(int id) {
+        Route route = repo.getById(id);
+        route.setIsActive(0);
+        return repo.save(route);
     }
 }

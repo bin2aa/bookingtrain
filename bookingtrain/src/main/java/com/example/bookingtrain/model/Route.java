@@ -1,4 +1,4 @@
-﻿package com.example.bookingtrain.model;
+package com.example.bookingtrain.model;
 
 import lombok.*;
 
@@ -25,6 +25,9 @@ public class Route {
 
     @Column(nullable = false)
     private Integer trainId;
+
+    @Column(nullable = false)
+    private int isActive;
 
     @ManyToOne
     @JoinColumn(name = "stationDepartureId", referencedColumnName  = "stationId", insertable = false, updatable = false)
