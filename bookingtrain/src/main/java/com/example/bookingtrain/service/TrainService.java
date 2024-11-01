@@ -1,4 +1,4 @@
-﻿package com.example.bookingtrain.service;
+package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.repository.TrainRepository;
