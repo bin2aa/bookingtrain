@@ -25,9 +25,19 @@ public class Train {
     @Column(nullable = false)
     private String image;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
     @Column(nullable = false)
     private Integer statusTrain;
+
+    @Column(nullable = false)
+    private int numberOfSeat;
+
+    @Transient
+    public String getImagePath() {
+        if (image == null || trainId == null) return null;
+
+        return "/static/media/img/trainImg" + "/" + image;
+    }
 }

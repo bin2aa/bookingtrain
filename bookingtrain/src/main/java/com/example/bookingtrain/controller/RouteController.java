@@ -1,7 +1,10 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Route;
+import com.example.bookingtrain.model.Station;
 import com.example.bookingtrain.service.RouteService;
+import com.example.bookingtrain.service.StationService;
+import com.example.bookingtrain.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,40 +17,51 @@ import java.util.List;
 public class RouteController {
 
     private RouteService routeService;
+    private StationService stationService;
+    private TrainService trainService;
 
     @Autowired
-    public RouteController(RouteService routeService) {
+    public RouteController(RouteService routeService, StationService stationService, TrainService trainService) {
         this.routeService = routeService;
+        this.stationService = stationService;
+        this.trainService = trainService;
     }
 
-//    @GetMapping("")
-//    public String showList(Model model) {
-//        List<Route> routeList = routeService.getAllRoutes();
-//        model.addAttribute("routeList", routeList);
-//        return "/list/routes";
-//    }
-//
-//    @GetMapping("/add")
-//    public String showAddPage(Model model) {
-//        model.addAttribute("route", new Route());
-//        return "/add/route";
-//    }
-//
-//    @PostMapping
-//    public String saveRoute(@ModelAttribute("route") Route route) {
-//        Route savedRoute = routeService.save(route);
-//        if (savedRoute != null) {
-//            return "redirect:/routes";
-//        }
-//        else{
-//            return "redirect:/error";
-//        }
-//    }
-//
-//    @GetMapping("")
-//    public String showuUpdatePage(Model model) {
-//        model.addAttribute("route", new Route());
-//        return "/update/route";
-//    }
+    @GetMapping("")
+    public String showList(Model model) {
+        List<Route> routeList = routeService.getAllRoutes();
+        model.addAttribute("routeList", routeList);
+        return "/list/routeList";
+    }
+
+    @GetMapping("/addRoute")
+    public String showAddPage(Model model) {
+        model.addAttribute("route", new Route());
+        var stationDeparturedList = stationService.getAll();
+        var stationArrivingList = stationService.getAll();
+        var trainList = trainService.getAllTrains();
+        model.addAttribute("stationDepartedList", stationDeparturedList);
+        model.addAttribute("stationArrivingList", stationArrivingList);
+        model.addAttribute("trainList", trainList);
+        return "/add/addRoute";
+    }
+
+    @PostMapping("/saveRoute")
+    public String saveRoute(@ModelAttribute("route") Route route) {
+        Route savedRoute = routeService.save(route);
+        if (savedRoute != null) {
+            return "redirect:/routes";
+        }
+        else{
+            return "redirect:/error";
+        }
+    }
+
+    @GetMapping("/editRoute/{id}")
+    public String showuUpdatePage(@PathVariable("id") int routeID ,Model model) {
+        Route route = routeService.getById(routeID);
+        model.addAttribute("route", route);
+        return "/update/route";
+    }
 
 }

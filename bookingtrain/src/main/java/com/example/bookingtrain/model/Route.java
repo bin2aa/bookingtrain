@@ -1,8 +1,10 @@
 package com.example.bookingtrain.model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -22,6 +24,16 @@ public class Route {
 
     @Column(nullable = false)
     private Integer stationArrivalId;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date dateStart;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date dateEnd;
 
     @Column(nullable = false)
     private Integer trainId;
