@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/header :: head"></head>
+<body th:replace="/fragments/body :: body">
+
+<div>
+    <div th:fragment="mainContent">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Train Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Train ID</th>
+                            <th>Train Code</th>
+                            <th>Train Name</th>
+                            <th>Image</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Number of Seats</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Train ID</th>
+                            <th>Train Code</th>
+                            <th>Train Name</th>
+                            <th>Image</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Number of Seats</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="train : ${trainList}">
+                            <td th:text="${train.trainId}"></td>
+                            <td th:text="${train.trainCode}"></td>
+                            <td th:text="${train.trainName}"></td>
+                            <td><img th:src="@{${train.imagePath}}" alt="Train Image" width="100"  height="100" /></td>
+                            <td th:text="${train.description}"></td>
+                            <td th:text="${train.statusTrain == 1 ? 'Active' : 'Inactive'}"></td>
+                            <td th:text="${train.numberOfSeat}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

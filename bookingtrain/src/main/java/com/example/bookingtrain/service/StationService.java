@@ -49,6 +49,14 @@ public class StationService implements IStationService {
 
     @Override
     public void deleteStation(int id) {
-        stationRepo.deleteById((long) id);
+        Station station = getById(id);
+        if (station != null) {
+            station.setStatusStation(0);
+            stationRepo.save(station);
+        }
     }
+
+//    public List<Station> getALlBy
+
+
 }
