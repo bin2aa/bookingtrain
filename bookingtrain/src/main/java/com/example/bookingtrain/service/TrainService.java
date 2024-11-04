@@ -28,7 +28,7 @@ public class TrainService implements ITrainService {
 
     @Override
     public Train getById(Integer id) {
-        return repo.findById((long) id).orElse(null);
+        return repo.findById(id).orElse(null);
     }
 
     @Override
@@ -42,9 +42,13 @@ public class TrainService implements ITrainService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         Train train = getById(id);
-        train.setStatusTrain(0);
-        repo.save(train);
+        if (train != null) {
+            train.setStatusTrain(0);
+            repo.save(train);
+            return true;
+        }
+        return false;
     }
 }

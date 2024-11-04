@@ -33,6 +33,9 @@ public class Ticket {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeOfBooking;
 
+    @Column(nullable = false)
+    private int isActive;
+
     @ManyToOne
     @JoinColumn(name = "passengerId", insertable = false, updatable = false)
     private Passenger passenger;

@@ -44,7 +44,13 @@ public class TicketService implements ITicketService {
         return repo.save(ticket);
     }
 
-    public void delete(int id) {
-        repo.deleteById((long) id);
+    public boolean delete(int id) {
+        Ticket ticket = getByID(id);
+        if (ticket != null) {
+            ticket.setIsActive(0);
+            repo.save(ticket);
+            return true;
+        }
+        return false;
     }
 }
