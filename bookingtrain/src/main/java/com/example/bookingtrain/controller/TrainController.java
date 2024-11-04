@@ -63,4 +63,21 @@ public class TrainController {
         }
         return "redirect:/trains";
     }
+
+    @GetMapping("/editTrain/{id}")
+    public String showEditForm(@PathVariable("id") Integer id, Model model) {
+        Train train = trainService.getById(id);
+        if(train != null){
+            model.addAttribute("train", train);
+            return "edit/editTrain";
+        }
+        return "redirect:/trains";
+    }
+
+    @GetMapping("/deleteTrain/{id}")
+    public String deleteTrain(@PathVariable("id") Integer id) {
+        trainService.delete(id);
+        return "redirect:/trains";
+    }
+
 }

@@ -7,7 +7,7 @@
     <div th:fragment="mainContent">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Available Ticket</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -20,6 +20,7 @@
                             <th>Date</th>
                             <th>Station From</th>
                             <th>Station Arrival</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -30,6 +31,7 @@
                             <th>Date</th>
                             <th>Station From</th>
                             <th>Station Arrival</th>
+                            <th>Action</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -40,6 +42,11 @@
                             <td th:text="${ticket.timeOfBooking}"></td>
                             <td th:text="${ticket.stationArrivalId}"></td>
                             <td th:text="${ticket.stationDepartureId}"></td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" th:href="@{/tickets/editTicket/{id} (id=${ticket.ticketId})}">Edit</a>
+                                <a class="btn btn-danger btn-sm" th:href="@{/tickets/deleteTicket/{id} (id=${ticket.ticketId})}"
+                                   onclick="return confirm('Are you sure you want to delete this tikets?');">Delete</a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

@@ -20,7 +20,7 @@ public class StationService implements IStationService {
 
     @Override
     public Station getById(int id) {
-        return stationRepo.findById((long) id).orElse(null);
+        return stationRepo.findById(id).orElse(null);
     }
 
     @Override
@@ -45,6 +45,10 @@ public class StationService implements IStationService {
             existedStation.setStatusStation(1);
         }
         return existedStation;
+    }
+
+    public Station save(Station station){
+        return stationRepo.save(station);
     }
 
     @Override

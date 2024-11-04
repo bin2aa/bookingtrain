@@ -57,14 +57,14 @@ public class TicketController {
         return "redirect:/list/ticketList";
     }
 
-    @GetMapping("/updateTicket/{id}")
+    @GetMapping("/editTicket/{id}")
     public String updateTicket(@PathVariable("id") int id, Model model) {
         Ticket ticket = ticketService.getByID(id);
         model.addAttribute("ticket", ticket);
         return "edit/editTicket";
     }
 
-    @DeleteMapping("/deleteTicket/{id}")
+    @GetMapping("/deleteTicket/{id}")
     public String deleteTicket(@PathVariable("id") int id) {
         ticketService.delete(id);
         return "redirect:/list/ticketList";
