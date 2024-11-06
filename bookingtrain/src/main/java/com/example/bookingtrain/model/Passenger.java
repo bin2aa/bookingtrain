@@ -22,5 +22,8 @@ public class Passenger {
     private String phone;
 
     @Column(nullable = true)
+    private String identityId;
+
+    @Column(nullable = true)
     private java.util.Date dateOfBirth;
 }
