@@ -7,8 +7,12 @@ import com.example.bookingtrain.service.PermissionService;
 import com.example.bookingtrain.service.RoleOperationService;
 import com.example.bookingtrain.service.RoleService;
 import com.example.bookingtrain.service.StatusRoleOperationService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +41,15 @@ public class RoleOperationController {
     private OperationService operationService;
 
     @GetMapping
-    public String getAllRoleOperations(Model model) {
-        List<RoleOperation> roleOperations = roleOperationService.getAllRoleOperations();
-        model.addAttribute("roleOperations", roleOperations);
+    public String getAllRoleOperations(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 3; // Số lượng mục trên mỗi trang
+        Pageable pageable = PageRequest.of(page, pageSize,
+                Sort.by("id.roleId").ascending().and(Sort.by("id.permissionId")).and(Sort.by("id.operationId")));
+        Page<RoleOperation> roleOperationsPage = roleOperationService.getAllRoleOperations(pageable);
+        model.addAttribute("roleOperations", roleOperationsPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", roleOperationsPage.getTotalPages());
+        model.addAttribute("baseUrl", "/roleOperations");
         return "list/roleOperationList";
     }
 
@@ -90,8 +100,12 @@ public class RoleOperationController {
 
     @PostMapping("/editJson")
     @ResponseBody
-    public String editRoleOperation(@RequestParam Integer roleId, @RequestParam Integer permissionId,
-            @RequestParam Integer operationId, @RequestParam Integer statusId) {
+    public String editRoleOperation(@RequestBody Map<String, Integer> payload) {
+        Integer roleId = payload.get("roleId");
+        Integer permissionId = payload.get("permissionId");
+        Integer operationId = payload.get("operationId");
+        Integer statusId = payload.get("statusId");
+
         RoleOperationId roleOperationId = new RoleOperationId(roleId, permissionId, operationId);
         RoleOperation roleOperation = roleOperationService.getRoleOperationById(roleOperationId);
         if (roleOperation == null) {

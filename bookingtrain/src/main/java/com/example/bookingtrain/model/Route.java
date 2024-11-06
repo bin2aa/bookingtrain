@@ -6,23 +6,23 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
 @Entity
 @Table(name = "routes")
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 public class Route {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer routeId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
+    private String routeName;
+
+    @Column(nullable = true)
     private Integer stationDepartureId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer stationArrivalId;
 
     @Column(nullable = false)
@@ -40,17 +40,11 @@ public class Route {
 
     @Column(nullable = false)
     private int isActive;
+    @ManyToOne
+    @JoinColumn(name = "stationDepartureId", insertable = false, updatable = false)
+    private Station stationDeparture;
 
     @ManyToOne
-    @JoinColumn(name = "stationDepartureId", referencedColumnName  = "stationId", insertable = false, updatable = false)
-    private Station stationDepartured;
-
-    @ManyToOne
-    @JoinColumn(name = "stationArrivalId", referencedColumnName  = "stationId", insertable = false, updatable = false)
+    @JoinColumn(name = "stationArrivalId", insertable = false, updatable = false)
     private Station stationArrival;
-
-    @ManyToOne
-    @JoinColumn(name = "trainId", referencedColumnName  = "trainId", insertable = false, updatable = false)
-    private Train train;
-
 }

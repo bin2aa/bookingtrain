@@ -1,13 +1,13 @@
-package com.example.bookingtrain.service.inter;
+// package com.example.bookingtrain.service.inter;
 
-import com.example.bookingtrain.model.Object;
+// import com.example.bookingtrain.model.Object;
 
-import java.util.List;
+// import java.util.List;
 
-public interface IObjectService {
+// public interface IObjectService {
 
-    Object getById(Integer id);
-    List<Object> getAll();
-    Object save(Object object);
-    void delete(Integer id);
-}
+// Object getById(Integer id);
+// List<Object> getAll();
+// Object save(Object object);
+// void delete(Integer id);
+// }

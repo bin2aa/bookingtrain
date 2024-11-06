@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "schedules")
@@ -17,23 +21,23 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer scheduleId;
 
-    @Column(nullable= false)
+    @Column(nullable = true)
+    private Integer routeId;
+
+    @Column(nullable = true)
     private Integer trainId;
 
-    @Column(nullable = false)
-    private Integer stationDepartureId;
+    @Column(nullable = true)
+    private java.util.Date departureTime;
 
-    @Column(nullable = false)
-    private Integer stationArrivalId;
-
-    @ManyToOne
-    @JoinColumn(name = "stationDepartureId", referencedColumnName  = "stationId", insertable = false, updatable = false)
-    private Station stationDepartured;
+    @Column(nullable = true)
+    private java.util.Date arrivalTime;
 
     @ManyToOne
-    @JoinColumn(name = "stationArrivalId", referencedColumnName  = "stationId", insertable = false, updatable = false)
-    private Station stationArrival;
+    @JoinColumn(name = "routeId", insertable = false, updatable = false)
+    private Route route;
 
-    @Column(nullable = false)
-    private int statusSchedule;
+    @ManyToOne
+    @JoinColumn(name = "trainId", insertable = false, updatable = false)
+    private Train train;
 }
