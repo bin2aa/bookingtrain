@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "seattype")
+@Table(name = "seat_types")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,12 +15,9 @@ public class SeatType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer seatTypeId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String seatTypeName;
 
-    @Column(nullable = false)
-    private String description;
-
     @Column(nullable = true)
-    private Integer price;
+    private Double price;
 }

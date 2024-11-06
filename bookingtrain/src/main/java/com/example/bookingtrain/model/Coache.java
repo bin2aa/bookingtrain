@@ -6,22 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "seats")
+@Table(name = "coaches")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Seat {
+public class Coache {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer seatId;
-
-    @Column(nullable = true)
-    private String seatNumber;
-
-    @Column(nullable = true)
     private Integer coachId;
 
+    @Column(nullable = true)
+    private String coachCode;
+
+    @Column(nullable = true)
+    private Integer trainId;
+
     @ManyToOne
-    @JoinColumn(name = "coachId", insertable = false, updatable = false)
-    private Coache coach;
+    @JoinColumn(name = "trainId", insertable = false, updatable = false)
+    private Train train;
 }

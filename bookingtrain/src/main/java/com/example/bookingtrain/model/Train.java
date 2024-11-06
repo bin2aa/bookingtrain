@@ -1,7 +1,6 @@
 package com.example.bookingtrain.model;
 
 import javax.persistence.*;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -16,23 +15,11 @@ public class Train {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer trainId;
 
-    @Column(nullable = false)
-    private String trainCode;
-
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String trainName;
 
-    @Column(nullable = false)
-    private String image;
-
     @Column(nullable = true)
-    private String description;
-
-    @Column(nullable = false)
-    private Integer statusTrain;
-
-    @Column(nullable = false)
-    private int numberOfSeat;
+    private String trainCode;
 
     @Transient
     public String getImagePath() {

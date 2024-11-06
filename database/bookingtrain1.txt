@@ -1,0 +1,547 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Nov 06, 2024 at 12:15 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `bookingtrain1`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bookings`
+--
+
+CREATE TABLE `bookings` (
+  `bookingId` int(11) NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `employeeId` int(11) DEFAULT NULL,
+  `total` decimal(10,2) DEFAULT NULL,
+  `dateBooking` datetime DEFAULT NULL,
+  `scheduleId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coaches`
+--
+
+CREATE TABLE `coaches` (
+  `coachId` int(11) NOT NULL,
+  `coachCode` varchar(255) DEFAULT NULL,
+  `trainId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employees`
+--
+
+CREATE TABLE `employees` (
+  `employeeId` int(11) NOT NULL,
+  `employeeName` varchar(255) DEFAULT NULL,
+  `dateOfBirth` date DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `roleId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operations`
+--
+
+CREATE TABLE `operations` (
+  `operationId` int(11) NOT NULL,
+  `operationName` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `passengers`
+--
+
+CREATE TABLE `passengers` (
+  `passengerId` int(11) NOT NULL,
+  `passengerName` varchar(255) DEFAULT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `dateOfBirth` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `permissionId` int(11) NOT NULL,
+  `permissionName` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roleoperation`
+--
+
+CREATE TABLE `roleoperation` (
+  `roleId` int(11) NOT NULL,
+  `permissionId` int(11) NOT NULL,
+  `operationId` int(11) NOT NULL,
+  `statusId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+
+CREATE TABLE `roles` (
+  `roleId` int(11) NOT NULL,
+  `roleName` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `routes`
+--
+
+CREATE TABLE `routes` (
+  `routeId` int(11) NOT NULL,
+  `trainId` int(11) DEFAULT NULL,
+  `stationDepartureId` int(11) DEFAULT NULL,
+  `stationArrivalId` int(11) DEFAULT NULL,
+  `routeName` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedules`
+--
+
+CREATE TABLE `schedules` (
+  `scheduleId` int(11) NOT NULL,
+  `trainId` int(11) DEFAULT NULL,
+  `timeToDeparture` datetime DEFAULT NULL,
+  `timeToArrival` datetime DEFAULT NULL,
+  `arrivalTime` datetime DEFAULT NULL,
+  `departureTime` datetime DEFAULT NULL,
+  `routeId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seats`
+--
+
+CREATE TABLE `seats` (
+  `seatId` int(11) NOT NULL,
+  `seatCode` varchar(10) DEFAULT NULL,
+  `seatTypeId` int(11) DEFAULT NULL,
+  `coachId` int(11) DEFAULT NULL,
+  `seatNumber` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seattype`
+--
+
+CREATE TABLE `seattype` (
+  `seatTypeId` int(11) NOT NULL,
+  `seatTypeName` varchar(255) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stations`
+--
+
+CREATE TABLE `stations` (
+  `stationId` int(11) NOT NULL,
+  `stationName` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
+  `stationCode` varchar(255) NOT NULL,
+  `statusStation` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `statusroleoperation`
+--
+
+CREATE TABLE `statusroleoperation` (
+  `statusId` int(11) NOT NULL,
+  `statusName` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tickets`
+--
+
+CREATE TABLE `tickets` (
+  `ticketId` int(11) NOT NULL,
+  `bookingId` int(11) DEFAULT NULL,
+  `passengerId` int(11) DEFAULT NULL,
+  `seatId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trains`
+--
+
+CREATE TABLE `trains` (
+  `trainId` int(11) NOT NULL,
+  `trainCode` varchar(10) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
+  `statusTrain` int(11) NOT NULL,
+  `trainName` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `userId` int(11) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `roleID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`bookingId`),
+  ADD KEY `userId` (`userId`),
+  ADD KEY `employeeId` (`employeeId`),
+  ADD KEY `scheduleId` (`scheduleId`);
+
+--
+-- Indexes for table `coaches`
+--
+ALTER TABLE `coaches`
+  ADD PRIMARY KEY (`coachId`),
+  ADD KEY `trainId` (`trainId`);
+
+--
+-- Indexes for table `employees`
+--
+ALTER TABLE `employees`
+  ADD PRIMARY KEY (`employeeId`),
+  ADD KEY `roleId` (`roleId`);
+
+--
+-- Indexes for table `operations`
+--
+ALTER TABLE `operations`
+  ADD PRIMARY KEY (`operationId`);
+
+--
+-- Indexes for table `passengers`
+--
+ALTER TABLE `passengers`
+  ADD PRIMARY KEY (`passengerId`);
+
+--
+-- Indexes for table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`permissionId`);
+
+--
+-- Indexes for table `roleoperation`
+--
+ALTER TABLE `roleoperation`
+  ADD PRIMARY KEY (`roleId`,`permissionId`,`operationId`),
+  ADD KEY `roleoperation_ibfk_2` (`permissionId`),
+  ADD KEY `roleoperation_ibfk_3` (`operationId`),
+  ADD KEY `roleoperation_ibfk_4` (`statusId`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`roleId`);
+
+--
+-- Indexes for table `routes`
+--
+ALTER TABLE `routes`
+  ADD PRIMARY KEY (`routeId`),
+  ADD KEY `trainId` (`trainId`),
+  ADD KEY `stationDepartureId` (`stationDepartureId`),
+  ADD KEY `stationArrivalId` (`stationArrivalId`);
+
+--
+-- Indexes for table `schedules`
+--
+ALTER TABLE `schedules`
+  ADD PRIMARY KEY (`scheduleId`),
+  ADD KEY `trainId` (`trainId`),
+  ADD KEY `FK7o59nkqglakwmt6dyl8fk3ktl` (`routeId`);
+
+--
+-- Indexes for table `seats`
+--
+ALTER TABLE `seats`
+  ADD PRIMARY KEY (`seatId`),
+  ADD KEY `seatTypeId` (`seatTypeId`),
+  ADD KEY `coachId` (`coachId`);
+
+--
+-- Indexes for table `seattype`
+--
+ALTER TABLE `seattype`
+  ADD PRIMARY KEY (`seatTypeId`);
+
+--
+-- Indexes for table `stations`
+--
+ALTER TABLE `stations`
+  ADD PRIMARY KEY (`stationId`);
+
+--
+-- Indexes for table `statusroleoperation`
+--
+ALTER TABLE `statusroleoperation`
+  ADD PRIMARY KEY (`statusId`);
+
+--
+-- Indexes for table `tickets`
+--
+ALTER TABLE `tickets`
+  ADD PRIMARY KEY (`ticketId`),
+  ADD KEY `bookingId` (`bookingId`),
+  ADD KEY `passengerId` (`passengerId`),
+  ADD KEY `FKtiekrrbi4apndmddkb3dsjvrg` (`seatId`);
+
+--
+-- Indexes for table `trains`
+--
+ALTER TABLE `trains`
+  ADD PRIMARY KEY (`trainId`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userId`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `roleId` (`roleID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `bookings`
+--
+ALTER TABLE `bookings`
+  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `coaches`
+--
+ALTER TABLE `coaches`
+  MODIFY `coachId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employees`
+--
+ALTER TABLE `employees`
+  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `operations`
+--
+ALTER TABLE `operations`
+  MODIFY `operationId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `passengers`
+--
+ALTER TABLE `passengers`
+  MODIFY `passengerId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `permissionId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `roleId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `routes`
+--
+ALTER TABLE `routes`
+  MODIFY `routeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `schedules`
+--
+ALTER TABLE `schedules`
+  MODIFY `scheduleId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `seats`
+--
+ALTER TABLE `seats`
+  MODIFY `seatId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `seattype`
+--
+ALTER TABLE `seattype`
+  MODIFY `seatTypeId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `stations`
+--
+ALTER TABLE `stations`
+  MODIFY `stationId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `statusroleoperation`
+--
+ALTER TABLE `statusroleoperation`
+  MODIFY `statusId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tickets`
+--
+ALTER TABLE `tickets`
+  MODIFY `ticketId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `trains`
+--
+ALTER TABLE `trains`
+  MODIFY `trainId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
+  ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`employeeId`),
+  ADD CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`scheduleId`) REFERENCES `schedules` (`scheduleId`);
+
+--
+-- Constraints for table `coaches`
+--
+ALTER TABLE `coaches`
+  ADD CONSTRAINT `coaches_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`);
+
+--
+-- Constraints for table `employees`
+--
+ALTER TABLE `employees`
+  ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`roleId`) REFERENCES `roles` (`roleID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `roleoperation`
+--
+ALTER TABLE `roleoperation`
+  ADD CONSTRAINT `roleoperation_ibfk_1` FOREIGN KEY (`roleId`) REFERENCES `roles` (`roleID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `roleoperation_ibfk_2` FOREIGN KEY (`permissionId`) REFERENCES `permissions` (`permissionId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `roleoperation_ibfk_3` FOREIGN KEY (`operationId`) REFERENCES `operations` (`operationId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `roleoperation_ibfk_4` FOREIGN KEY (`statusId`) REFERENCES `statusroleoperation` (`statusId`);
+
+--
+-- Constraints for table `routes`
+--
+ALTER TABLE `routes`
+  ADD CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`),
+  ADD CONSTRAINT `routes_ibfk_2` FOREIGN KEY (`stationDepartureId`) REFERENCES `stations` (`stationId`),
+  ADD CONSTRAINT `routes_ibfk_3` FOREIGN KEY (`stationArrivalId`) REFERENCES `stations` (`stationId`);
+
+--
+-- Constraints for table `schedules`
+--
+ALTER TABLE `schedules`
+  ADD CONSTRAINT `FK7o59nkqglakwmt6dyl8fk3ktl` FOREIGN KEY (`routeId`) REFERENCES `routes` (`routeId`),
+  ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`);
+
+--
+-- Constraints for table `seats`
+--
+ALTER TABLE `seats`
+  ADD CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`seatTypeId`) REFERENCES `seattype` (`seatTypeId`),
+  ADD CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`coachId`) REFERENCES `coaches` (`coachId`);
+
+--
+-- Constraints for table `tickets`
+--
+ALTER TABLE `tickets`
+  ADD CONSTRAINT `FKtiekrrbi4apndmddkb3dsjvrg` FOREIGN KEY (`seatId`) REFERENCES `seats` (`seatId`),
+  ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `bookings` (`bookingId`),
+  ADD CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`passengerId`) REFERENCES `passengers` (`passengerId`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`roleID`) REFERENCES `roles` (`roleID`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
