@@ -51,11 +51,16 @@ public class ScheduleController {
     @PostMapping("/saveSchedule")
     public String saveSchedule(@ModelAttribute("schedule") Schedule schedule) {
         if(schedule.getScheduleId() == null){
-            schedule.setStatusSchedule(1);
+//            schedule.setStatusSchedule(1);
             scheduleService.save(schedule);
         }else{
             Schedule existingSchedule = scheduleService.getById(schedule.getScheduleId());
-            existingSchedule.setStationArrivalId(schedule.getStationArrivalId());
+//            existingSchedule.setStationArrivalId(schedule.getStationArrivalId());
+            existingSchedule.setRouteId(schedule.getRouteId());
+            existingSchedule.setDepartureTime(schedule.getDepartureTime());
+            existingSchedule.setArrivalTime(schedule.getArrivalTime());
+            existingSchedule.setTrainId(schedule.getTrainId());
+            scheduleService.save(existingSchedule);
         }
         return "redirect:/schedules";
     }

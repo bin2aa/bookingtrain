@@ -32,10 +32,10 @@ public class Ticket {
     @JoinColumn(name = "seatId", insertable = false, updatable = false)
     private Seat seat;
 
-    @Column(nullable = false)
-    private int isActive;
-
     @ManyToOne
     @JoinColumn(name = "passengerId", insertable = false, updatable = false)
     private Passenger passenger;
+
+    @Column
+    private int isActive;
 }

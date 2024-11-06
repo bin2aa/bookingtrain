@@ -17,8 +17,6 @@
                             <th>Station ID</th>
                             <th>Station Code</th>
                             <th>Station Name</th>
-                            <th>Image</th>
-                            <th>Description</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -28,8 +26,6 @@
                             <th>Station ID</th>
                             <th>Station Code</th>
                             <th>Station Name</th>
-                            <th>Image</th>
-                            <th>Description</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -39,8 +35,6 @@
                             <td th:text="${station.stationId}"></td>
                             <td th:text="${station.stationCode}"></td>
                             <td th:text="${station.stationName}"></td>
-                            <td><img th:src="@{${station.image}}" alt="Station Image" width="100" height="100" /></td>
-                            <td th:text="${station.description}"></td>
                             <td th:text="${station.statusStation == 1 ? 'Active' : 'Inactive'}"></td>
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/stations/editStation/{id} (id=${station.stationId})}">Edit</a>

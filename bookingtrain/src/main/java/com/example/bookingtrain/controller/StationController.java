@@ -40,8 +40,7 @@ public class StationController {
             Station existingStation = stationService.getById(station.getStationId());
             existingStation.setStationCode(station.getStationCode());
             existingStation.setStationName(station.getStationName());
-            existingStation.setImage(station.getImage());
-            existingStation.setDescription(station.getDescription());
+//            existingStation.setImage(station.getImage());
             stationService.save(existingStation);
             return "redirect:/stations";
         }

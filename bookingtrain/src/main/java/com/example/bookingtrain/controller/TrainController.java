@@ -48,7 +48,7 @@ public class TrainController {
             train.setStatusTrain(1);
             try {
                 String fileName = multipartFile.getOriginalFilename();
-                train.setImage(fileName);
+//                train.setImage(fileName);
 
                 Train savedTrain = trainService.save(train);
 

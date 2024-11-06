@@ -25,21 +25,6 @@ public class Route {
     @Column(nullable = true)
     private Integer stationArrivalId;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date dateStart;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date dateEnd;
-
-    @Column(nullable = false)
-    private Integer trainId;
-
-    @Column(nullable = false)
-    private int isActive;
     @ManyToOne
     @JoinColumn(name = "stationDepartureId", insertable = false, updatable = false)
     private Station stationDeparture;

@@ -33,8 +33,8 @@
                         <tbody>
                         <tr th:each="route : ${routeList}">
                             <td th:text="${route.routeId}"></td>
-                            <td th:text="${route.getStationDepartureId}"></td>
-                            <td th:text="${route.getStationArrivalId}"></td>
+                            <td th:text="${route.getStationDeparture.getStationName}"></td>
+                            <td th:text="${route.getStationArrival.getStationName}"></td>
                             <td th:text="${route.trainId}"></td>
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/routes/editRoute/{id} (id=${route.routeId})}">Edit</a>
