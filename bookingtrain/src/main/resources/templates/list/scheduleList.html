@@ -15,9 +15,9 @@
                         <thead>
                         <tr>
                             <th>Schedule ID</th>
-                            <th>Train ID</th>
-                            <th>Station Departure</th>
-                            <th>Station Arrival</th>
+                            <th>Train Name</th>
+                            <th>Departure Time</th>
+                            <th>Arrival Time</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -25,9 +25,9 @@
                         <tfoot>
                         <tr>
                             <th>Schedule ID</th>
-                            <th>Train ID</th>
-                            <th>Station Departure</th>
-                            <th>Station Arrival</th>
+                            <th>Train Name</th>
+                            <th>Departure Time</th>
+                            <th>Arrival Time</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -35,9 +35,9 @@
                         <tbody>
                         <tr th:each="schedule : ${scheduleList}">
                             <td th:text="${schedule.scheduleId}"></td>
-                            <td th:text="${schedule.trainId}"></td>
-                            <td th:text="${schedule.stationDepartured.stationName}"></td>
-                            <td th:text="${schedule.stationArrival.stationName}"></td>
+                            <td th:text="${schedule.train.trainName}"></td>
+                            <td th:text="${schedule.departureTime}"></td>
+                            <td th:text="${schedule.arrivalTime}"></td>
                             <td th:text="${schedule.statusSchedule == 1 ? 'Active' : 'Inactive'}"></td>
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/schedules/editSchedule/{id} (id=${schedule.scheduleId})}">Edit</a>

@@ -37,11 +37,12 @@
                         <tbody>
                         <tr th:each="passenger : ${passengerList}">
                             <td th:text="${passenger.passengerId}"></td>
-                            <td th:text="${passenger.fullName}"></td>
+                            <td th:text="${passenger.passengerName}"></td>
                             <td th:text="${#dates.format(passenger.dateOfBirth, 'yyyy-MM-dd')}"></td>
                             <td th:text="${passenger.identityId}"></td>
                             <td th:text="${passenger.phone}"></td>
-                            <td th:text="${passenger.object.name}"></td>
+<!--                            <td th:text="${passenger.object.name}"></td>-->
+                            <td>Null IDK</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/passengers/editPassenger/{id} (id=${passenger.getPassengerId})}">Edit</a>
                                 <a class="btn btn-danger btn-sm" th:href="@{/passengers/deletePassenger/{id} (id=${passenger.getPassengerId})}"
