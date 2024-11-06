@@ -19,7 +19,7 @@ public class PassengerService implements IPassengerService {
     }
 
     public Passenger getById(Integer id) {
-        return passengerRepository.findById((long)id).orElse(null);
+        return passengerRepository.findById((long) id).orElse(null);
     }
 
     public List<Passenger> getAll() {
