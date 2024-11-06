@@ -1,5 +1,5 @@
 package com.example.bookingtrain.repository;
 
-public class SeatRepository {
+public class BookingRepository {
 
 }

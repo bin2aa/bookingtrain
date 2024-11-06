@@ -6,29 +6,32 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "routes")
+@Table(name = "schedules")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Route {
+public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer scheduleId;
+
+    @Column(nullable = true)
     private Integer routeId;
 
     @Column(nullable = true)
-    private String routeName;
+    private Integer trainId;
 
     @Column(nullable = true)
-    private Integer stationDepartureId;
+    private java.util.Date departureTime;
 
     @Column(nullable = true)
-    private Integer stationArrivalId;
+    private java.util.Date arrivalTime;
 
     @ManyToOne
-    @JoinColumn(name = "stationDepartureId", insertable = false, updatable = false)
-    private Station stationDeparture;
+    @JoinColumn(name = "routeId", insertable = false, updatable = false)
+    private Route route;
 
     @ManyToOne
-    @JoinColumn(name = "stationArrivalId", insertable = false, updatable = false)
-    private Station stationArrival;
+    @JoinColumn(name = "trainId", insertable = false, updatable = false)
+    private Train train;
 }

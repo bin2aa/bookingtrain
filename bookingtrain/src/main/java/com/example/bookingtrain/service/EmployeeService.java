@@ -33,7 +33,7 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public Employee findByEmployeeFullName(String fullName) {
-        return employeeRepository.findByFullName(fullName);
+    public Employee findByEmployeeFullName(String employeeName) {
+        return employeeRepository.findByEmployeeName(employeeName);
     }
 }
