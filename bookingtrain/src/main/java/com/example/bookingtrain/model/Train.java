@@ -21,10 +21,7 @@ public class Train {
     @Column(nullable = true)
     private String trainCode;
 
-    @Transient
-    public String getImagePath() {
-        if (image == null || trainId == null) return null;
+    @Column
+    private int statusTrain;
 
-        return "/static/media/img/trainImg" + "/" + image;
-    }
 }
