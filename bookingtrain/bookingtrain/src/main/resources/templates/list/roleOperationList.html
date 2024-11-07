@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head">
+    <meta charset="UTF-8">
+    <title>RoleOperation List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/toggleOnOff.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/ajaxToggle.js"></script>
+</head>
+
+<body th:replace="/fragments/body :: body">
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">RoleOperation List</h1>
+        <a href="#" th:href="@{/roleOperations/newRoleOperation}">Thêm chức vụ</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>RoleOperation ID</th>
+                    <th>RoleOperation name</th>
+                    <th>Permission Name</th>
+                    <th>Operation Name</th>
+                    <th>Status ON/OFF</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="roleOperation : ${roleOperations}">
+                    <td class="role-id" th:text="${roleOperation.id.roleId}"></td>
+                    <td th:text="${roleOperation.role.roleName}"></td>
+                    <td>
+                        <span class="permission-id" th:text="${roleOperation.id.permissionId}"
+                            style="display: none;"></span>
+                        <span th:text="${roleOperation.permission.permissionName}"></span>
+                    </td>
+                    <td>
+                        <span class="operation-id" th:text="${roleOperation.id.operationId}"
+                            style="display: none;"></span>
+                        <span th:text="${roleOperation.operation.operationName}"></span>
+                    </td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" class="toggle" th:checked="${roleOperation.statusId == 1}"
+                                th:data-role-id="${roleOperation.id.roleId}"
+                                th:data-permission-id="${roleOperation.id.permissionId}"
+                                th:data-operation-id="${roleOperation.id.operationId}"
+                                th:data-status="${roleOperation.statusId}">
+                            <span class="slider"></span>
+                            <span class="card-side"></span>
+                        </label>
+
+
+                        <!-- <label class="switch">
+                            <input type="checkbox" class="toggle" th:checked="${roleOperation.statusId == 1}"
+                                th:value="${roleOperation.statusId == 1 ? 1 : 2}">
+                            <span class="slider"></span>
+                            <span class="card-side"></span>
+                        </label> -->
+                    </td>
+                    <td>
+                        <a
+                            th:href="@{/roleOperations/editRoleOperation/{roleId}-{permissionId}-{operationId}(roleId=${roleOperation.id.roleId}, permissionId=${roleOperation.id.permissionId}, operationId=${roleOperation.id.operationId})}">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+</script>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Carriage Type</title>
+</head>
+
+<body>
+    <h1>Add New Carriage Type</h1>
+    <form th:action="@{/carriageTypes/addCarriageType}" th:object="${carriageTypes}" method="post">
+        <div>
+            <label for="carriageTypeName">Carriage Type Name:</label>
+            <input type="text" id="carriageTypeName" th:field="*{carriageTypeName}" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description" th:field="*{description}" required>
+        </div>
+        <div>
+            <button type="submit">Add Carriage Type</button>
+        </div>
+    </form>
+    <a th:href="@{/carriageTypes}">Back to Carriage Type List</a>
+</body>
+
+</html>
