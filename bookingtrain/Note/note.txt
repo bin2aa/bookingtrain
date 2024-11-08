@@ -1,0 +1,183 @@
+bookingtrain/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           └── bookingtrain/
+│   │   │               ├── BookingTrainApplication.java
+│   │   │               ├── config/
+│   │   │               │   └── DatabaseConfig.java
+│   │   │               ├── controller/
+│   │   │               │   ├── BookingController.java
+│   │   │               │   ├── PassengerController.java
+│   │   │               │   ├── SeatController.java
+│   │   │               │   ├── StationController.java
+│   │   │               │   ├── TrainController.java
+│   │   │               │   └── UserController.java
+│   │   │               ├── model/
+│   │   │               │   ├── Booking.java
+│   │   │               │   ├── Operation.java
+│   │   │               │   ├── Passenger.java
+│   │   │               │   ├── Role.java
+│   │   │               │   ├── Seat.java
+│   │   │               │   ├── SeatType.java
+│   │   │               │   ├── Station.java
+│   │   │               │   ├── Train.java
+│   │   │               │   ├── TrainSchedule.java
+│   │   │               │   └── User.java
+│   │   │               ├── repository/
+│   │   │               │   ├── BookingRepository.java
+│   │   │               │   ├── OperationRepository.java
+│   │   │               │   ├── PassengerRepository.java
+│   │   │               │   ├── RoleRepository.java
+│   │   │               │   ├── SeatRepository.java
+│   │   │               │   ├── SeatTypeRepository.java
+│   │   │               │   ├── StationRepository.java
+│   │   │               │   ├── TrainRepository.java
+│   │   │               │   ├── TrainScheduleRepository.java
+│   │   │               │   └── UserRepository.java
+│   │   │               └── service/
+│   │   │                   ├── BookingService.java
+│   │   │                   ├── PassengerService.java
+│   │   │                   ├── SeatService.java
+│   │   │                   ├── StationService.java
+│   │   │                   ├── TrainService.java
+│   │   │                   └── UserService.java
+│   │   └── resources/
+│   │       ├── static/
+│   │       ├── templates/
+│   │       └── application.properties
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── example/
+│                   └── bookingtrain/
+│                       └── BookingTrainApplicationTests.java
+│
+├── pom.xml
+└── README.md
+
+
+
+Bảng carriages (Toa xe):
+
+Lưu thông tin về các toa xe
+Các trường: carriageId (khóa chính), carriageTypeId (liên kết với bảng carriagetype), carriageCode, carriageName
+
+
+Bảng carriagetype (Loại toa xe):
+
+Định nghĩa các loại toa xe
+Các trường: carriageTypeId (khóa chính), carriageTypeName, description
+
+
+Bảng detailschedule (Chi tiết lịch trình):
+
+Liên kết giữa lịch trình, ghế và trạng thái ghế
+Các trường: scheduleId, seatId (tạo khóa chính kép), statusSeatId
+
+
+Bảng employees (Nhân viên):
+
+Lưu thông tin về nhân viên
+Các trường: employeeId (khóa chính), fullName, dateOfBirth, address, phone, roleId (liên kết với bảng roles)
+
+
+Bảng objects (Đối tượng):
+
+Có thể là các loại đối tượng hành khách (ví dụ: người lớn, trẻ em, người cao tuổi)
+Các trường: objectId (khóa chính), objectName, price
+
+
+Bảng operations (Hoạt động):
+
+Định nghĩa các hoạt động trong hệ thống
+Các trường: operationId (khóa chính), operationName
+
+
+Bảng orders (Đơn hàng):
+
+Lưu thông tin về các đơn đặt vé
+Các trường: orderId (khóa chính), passengerId, employeeId, price, timeToOrder
+
+
+Bảng passengers (Hành khách):
+
+Lưu thông tin về hành khách
+Các trường: passengerId (khóa chính), fullName, dateOfBirth, identityId, phone, objectId (liên kết với bảng objects)
+
+
+Bảng permissions (Quyền hạn):
+
+Định nghĩa các quyền hạn trong hệ thống
+Các trường: permissionId (khóa chính), permissionName
+
+
+Bảng roleoperation (Vai trò - Hoạt động):
+
+Liên kết giữa vai trò, quyền hạn và hoạt động
+Các trường: roleId, permissionId (tạo khóa chính kép), operationId, statusId
+
+
+Bảng roles (Vai trò):
+
+Định nghĩa các vai trò trong hệ thống
+Các trường: roleId (khóa chính), roleName
+
+
+Bảng schedules (Lịch trình):
+
+Lưu thông tin về các lịch trình chuyến tàu
+Các trường: scheduleId (khóa chính), stationDepartmentId, stationsArrivalId, trainId, timeToDepartment, timeToArrival, timeToCreateSchedule, employeeId
+
+
+Bảng seats (Ghế):
+
+Lưu thông tin về các ghế trong toa xe
+Các trường: seatId (khóa chính), seatCode, seatTypeId, carriageId
+
+
+Bảng seattype (Loại ghế):
+
+Định nghĩa các loại ghế
+Các trường: seatTypeId (khóa chính), seatTypeName, description, price
+
+
+Bảng stations (Ga tàu):
+
+Lưu thông tin về các ga tàu
+Các trường: stationId (khóa chính), stationCode, stationName, image, description
+
+
+Bảng statusroleoperation (Trạng thái vai trò - hoạt động):
+
+Định nghĩa các trạng thái cho bảng roleoperation
+Các trường: statusId (khóa chính), statusName
+
+
+Bảng statusseat (Trạng thái ghế):
+
+Định nghĩa các trạng thái của ghế (ví dụ: trống, đã đặt)
+Các trường: statusSeatId (khóa chính), statusSeatName
+
+
+Bảng tickets (Vé):
+
+Liên kết giữa đơn hàng và lịch trình
+Các trường: orderId, scheduleId (tạo khóa chính kép)
+
+
+Bảng trains (Tàu):
+
+Lưu thông tin về các đoàn tàu
+Các trường: trainId (khóa chính), trainCode, trainName, image, description
+
+
+-----------------------------
+Quyền Add New Role Operation chọn quyền group các bảng lại tạo một màng hình mới để bật tắt trạng thái các quyền
+
+
+HTtrack,
+momo dung http, localhost --> ngrok

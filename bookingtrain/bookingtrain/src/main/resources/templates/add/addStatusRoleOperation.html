@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add statusRoleOperation</title>
+</head>
+<body>
+    <h1>Add New statusRoleOperation</h1>
+    <form th:action="@{/statusRoleOperations/addStatusRoleOperation}" th:object="${statusRoleOperation}" method="post">
+        <div>
+            <label for="statusName">Name:</label>
+            <input type="text" id="statusName" th:field="*{statusName}" required>
+        </div>
+        <div>
+            <button type="submit">Add statusRoleOperation</button>
+        </div>
+    </form>
+    <a th:href="@{/statusRoleOperations}">Back to statusRoleOperation List</a>
+</body>
+</html>

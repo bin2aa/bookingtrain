@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/style/Ticket-result.css}" />
+</head>
+<body>
+<div th:replace="Client/Header :: Header"></div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3 filter-section">
+            <h5>Filter by</h5>
+            <div>
+                <label for="third-class-sleeping"><input type="checkbox" id="third-class-sleeping"> Third class sleeping</label><br>
+                <label for="second-class-sleeping"><input type="checkbox" id="second-class-sleeping"> Second class sleeping</label><br>
+                <label for="first-class-sleeping"><input type="checkbox" id="first-class-sleeping"> First class sleeping</label><br>
+                <label for="comfortable"><input type="checkbox" id="comfortable"> Comfortable</label><br>
+                <label for="non-reserved"><input type="checkbox" id="non-reserved"> Third class non reserved</label><br>
+                <label for="sedentary"><input type="checkbox" id="sedentary"> Sedentary carriage</label><br>
+                <label for="all"><input type="checkbox" id="all"> All</label>
+            </div>
+            <div class="time-range">
+                <label>Departure / Arrival Time</label>
+                <input type="range" class="form-control-range" min="0" max="24">
+            </div>
+            <div class="price-range">
+                <label>Price</label>
+                <input type="range" class="form-control-range" min="0" max="100">
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <h3>Tickets Found</h3>
+
+            <!-- Display message if no tickets are found -->
+            <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-warning">
+                No tickets found for the selected route.
+            </div>
+
+            <!-- Loop to display each ticket result -->
+            <div th:each="ticket : ${tickets}" class="ticket-card">
+                <div class="row">
+                    <div class="col-md-2 text-center">
+                        <i class="fa fa-train fa-3x ticket-logo"></i>
+                        <h6 th:text="${ticket.trainCode}">048A</h6>
+                        <p class="ticket-info" th:text="${ticket.trainName}">North Express</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 th:text="'Time: ' + ${ticket.timeDepartureFormatted}"></h6>
+                                <p class="ticket-info" th:text="'Date: ' + ${ticket.departureDate}"></p>
+                                <p class="ticket-info" th:text="${ticket.stationDeparture}"></p>
+                            </div>
+                            <div class="text-center">
+                                <div class="total-time" th:text="${ticket.totalTravelTime}"></div>
+                                <i class="fa fa-arrow-right fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 th:text="'Time: ' + ${ticket.timeArrivalFormatted}"></h6>
+                                <p class="ticket-info" th:text="'Date: ' + ${ticket.arrivalDate}"></p>
+                                <p class="ticket-info" th:text="${ticket.stationArrival}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <div class="price-container">
+                            <p class="price" th:text="'$' + ${ticket.price}"></p>
+                            <p class="ticket-info">/person</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn-primary">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<div th:replace="Client/Footer :: Footer"></div>
+</body>
+</html>

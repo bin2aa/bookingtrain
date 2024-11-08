@@ -1,0 +1,86 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <title>Login</title>
+    <style>
+        main {
+            background-image: url('/images/Search.jpg'); /* Thay đổi đường dẫn hình nền nếu cần */
+            background-size: cover;
+            background-position: center;
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.7); /* Nền tối cho form */
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px; /* Chiều rộng của form */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Đổ bóng cho form */
+        }
+
+        .description {
+            margin-left: 20px;
+            flex: 1; /* Tự động chiếm diện tích còn lại */
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Nền mô tả */
+            border-radius: 8px;
+        }
+
+        .description h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="Client/Header :: Header"></div>
+<main>
+    <div class="d-flex align-items-center justify-content-center" style="max-width: 60%">
+        <div class="login-container">
+            <h2 class="text-center">Login</h2>
+            <hr>
+            <form action="#" method="POST">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Enter your E-mail *</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Enter your password *</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember</label>
+                </div>
+                <button type="submit" class="btn btn-danger w-100">Login</button>
+                <div class="mt-3 text-center">
+                    <a href="#">Forgot password?</a>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-primary" th:href="@{/register}">Create New Account</a>
+                </div>
+            </form>
+        </div>
+        <div class="description" style="height: 492px">
+            <h2>BOOK YOUR TRAIN</h2>
+            <hr>
+            <p style="font-size: 22px">Easily book your train tickets quickly and conveniently with our system. Choose
+                your
+                preferred route, find available seats, and manage your journey with just a few simple steps.</p>
+            <p style="font-size: 22px">Log in to enjoy seamless booking services, track your train schedules, and save
+                passenger information for future trips. We are here to ensure you have a smooth and safe journey.</p>
+            <p style="font-size: 22px">Thanks you !!!</p>
+        </div>
+    </div>
+</main>
+<div th:replace="Client/Footer :: Footer"></div>
+</body>
+</html>

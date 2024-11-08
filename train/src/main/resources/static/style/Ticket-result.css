@@ -1,0 +1,57 @@
+body {
+    background-color: #f5f5f5;
+}
+
+.filter-section {
+    background-color: #343a40; /* Darker background for better contrast */
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 20px; /* Space below filter */
+}
+
+.filter-section h5 {
+    color: #f1f1f1;
+}
+
+.ticket-card {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.ticket-logo {
+    font-size: 1.3em;
+}
+
+.ticket-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-container {
+    display: flex; /* Align price elements horizontally */
+    justify-content: center; /* Center elements */
+    align-items: center; /* Vertically align */
+    gap: 5px; /* Space between price and '/person' */
+}
+
+.price {
+    font-size: 1.5em;
+    color: orange; /* Highlighted price */
+}
+
+.alert-warning {
+    margin-top: 20px; /* Space above alert */
+}
+
+.total-time {
+    font-weight: bold;
+    margin-top: 5px; /* Space above the total travel time */
+    color: #555; /* Change color for visibility */
+}
+

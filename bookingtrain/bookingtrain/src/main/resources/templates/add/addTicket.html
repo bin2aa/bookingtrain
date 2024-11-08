@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Add New Ticket</h1>
+<form th:action="@{/tickets/saveTicket}" th:object="${ticket}" method="post">
+    <div>
+        <label for="passengerId">Passenger:</label>
+        <select id="passengerId" th:field="*{passengerId}" required>
+            <option value="">Passenger</option>
+            <option th:each="passenger : ${passengerList}" th:value="${passenger.passengerId}" th:text="${passenger.fullName}"></option>
+        </select>
+    </div>
+    <div>
+        <label for="stationDepartureId">From station:</label>
+        <select id="stationDepartureId" th:field="*{stationDepartureId}" required>
+            <option value="">Select</option>
+            <option th:each="station : ${stationList}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+        </select>
+    </div>
+    <div>
+        <label for="stationArrivalId">To station:</label>
+        <select id="stationArrivalId" th:field="*{stationDepartureId}" required>
+            <option value="">Select</option>
+            <option th:each="station : ${stationList}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+        </select>
+    </div>
+    <div>
+        <label for="timeOfBooking">Date:</label>
+        <input type="date" id="timeOfBooking"/>
+    </div>
+    <div>
+        <button type="submit">Buy Ticket</button>
+    </div>
+</form>
+<a th:href="@{/tickets}">Back to Ticket List</a>
+</body>
+</html>

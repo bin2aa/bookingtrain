@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit permission</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Edit permission</h1>
+        <form th:action="@{/permissions/edit}" th:object="${permission}" method="post">
+            <input type="hidden" th:field="*{permissionId}" />
+            <div class="mb-3">
+                <label for="permissionName" class="form-label">permission Name</label>
+                <input type="text" id="permissionName" class="form-control" th:field="*{permissionName}" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

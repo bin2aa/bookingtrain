@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Train</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/style/home.css}"/>
+
+</head>
+
+<body>
+
+<div th:replace="Client/Header :: Header"></div>
+
+<!-- Navigation Bar -->
+<nav class="d-flex justify-content-between p-4" style="background-color: #323338">
+    <div class="nav-right" style="padding-left: 100px">
+        <a href="#">Home</a>
+        <a href="#">Manage Bookings</a>
+        <a href="#">Stations</a>
+        <a href="#">Trains</a>
+    </div>
+    <div class="nav-left" style="padding-right: 100px">
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Help</a>
+    </div>
+</nav>
+
+<main>
+    <section class="main-content">
+        <img src="/images/Search.jpg" alt="Search"/>
+
+        <div class="overlay"></div>
+
+        <div class="overlay-content">
+            <h1>WELCOME BOOK YOUR TRAIN</h1>
+            <span>We save your time both while purchasing, the check-in and during the travel</span>
+        </div>
+        <!-- Booking Form -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-container p-4 border rounded bg-light shadow">
+                        <h5 class="text-center mb-4">Search Tickets</h5>
+                        <form th:action="@{/searchTickets}" method="get">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="stationDeparture" class="font-weight-bold">Departure :</label>
+                                    <select id="stationDeparture" name="sd" class="form-control" required>
+                                        <option value="" disabled selected>Select departure station</option>
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="stationArrival" class="font-weight-bold">Arrival :</label>
+                                    <select id="stationArrival" name="sa" class="form-control" required>
+                                        <option value="" disabled selected>Select arrival station</option>
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="personAdult" class="font-weight-bold">Number of Adults:</label>
+                                    <select id="personAdult" name="ad" class="form-control" required>
+                                        <option value="" disabled selected>Select number of adults</option>
+                                        <option value="1">1 Adult</option>
+                                        <option value="2">2 Adults</option>
+                                        <option value="3">3 Adults</option>
+                                        <option value="4">4 Adults</option>
+                                        <option value="5">5 Adults</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="personKid" class="font-weight-bold">Number of Kids:</label>
+                                    <select id="personKid" name="ki" class="form-control" required>
+                                        <option value="" disabled selected>Select number of kids</option>
+                                        <option value="1">1 Kid</option>
+                                        <option value="2">2 Kids</option>
+                                        <option value="3">3 Kids</option>
+                                        <option value="4">4 Kids</option>
+                                        <option value="5">5 Kids</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">Search Tickets</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-3 filter-section p-3 border rounded">
+                    <h5>Filter by</h5>
+                    <div>
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li th:each="carriageType : ${carriageTypes}" class="mb-2">
+                                <label th:for="${carriageType.carriageTypeName}" class="d-flex align-items-center">
+                                    <input type="checkbox" th:id="${carriageType.carriageTypeName}"
+                                           class="styled-checkbox mr-2">
+                                    <span th:text="${carriageType.carriageTypeName}"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="range-slider mt-3">
+                        <label>Departure</label>
+                        <input type="range" class="form-control-range custom-range" min="0" max="24">
+                    </div>
+
+                    <div class="range-slider mt-3">
+                        <label>Arrival Time</label>
+                        <input type="range" class="form-control-range custom-range" min="0" max="24">
+                    </div>
+
+                    <div class="range-slider mt-3">
+                        <label>Price</label>
+                        <input type="range" class="form-control-range custom-range" min="0" max="100">
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <h3>Tickets Found</h3>
+
+                    <!-- Display message if no tickets are found -->
+                    <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-warning">
+                        No tickets found for the selected route.
+                    </div>
+
+                    <!-- Loop to display each ticket result -->
+                    <div th:each="ticket : ${tickets}" class="ticket-card">
+                        <div class="row">
+                            <div class="col-md-2 text-center">
+                                <i class="fa fa-train fa-3x ticket-logo"></i>
+                                <h6 th:text="${ticket.trainCode}">048A</h6>
+                                <p class="ticket-info" th:text="${ticket.trainName}">North Express</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 th:text="'Time: ' + ${ticket.timeDepartureFormatted}"></h6>
+                                        <p class="ticket-info" th:text="'Date: ' + ${ticket.departureDate}"></p>
+                                        <p class="ticket-info" th:text="${ticket.stationDeparture}"></p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="total-time" th:text="${ticket.totalTravelTime}"></div>
+                                        <i class="fa fa-arrow-right fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h6 th:text="'Time: ' + ${ticket.timeArrivalFormatted}"></h6>
+                                        <p class="ticket-info" th:text="'Date: ' + ${ticket.arrivalDate}"></p>
+                                        <p class="ticket-info" th:text="${ticket.stationArrival}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="price-container">
+                                    <p class="price" th:text="'$' + ${ticket.price}"></p>
+                                    <p class="ticket-info">/person</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+
+                                <form action="/addPassenger" method="POST">
+                                    <input type="hidden" name="trainCode" th:value="${ticket.trainCode}"/>
+                                    <input type="hidden" name="stationDeparture" th:value="${ticket.stationDeparture}"/>
+                                    <input type="hidden" name="stationArrival" th:value="${ticket.stationArrival}"/>
+                                    <input type="hidden" name="timeDeparture" th:value="${ticket.timeDeparture}"/>
+                                    <input type="hidden" name="timeArrival" th:value="${ticket.timeArrival}"/>
+                                    <input type="hidden" name="personAdult" th:value="${param.ad}"/>
+                                    <input type="hidden" name="personKid" th:value="${param.ki}"/>
+
+                                    <button type="submit" class="btn btn-primary">Buy Now</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div th:replace="Client/Footer :: Footer"></div>
+<script>
+    // Function to swap 'From' and 'To' station values
+    function swapStations() {
+        let fromStation = document.getElementById("from-route");
+        let toStation = document.getElementById("to-route");
+        let temp = fromStation.value;
+        fromStation.value = toStation.value;
+        toStation.value = temp;
+    }
+
+
+        function logFormData(event) {
+        // Ngăn chặn form gửi ngay lập tức
+        event.preventDefault();
+
+        // Lấy dữ liệu từ các trường input
+        const form = event.target;
+        const trainCode = form.trainCode.value;
+        const stationDeparture = form.stationDeparture.value;
+        const stationArrival = form.stationArrival.value;
+        const timeDeparture = form.timeDeparture.value;
+        const timeArrival = form.timeArrival.value;
+        const personAdult = form.personAdult.value;
+        const personKid = form.personKid.value;
+
+        // In ra console
+        console.log("Train Code:", trainCode);
+        console.log("Station Departure:", stationDeparture);
+        console.log("Station Arrival:", stationArrival);
+        console.log("Time Departure:", timeDeparture);
+        console.log("Time Arrival:", timeArrival);
+        console.log("Number of Adults:", personAdult);
+        console.log("Number of Kids:", personKid);
+
+        // Gửi form sau khi in ra
+        form.submit();
+    }
+</script>
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+</body>
+</html>

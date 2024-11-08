@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Role Operation</title>
+</head>
+<body>
+    <h1>Add New Role Operation</h1>
+    <form th:action="@{/roleOperations/addRoleOperation}" th:object="${roleOperation}" method="post">
+        <div>
+            <label for="roleId">Role:</label>
+            <select id="roleId" th:field="*{id.roleId}" required>
+                <option value="">Role</option>
+                <option th:each="role : ${roles}" th:value="${role.roleId}" th:text="${role.roleName}"></option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="permissionId">Permission:</label>
+            <select id="permissionId" th:field="*{id.permissionId}" required>
+                <option value="">Permission</option>
+                <option th:each="permission : ${permissions}" th:value="${permission.permissionId}" th:text="${permission.permissionName}"></option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="operationId">Operation:</label>
+            <select id="operationId" th:field="*{id.operationId}" required>
+                <option value="">Operation</option>
+                <option th:each="operation : ${operations}" th:value="${operation.operationId}" th:text="${operation.operationName}"></option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="statusId">Status:</label>
+            <select id="statusId" th:field="*{statusId}" required>
+                <option value="">Status</option>
+                <option th:each="status : ${statusRoleOperations}" th:value="${status.statusId}" th:text="${status.statusName}"></option>
+            </select>
+        </div>
+        
+        <button type="submit">Add Role Operation</button>
+    </form>
+    <a th:href="@{/roleOperations}">Back to Role Operation List</a>
+</body>
+</html>

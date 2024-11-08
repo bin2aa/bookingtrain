@@ -1,0 +1,22 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<header class="d-flex justify-content-between p-3" style="background-color: #1c1b20">
+    <div style="padding-left: 100px">
+        <h4 style="color: #6E6D72"><strong style="color: #C4C5CA">BOOK</strong>YOUR<strong
+                style="color: #C4C5CA">TRAIN</strong></h4>
+    </div>
+    <div style="padding-right: 100px">
+        <a th:href="@{/register}" class="btn me-2" style="color: #6E6D72; background-color: #1c1b20">Sign Up</a>
+        <a th:href="@{/login}" class="btn" style="color: #6E6D72; background-color: #1c1b20">Login</a>
+    </div>
+</header>
+</body>
+</html>
