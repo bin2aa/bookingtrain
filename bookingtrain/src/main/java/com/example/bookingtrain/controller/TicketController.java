@@ -47,9 +47,18 @@
      }
 
      @PostMapping("/saveTicket")
-     public String saveTicket(@RequestBody Ticket ticket, Model model) {
-         ticketService.save(ticket);
-         return "redirect:/list/ticketList";
+     public String saveTicket(@ModelAttribute("ticket")  Ticket ticket) {
+         if(ticket.getTicketId() == null){
+             ticketService.save(ticket);
+         }else{
+             Ticket existingTicket = ticketService.getByID(ticket.getTicketId());
+             existingTicket.setPassengerId(ticket.getPassengerId());
+             existingTicket.setBookingId(ticket.getBookingId());
+             existingTicket.setSeatId(ticket.getSeatId());
+             ticketService.save(ticket);
+         }
+
+         return "redirect:/tickets";
      }
 
 

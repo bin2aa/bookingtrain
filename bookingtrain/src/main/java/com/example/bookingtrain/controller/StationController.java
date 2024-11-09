@@ -36,16 +36,14 @@ public class StationController {
     @PostMapping("/saveStation")
     public String saveStation(@ModelAttribute("station") Station station) {
         if(station.getStationId() != null) {
-            stationService.save(station);
             Station existingStation = stationService.getById(station.getStationId());
-            existingStation.setStationCode(station.getStationCode());
             existingStation.setStationName(station.getStationName());
-//            existingStation.setImage(station.getImage());
+            existingStation.setStationCode(station.getStationCode());
+
             stationService.save(existingStation);
-            return "redirect:/stations";
+        }else {
+            stationService.save(station);
         }
-        station.setStatusStation(1);
-        stationService.save(station);
         return "redirect:/stations";
     }
 

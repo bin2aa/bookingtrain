@@ -10,6 +10,12 @@
   <h1 class="text-center mb-4">New Route</h1>
   <form class="form align-content-center" th:action="@{/routes/saveRoute}" th:object="${route}" method="post">
     <div class="form-group row">
+      <div class="form-group row">
+        <label for="routeName" class="col-sm-2 col-form-label">Route Name:</label>
+        <div class="col-sm-10">
+          <input type="text" id="routeName" th:value="*{routeName}"  required>
+        </div>
+      </div>
       <label for="stationDepartedList" class="col-sm-2 col-form-label">From Station:</label>
       <div class="col-sm-10">
         <select id="stationDepartedList" th:field="*{stationDepartureId}" class="form-control" required>
@@ -25,18 +31,6 @@
           <option value="">Select Arrival Station</option>
           <option th:each="station : ${stationArrivingList}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
         </select>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="dateStart" class="col-sm-2 col-form-label">Start Date:</label>
-      <div class="col-sm-10">
-        <input type="datetime-local" id="dateStart" th:field="*{dateStart}" class="form-control" required/>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="dateEnd" class="col-sm-2 col-form-label">End Date:</label>
-      <div class="col-sm-10">
-        <input type="datetime-local" id="dateEnd" th:field="*{dateEnd}" class="form-control" required/>
       </div>
     </div>
     <div class="form-group row">

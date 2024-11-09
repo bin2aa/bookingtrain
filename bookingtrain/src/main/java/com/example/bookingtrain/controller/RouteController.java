@@ -48,20 +48,30 @@ public class RouteController {
 
     @PostMapping("/saveRoute")
     public String saveRoute(@ModelAttribute("route") Route route) {
-        Route savedRoute = routeService.save(route);
-        if (savedRoute != null) {
-            return "redirect:/routes";
+        if(route.getRouteId() == null){
+            routeService.save(route);
+        }else{
+            Route exsitingRoute = routeService.getById(route.getRouteId());
+            exsitingRoute.setRouteName(route.getRouteName());
+            exsitingRoute.setStationArrivalId(route.getStationArrivalId());
+            exsitingRoute.setStationDepartureId(route.getStationDepartureId());
+            exsitingRoute.setTrainId(route.getTrainId());
+            routeService.save(exsitingRoute);
         }
-        else{
-            return "redirect:/error";
-        }
+        return "redirect:/routes";
     }
 
     @GetMapping("/editRoute/{id}")
     public String showuUpdatePage(@PathVariable("id") int routeID ,Model model) {
         Route route = routeService.getById(routeID);
+        var stationDeparturedList = stationService.getAll();
+        var stationArrivingList = stationService.getAll();
+        var trainList = trainService.getAllTrains();
         model.addAttribute("route", route);
-        return "/update/route";
+        model.addAttribute("stationDepartedList", stationDeparturedList);
+        model.addAttribute("stationArrivingList", stationArrivingList);
+        model.addAttribute("trainList", trainList);
+        return "/edit/editRoute";
     }
 
 }

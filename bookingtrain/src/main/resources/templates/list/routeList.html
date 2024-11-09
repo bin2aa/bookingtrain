@@ -14,7 +14,8 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>Id</th>
+                            <th width="50px">Id</th>
+                            <th>Route Name</th>
                             <th>Station Departured</th>
                             <th>Station Arrival</th>
                             <th>Train</th>
@@ -24,6 +25,7 @@
                         <tfoot>
                         <tr>
                             <th>Id</th>
+                            <th>Route Name</th>
                             <th>Station Departured</th>
                             <th>Station Arrival</th>
                             <th>Train</th>
@@ -33,6 +35,7 @@
                         <tbody>
                         <tr th:each="route : ${routeList}">
                             <td th:text="${route.routeId}"></td>
+                            <td th:text="${route.routeName}"></td>
                             <td th:text="${route.getStationDeparture.getStationName}"></td>
                             <td th:text="${route.getStationArrival.getStationName}"></td>
                             <td th:text="${route.trainId}"></td>

@@ -1,13 +1,12 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Passenger;
+import com.example.bookingtrain.model.Station;
 import com.example.bookingtrain.service.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,10 +35,32 @@ public class PassengerController {
     }
 
     @PostMapping("/savePassenger")
-    public String savePassenger(Passenger passenger) {
-        passengerService.save(passenger);
+    public String savePassenger(@ModelAttribute("passenger") Passenger passenger) {
+        if(passenger.getPassengerId() == null){
+            passengerService.save(passenger);
+        }else {
+            Passenger exsitingPassenger = passengerService.getById(passenger.getPassengerId());
+            exsitingPassenger.setPassengerName(passenger.getPassengerName());
+            exsitingPassenger.setDateOfBirth(passenger.getDateOfBirth());
+            exsitingPassenger.setPhone(passenger.getPhone());
+            exsitingPassenger.setIdentityId(passenger.getIdentityId());
+
+            passengerService.save(passenger);
+        }
         return "redirect:/passengers";
     }
 
+    @GetMapping("/updatePassenger/{id}")
+    public String showUpdatePage(@PathVariable int id ,Model model) {
+        Passenger p = passengerService.getById(id);
+        model.addAttribute("passenger", p);
+        return "edit/editPassenger";
+    }
+
+    @GetMapping("/deletePassenger/{id}")
+    public String deletePassenger(@PathVariable int id) {
+        passengerService.delete(id);
+        return "redirect:/passengers";
+    }
 
 }

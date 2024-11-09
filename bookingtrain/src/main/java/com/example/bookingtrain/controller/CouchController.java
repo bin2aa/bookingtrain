@@ -45,8 +45,11 @@ public class CouchController {
             couch.setStatusCouch(1);
             couchService.save(couch);
             return "redirect:/couches";
+        }else {
+            Couch existingCouch = couchService.getById(couch.getCouchId());
+            existingCouch.setTrainId(couch.getTrainId());
+            couchService.save(couch);
         }
-        couchService.save(couch);
         return "redirect:/couches";
     }
 
