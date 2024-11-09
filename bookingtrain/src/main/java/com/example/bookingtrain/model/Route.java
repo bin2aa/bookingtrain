@@ -25,6 +25,9 @@ public class Route {
     @Column(nullable = true)
     private Integer stationArrivalId;
 
+    @Column(nullable = true)
+    private Integer trainId;
+
     @ManyToOne
     @JoinColumn(name = "stationDepartureId", insertable = false, updatable = false)
     private Station stationDeparture;
@@ -32,4 +35,8 @@ public class Route {
     @ManyToOne
     @JoinColumn(name = "stationArrivalId", insertable = false, updatable = false)
     private Station stationArrival;
+
+    @ManyToOne
+    @JoinColumn(name = "trainId", insertable = false, updatable = false)
+    private Train train;
 }
