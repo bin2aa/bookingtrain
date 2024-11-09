@@ -42,9 +42,13 @@ public class TrainController {
                              @RequestParam("imageFile") MultipartFile multipartFile,
                              Model model){
         if(train.getTrainId() != null) {
+            Train existingTrain = trainService.getById(train.getTrainId());
+            existingTrain.setTrainName(train.getTrainName());
+            existingTrain.setTrainCode(train.getTrainCode());
             trainService.save(train);
         }
         else{
+            // Tạo train moi
             train.setStatusTrain(1);
             try {
                 String fileName = multipartFile.getOriginalFilename();

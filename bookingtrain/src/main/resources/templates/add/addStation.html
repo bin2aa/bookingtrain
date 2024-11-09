@@ -20,14 +20,6 @@
                         <input type="text" class="form-control" id="stationName" th:field="*{stationName}" placeholder="Enter Station Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="image">Image</label>
-                        <input type="text" class="form-control" id="image" th:field="*{image}" placeholder="Enter Image URL" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" id="description" th:field="*{description}" placeholder="Enter Description" required></textarea>
-                    </div>
-                    <div class="form-group">
                         <label for="statusStation">Status</label>
                         <select class="form-control" id="statusStation" th:field="*{statusStation}">
                             <option th:value="1" th:text="'Active'"></option>

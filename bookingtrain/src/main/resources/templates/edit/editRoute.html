@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/fragments/header :: head">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body th:replace="/fragments/body :: body">
+
+<div th:fragment="mainContent" class="container mt-5">
+    <h1 class="text-center mb-4">Edit Route</h1>
+    <form class="form align-content-center" th:action="@{/routes/saveRoute}" th:object="${route}" method="post">
+        <input type="hidden" th:field="*{routeId}">
+        <div class="form-group row">
+            <label for="routeName" class="col-sm-2 col-form-label">Route Name:</label>
+            <div class="col-sm-10">
+                <input type="text" id="routeName" th:field="*{routeName}"  required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="stationDepartedList" class="col-sm-2 col-form-label">From Station:</label>
+            <div class="col-sm-10">
+                <select id="stationDepartedList" th:field="*{stationDepartureId}" class="form-control" required>
+                    <option value="">Select Departure Station</option>
+                    <option th:each="station : ${stationDepartedList}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="stationArrivingList" class="col-sm-2 col-form-label">To Station:</label>
+            <div class="col-sm-10">
+                <select id="stationArrivingList" th:field="*{stationArrivalId}" class="form-control" required>
+                    <option value="">Select Arrival Station</option>
+                    <option th:each="station : ${stationArrivingList}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="trainId" class="col-sm-2 col-form-label">Train:</label>
+            <div class="col-sm-10">
+                <select id="trainId" th:field="*{trainId}" class="form-control" required>
+                    <option value="">Select Train</option>
+                    <option th:each="train : ${trainList}" th:value="${train.trainId}" th:text="${train.trainName}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary btn-block">Add Route</button>
+            </div>
+        </div>
+    </form>
+    <div class="text-center mt-3">
+        <a th:href="@{/routes}" class="btn btn-secondary">Back to Route List</a>
+    </div>
+</div>

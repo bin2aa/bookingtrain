@@ -15,7 +15,7 @@
             <div class="col-sm-10">
                 <select id="passengerId" th:field="*{passengerId}" class="form-control" required>
                     <option value="">Passenger</option>
-                    <option th:each="passenger : ${passengerList}" th:value="${passenger.passengerId}" th:text="${passenger.fullName}"></option>
+                    <option th:each="passenger : ${passengerList}" th:value="${passenger.passengerId}" th:text="${passenger.passengerName}"></option>
                 </select>
             </div>
         </div>

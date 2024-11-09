@@ -24,4 +24,6 @@ public class Train {
     @Column
     private int statusTrain;
 
+
+
 }
