@@ -14,7 +14,8 @@
 <body th:replace="/fragments/body :: body">
     <div th:fragment="mainContent">
         <h1 class="mb-4">RoleOperation List</h1>
-        <a href="#" th:href="@{/roleOperations/newRoleOperation}">Thêm chức vụ</a>
+        
+        <a class="addRoleOperationLink" th:href="@{/roleOperations/newRoleOperation}">Thêm chức vụ</a>
         <div id="tableContent" th:fragment="tableContent">
             <table class="table table-striped">
                 <thead>
@@ -66,6 +67,10 @@
 
         </div>
     </div>
+<!-- 
+    <div id="addRoleOperationContainer"></div>
+    <div class="overlay"></div> -->
+
 </body>
 
 </html>

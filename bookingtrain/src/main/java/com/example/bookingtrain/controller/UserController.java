@@ -4,6 +4,10 @@ import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.service.RoleService;
 import com.example.bookingtrain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +26,18 @@ public class UserController {
     private RoleService roleService;
 
     @GetMapping // Xử lý yêu cầu GET tới đường dẫn /users
-    public String getAllUsers(Model model) { // Model là một đối tượng dùng để truyền dữ liệu từ Controller tới View
-        List<User> users = userService.getAllUsers(); // Lấy danh sách users từ service
-        model.addAttribute("users", users); // Thêm danh sách users vào model
+    public String getAllUsers(@RequestParam(defaultValue = "0") int page, Model model) { // Model là một đối tượng dùng
+                                                                                         // để truyền dữ liệu
+                                                                                         // từController tới View
+        int pageSize = 3;
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("userId").ascending());
+        Page<User> usersPage = userService.getAllUsers(pageable); // Lấy danh sách users từ service
+
+        model.addAttribute("users", usersPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usersPage.getTotalPages());
+        model.addAttribute("baseUrl", "/users");
         return "list/userList"; // Trả về template userList.html
     }
 
