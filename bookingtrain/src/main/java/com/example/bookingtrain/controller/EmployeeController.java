@@ -35,7 +35,7 @@ public class EmployeeController {
     @PostMapping("/addEmployee")
     public String addEmployee(@ModelAttribute Employee employee) {
         employeeService.createEmployee(employee);
-        return "redirect:/employees";
+        return "redirect:/employees"; // Điều hướng về trang danh sách nhân viên
     }
 
     @GetMapping("/editEmployee/{employeeID}")
@@ -43,7 +43,7 @@ public class EmployeeController {
         Employee employee = employeeService.getEmployeeById(employeeID);
         model.addAttribute("employee", employee);
         model.addAttribute("roles", roleService.getAllRoles());
-        return "edit/employeeEdit";
+        return "edit/editEmployee";
     }
 
     @PostMapping("/edit")

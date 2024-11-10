@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/header :: head"></head>
+<body th:replace="/fragments/body :: body">
+
+<div>
+    <div th:fragment="mainContent">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>PassengerId</th>
+                            <th>LegId</th>
+                            <th>Date</th>
+                            <th>Station From</th>
+                            <th>Station Arrival</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>PassengerId</th>
+                            <th>LegId</th>
+                            <th>Date</th>
+                            <th>Station From</th>
+                            <th>Station Arrival</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="ticket : ${ticketList}">
+                            <td th:text="${ticket.ticketId}"></td>
+                            <td th:text="${ticket.passengerId}"></td>
+                            <td th:text="${ticket.legId}"></td>
+                            <td th:text="${ticket.timeOfBooking}"></td>
+                            <td th:text="${ticket.stationArrivalId}"></td>
+                            <td th:text="${ticket.stationDepartureId}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// @RestController
+// @CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequestMapping("/roles")
 public class RoleController {
@@ -42,7 +44,7 @@ public class RoleController {
     public String editRoleForm(@PathVariable Integer roleId, Model model) { // Đảm bảo kiểu dữ liệu là Long
         Role role = roleService.getRoleById(roleId);
         model.addAttribute("role", role);
-        return "edit/roleEdit";
+        return "edit/editRole";
     }
 
     @PostMapping("/edit")
