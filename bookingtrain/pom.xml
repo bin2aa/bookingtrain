@@ -74,14 +74,35 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Spring Session -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-core</artifactId>
+        </dependency>
+
+        <!-- Spring Security -->
+        <!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency> -->
 
     </dependencies>
+
+
+
+        <repositories>
+                <repository>
+                    <id>jpa-buddy-repo</id>
+                    <url>https://repo.jpaspringbuddy.com</url>
+                </repository>
+        </repositories>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.3.4</version>
             </plugin>
         </plugins>
     </build>

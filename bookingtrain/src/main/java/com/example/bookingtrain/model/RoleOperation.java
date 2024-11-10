@@ -20,14 +20,17 @@ public class RoleOperation {
 
     @ManyToOne
     @JoinColumn(name = "roleId", insertable = false, updatable = false)
+    @MapsId("roleId")
     private Role role;
 
     @ManyToOne
     @JoinColumn(name = "permissionId", insertable = false, updatable = false)
+    @MapsId("permissionId")
     private Permission permission;
 
     @ManyToOne
     @JoinColumn(name = "operationId", insertable = false, updatable = false)
+    @MapsId("operationId")
     private Operation operation;
 
     @ManyToOne

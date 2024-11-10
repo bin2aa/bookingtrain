@@ -39,7 +39,7 @@ public class PermissionController {
     public String editPermissionForm(@PathVariable Integer permissionId, Model model) {
         Permission permission = permissionService.getPermissionById(permissionId);
         model.addAttribute("permission", permission);
-        return "edit/permissionEdit";
+        return "edit/editPermission";
     }
 
     @PostMapping("/edit")

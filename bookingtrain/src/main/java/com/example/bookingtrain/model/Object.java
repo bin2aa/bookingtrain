@@ -1,10 +1,9 @@
 package com.example.bookingtrain.model;
 
 import javax.persistence.*;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "objects")
@@ -21,5 +20,9 @@ public class Object {
 
     @Column(nullable = false)
     private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "passengerId", insertable = false, updatable = false)
+    private Role passenger;
 
 }

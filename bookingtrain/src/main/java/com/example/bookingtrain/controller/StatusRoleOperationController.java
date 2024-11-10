@@ -39,7 +39,7 @@ public class StatusRoleOperationController {
         StatusRoleOperation statusRoleOperation = statusRoleOperationService
                 .getStatusRoleOperationById(statusId);
         model.addAttribute("statusRoleOperation", statusRoleOperation);
-        return "edit/statusRoleOperationEdit";
+        return "edit/editStatusRoleOperation";
     }
 
     @PostMapping("/edit")

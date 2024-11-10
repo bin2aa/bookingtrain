@@ -15,20 +15,13 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer seatId;
 
-    @Column(nullable = true, length = 255)
-    private String seatCode;
+    @Column(nullable = true)
+    private String seatNumber;
 
     @Column(nullable = true)
-    private Integer seatTypeId;
-
-    @Column(nullable = true)
-    private Integer carriageId;
+    private Integer coachId;
 
     @ManyToOne
-    @JoinColumn(name = "seatTypeId", insertable = false, updatable = false)
-    private SeatType seatType;
-
-    @ManyToOne
-    @JoinColumn(name = "carriageId", insertable = false, updatable = false)
-    private Carriage carriage;
+    @JoinColumn(name = "coachId", insertable = false, updatable = false)
+    private Coache coach;
 }

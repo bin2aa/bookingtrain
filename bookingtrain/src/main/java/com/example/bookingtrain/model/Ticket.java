@@ -1,7 +1,6 @@
 package com.example.bookingtrain.model;
 
 import javax.persistence.*;
-import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -16,21 +15,24 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ticketId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
+    private Integer bookingId;
+
+    @Column(nullable = true)
+    private Integer seatId;
+
+    @Column(nullable = true)
     private Integer passengerId;
 
-    @Column(nullable = false)
-    private Integer legId;
+    @ManyToOne
+    @JoinColumn(name = "bookingId", insertable = false, updatable = false)
+    private Booking booking;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timeOfBooking;
+    @ManyToOne
+    @JoinColumn(name = "seatId", insertable = false, updatable = false)
+    private Seat seat;
 
     @ManyToOne
     @JoinColumn(name = "passengerId", insertable = false, updatable = false)
     private Passenger passenger;
-
-    @ManyToOne
-    @JoinColumn(name = "legId", insertable = false, updatable = false)
-    private Leg leg;
 }
