@@ -1,183 +1,185 @@
-bookingtrain/
-│
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── example/
-│   │   │           └── bookingtrain/
-│   │   │               ├── BookingTrainApplication.java
-│   │   │               ├── config/
-│   │   │               │   └── DatabaseConfig.java
-│   │   │               ├── controller/
-│   │   │               │   ├── BookingController.java
-│   │   │               │   ├── PassengerController.java
-│   │   │               │   ├── SeatController.java
-│   │   │               │   ├── StationController.java
-│   │   │               │   ├── TrainController.java
-│   │   │               │   └── UserController.java
-│   │   │               ├── model/
-│   │   │               │   ├── Booking.java
-│   │   │               │   ├── Operation.java
-│   │   │               │   ├── Passenger.java
-│   │   │               │   ├── Role.java
-│   │   │               │   ├── Seat.java
-│   │   │               │   ├── SeatType.java
-│   │   │               │   ├── Station.java
-│   │   │               │   ├── Train.java
-│   │   │               │   ├── TrainSchedule.java
-│   │   │               │   └── User.java
-│   │   │               ├── repository/
-│   │   │               │   ├── BookingRepository.java
-│   │   │               │   ├── OperationRepository.java
-│   │   │               │   ├── PassengerRepository.java
-│   │   │               │   ├── RoleRepository.java
-│   │   │               │   ├── SeatRepository.java
-│   │   │               │   ├── SeatTypeRepository.java
-│   │   │               │   ├── StationRepository.java
-│   │   │               │   ├── TrainRepository.java
-│   │   │               │   ├── TrainScheduleRepository.java
-│   │   │               │   └── UserRepository.java
-│   │   │               └── service/
-│   │   │                   ├── BookingService.java
-│   │   │                   ├── PassengerService.java
-│   │   │                   ├── SeatService.java
-│   │   │                   ├── StationService.java
-│   │   │                   ├── TrainService.java
-│   │   │                   └── UserService.java
-│   │   └── resources/
-│   │       ├── static/
-│   │       ├── templates/
-│   │       └── application.properties
-│   └── test/
-│       └── java/
-│           └── com/
-│               └── example/
-│                   └── bookingtrain/
-│                       └── BookingTrainApplicationTests.java
-│
-├── pom.xml
-└── README.md
+bookings (Đặt vé)
+
+Mô tả: Chứa thông tin về các đơn đặt vé.
+Các trường chính:
+bookingId: ID đặt vé.
+userId: ID người dùng thực hiện đặt vé.
+employeeId: ID nhân viên xử lý đặt vé.
+total: Tổng số tiền của đơn đặt vé.
+dateBooking: Ngày đặt vé.
+scheduleId: ID lịch trình chuyến tàu.
+coaches (Toa)
+
+Mô tả: Quản lý thông tin về các toa trong tàu.
+Các trường chính:
+coachId: ID toa.
+coachCode: Mã số của toa.
+trainId: ID tàu chứa toa này.
+employees (Nhân viên)
+
+Mô tả: Lưu trữ thông tin về nhân viên.
+Các trường chính:
+employeeId: ID nhân viên.
+employeeName: Tên nhân viên.
+dateOfBirth: Ngày sinh.
+address: Địa chỉ.
+phone: Số điện thoại.
+roleId: ID vai trò của nhân viên.
+objects (Đối tượng)
+
+Mô tả: Có thể đại diện cho các sản phẩm hoặc dịch vụ liên quan.
+Các trường chính:
+objectId: ID đối tượng.
+objectName: Tên đối tượng.
+price: Giá của đối tượng.
+operations (Hoạt động)
+
+Mô tả: Quản lý các hoạt động hoặc nhiệm vụ.
+Các trường chính:
+operationId: ID hoạt động.
+operationName: Tên hoạt động.
+passengers (Hành khách)
+
+Mô tả: Lưu trữ thông tin về hành khách.
+Các trường chính:
+passengerId: ID hành khách.
+passengerName: Tên hành khách.
+phone: Số điện thoại.
+dateOfBirth: Ngày sinh.
+objectId: ID đối tượng liên quan.
+permissions (Quyền hạn)
+
+Mô tả: Quản lý các quyền hạn trong hệ thống.
+Các trường chính:
+permissionId: ID quyền hạn.
+permissionName: Tên quyền hạn.
+roleoperation (Vai trò_Hoạt động)
+
+Mô tả: Liên kết giữa vai trò, quyền hạn và hoạt động.
+Các trường chính:
+roleId: ID vai trò.
+permissionId: ID quyền hạn.
+operationId: ID hoạt động.
+statusId: ID trạng thái.
+roles (Vai trò)
+
+Mô tả: Quản lý các vai trò người dùng trong hệ thống.
+Các trường chính:
+roleId: ID vai trò.
+roleName: Tên vai trò.
+routes (Tuyến đường)
+
+Mô tả: Lưu trữ thông tin về các tuyến đường tàu.
+Các trường chính:
+routeId: ID tuyến đường.
+trainId: ID tàu trên tuyến đường này.
+stationDepartureId: ID ga khởi hành.
+stationArrivalId: ID ga đến.
+routeName: Tên tuyến đường.
+schedules (Lịch trình)
+
+Mô tả: Quản lý lịch trình các chuyến tàu.
+Các trường chính:
+scheduleId: ID lịch trình.
+trainId: ID tàu.
+arrivalTime: Thời gian đến.
+departureTime: Thời gian khởi hành.
+routeId: ID tuyến đường.
+seats (Ghế)
+
+Mô tả: Quản lý thông tin về các ghế trong toa.
+Các trường chính:
+seatId: ID ghế.
+seatCode: Mã ghế.
+seatTypeId: ID loại ghế.
+coachId: ID toa chứa ghế.
+seatNumber: Số ghế.
+seattype (Loại ghế)
+
+Mô tả: Quản lý các loại ghế khác nhau.
+Các trường chính:
+seatTypeId: ID loại ghế.
+seatTypeName: Tên loại ghế.
+price: Giá của loại ghế.
+stations (Ga)
+
+Mô tả: Lưu trữ thông tin về các ga tàu.
+Các trường chính:
+stationId: ID ga.
+stationName: Tên ga.
+description: Mô tả về ga.
+image: Hình ảnh của ga.
+stationCode: Mã ga.
+statusStation: Trạng thái của ga.
+statusroleoperation (Trạng thái Vai trò_Hoạt động)
+
+Mô tả: Quản lý trạng thái của liên kết vai trò và hoạt động.
+Các trường chính:
+statusId: ID trạng thái.
+statusName: Tên trạng thái.
+tickets (Vé)
+
+Mô tả: Quản lý thông tin về vé đã đặt.
+Các trường chính:
+ticketId: ID vé.
+bookingId: ID đặt vé liên quan.
+passengerId: ID hành khách liên quan.
+seatId: ID ghế đã chọn.
+trains (Tàu)
+
+Mô tả: Lưu trữ thông tin về các tàu.
+Các trường chính:
+trainId: ID tàu.
+trainCode: Mã tàu.
+description: Mô tả về tàu.
+image: Hình ảnh của tàu.
+statusTrain: Trạng thái của tàu.
+trainName: Tên tàu.
+users (Người dùng)
+
+Mô tả: Quản lý thông tin người dùng hệ thống.
+Các trường chính:
+userId: ID người dùng.
+email: Email người dùng.
+password: Mật khẩu.
+username: Tên đăng nhập.
+roleID: ID vai trò của người dùng.
+Quan hệ giữa các bảng chính:
+
+bookings liên kết với users, employees, và schedules thông qua các khóa ngoại.
+coaches liên kết với trains.
+employees liên kết với roles.
+passengers liên kết với operations.
+roleoperation liên kết với roles, permissions, operations, và statusroleoperation.
+routes liên kết với trains và stations.
+schedules liên kết với routes và trains.
+seats liên kết với seattype và coaches.
+tickets liên kết với bookings, passengers, và seats.
+users liên kết với roles.
 
 
 
-Bảng carriages (Toa xe):
+-------------------------------------------------------------------------------------------
+Quy trình đặt vé của client
 
-Lưu thông tin về các toa xe
-Các trường: carriageId (khóa chính), carriageTypeId (liên kết với bảng carriagetype), carriageCode, carriageName
+Chọn chuyến tàu và lịch trình:
 
+Khách hàng chọn tuyến đường từ routes, xem các chuyến tàu có sẵn từ bảng trains và các lịch trình tương ứng từ bảng schedules. Thông tin về các ga đi và đến được lấy từ bảng stations.
+Chọn ghế:
 
-Bảng carriagetype (Loại toa xe):
+Dựa trên chuyến tàu đã chọn, hệ thống truy xuất các ghế trống từ bảng seats, loại ghế từ bảng seattype và thông tin toa từ bảng coaches.
+Nhập thông tin hành khách:
 
-Định nghĩa các loại toa xe
-Các trường: carriageTypeId (khóa chính), carriageTypeName, description
+Khách hàng nhập thông tin cá nhân vào bảng passengers, bao gồm tên, số điện thoại, ngày sinh, v.v.
+Tạo đơn đặt vé:
 
+Hệ thống tạo một bản ghi mới trong bảng bookings, liên kết với userId của khách hàng và scheduleId của chuyến tàu. Tổng tiền vé được lưu trong trường total.
+Liên kết vé với hành khách và ghế:
 
-Bảng detailschedule (Chi tiết lịch trình):
+Mỗi vé được tạo trong bảng tickets, liên kết với bookingId, passengerId và seatId tương ứng.
+Xác nhận và thanh toán:
 
-Liên kết giữa lịch trình, ghế và trạng thái ghế
-Các trường: scheduleId, seatId (tạo khóa chính kép), statusSeatId
+Sau khi khách hàng xác nhận thông tin và thanh toán, hệ thống cập nhật trạng thái trong bảng bookings và có thể cập nhật thêm thông tin thanh toán nếu có bảng payments.
+Quản lý vai trò và quyền hạn (nếu cần):
 
-
-Bảng employees (Nhân viên):
-
-Lưu thông tin về nhân viên
-Các trường: employeeId (khóa chính), fullName, dateOfBirth, address, phone, roleId (liên kết với bảng roles)
-
-
-Bảng objects (Đối tượng):
-
-Có thể là các loại đối tượng hành khách (ví dụ: người lớn, trẻ em, người cao tuổi)
-Các trường: objectId (khóa chính), objectName, price
-
-
-Bảng operations (Hoạt động):
-
-Định nghĩa các hoạt động trong hệ thống
-Các trường: operationId (khóa chính), operationName
-
-
-Bảng orders (Đơn hàng):
-
-Lưu thông tin về các đơn đặt vé
-Các trường: orderId (khóa chính), passengerId, employeeId, price, timeToOrder
-
-
-Bảng passengers (Hành khách):
-
-Lưu thông tin về hành khách
-Các trường: passengerId (khóa chính), fullName, dateOfBirth, identityId, phone, objectId (liên kết với bảng objects)
-
-
-Bảng permissions (Quyền hạn):
-
-Định nghĩa các quyền hạn trong hệ thống
-Các trường: permissionId (khóa chính), permissionName
-
-
-Bảng roleoperation (Vai trò - Hoạt động):
-
-Liên kết giữa vai trò, quyền hạn và hoạt động
-Các trường: roleId, permissionId (tạo khóa chính kép), operationId, statusId
-
-
-Bảng roles (Vai trò):
-
-Định nghĩa các vai trò trong hệ thống
-Các trường: roleId (khóa chính), roleName
-
-
-Bảng schedules (Lịch trình):
-
-Lưu thông tin về các lịch trình chuyến tàu
-Các trường: scheduleId (khóa chính), stationDepartmentId, stationsArrivalId, trainId, timeToDepartment, timeToArrival, timeToCreateSchedule, employeeId
-
-
-Bảng seats (Ghế):
-
-Lưu thông tin về các ghế trong toa xe
-Các trường: seatId (khóa chính), seatCode, seatTypeId, carriageId
-
-
-Bảng seattype (Loại ghế):
-
-Định nghĩa các loại ghế
-Các trường: seatTypeId (khóa chính), seatTypeName, description, price
-
-
-Bảng stations (Ga tàu):
-
-Lưu thông tin về các ga tàu
-Các trường: stationId (khóa chính), stationCode, stationName, image, description
-
-
-Bảng statusroleoperation (Trạng thái vai trò - hoạt động):
-
-Định nghĩa các trạng thái cho bảng roleoperation
-Các trường: statusId (khóa chính), statusName
-
-
-Bảng statusseat (Trạng thái ghế):
-
-Định nghĩa các trạng thái của ghế (ví dụ: trống, đã đặt)
-Các trường: statusSeatId (khóa chính), statusSeatName
-
-
-Bảng tickets (Vé):
-
-Liên kết giữa đơn hàng và lịch trình
-Các trường: orderId, scheduleId (tạo khóa chính kép)
-
-
-Bảng trains (Tàu):
-
-Lưu thông tin về các đoàn tàu
-Các trường: trainId (khóa chính), trainCode, trainName, image, description
-
-
------------------------------
-Quyền Add New Role Operation chọn quyền group các bảng lại tạo một màng hình mới để bật tắt trạng thái các quyền
-
-
-HTtrack,
-momo dung http, localhost --> ngrok
+Nếu có các bước quản lý hoặc kiểm tra quyền hạn của người dùng, hệ thống sẽ sử dụng các bảng users, roles, permissions và roleoperation để xác thực và phân quyền.

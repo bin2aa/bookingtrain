@@ -4,6 +4,8 @@ import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,8 +15,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAllOrderByUserId(pageable);
     }
 
     public User getUserById(Integer id) {
@@ -22,8 +24,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
-
-        user.setRoleId(1); // Mặc định là user thường khi tạo tài khoản
+        if (user.getRoleId() == null) {
+            user.setRoleId(1); // Đặt mặc định chỉ khi roleId không được cung cấp
+        }
         return userRepository.save(user);
     }
 

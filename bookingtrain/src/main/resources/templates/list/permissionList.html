@@ -9,7 +9,7 @@
 <body th:replace="/fragments/body :: body">
     <div th:fragment="mainContent">
         <h1 class="mb-4">permission List</h1>
-        <a href="#" th:href="@{/permissions/newPermission}">Thêm permisson</a>
+        <a class="addPermissionLink" th:href="@{/permissions/newPermission}">Thêm permisson</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -22,8 +22,10 @@
                     <td th:text="${permission.permissionId}"></td>
                     <td th:text="${permission.permissionName}"></td>
                     <td>
-                        <a th:href="@{/permissions/editPermission/{permissionId}(permissionId=${permission.permissionId})}" class="btn btn-warning btn-sm">Edit</a>
-                        <a th:href="@{/permissions/deletePermission/{id}(id=${permission.permissionId})}" class="btn btn-danger btn-sm"
+                        <a th:href="@{/permissions/editPermission/{permissionId}(permissionId=${permission.permissionId})}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/permissions/deletePermission/{id}(id=${permission.permissionId})}"
+                            class="btn btn-danger btn-sm"
                             onclick="return confirm('Are you sure you want to delete this permission?');">Delete</a>
                     </td>
 
@@ -31,6 +33,13 @@
             </tbody>
         </table>
     </div>
+
+    <!-- <div id="addPermissionContainer"></div>
+    <div class="overlay"></div> -->
+
+
 </body>
 
 </html>
+
+
