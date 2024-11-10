@@ -19,7 +19,7 @@ public class PassengerService implements IPassengerService {
     }
 
     public Passenger getById(Integer id) {
-        return passengerRepository.findById((long) id).orElse(null);
+        return passengerRepository.findById(id).orElse(null);
     }
 
     public List<Passenger> getAll() {
@@ -30,7 +30,7 @@ public class PassengerService implements IPassengerService {
         return passengerRepository.save(passenger);
     }
 
-    public void delete(Passenger passenger) {
-        passengerRepository.delete(passenger);
+    public void delete(int id) {
+        passengerRepository.deleteById(id);
     }
 }

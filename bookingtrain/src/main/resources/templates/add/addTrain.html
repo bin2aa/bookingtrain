@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/fragments/header :: head">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body th:replace="/fragments/body :: body">
+
+<div th:fragment="mainContent" class="container mt-5">
+    <h1 class="text-center mb-4">Add Train</h1>
+    <form class="form align-content-center" th:action="@{/trains/saveTrain}" th:object="${train}" method="post" enctype="multipart/form-data">
+        <div class="form-group row">
+            <label for="trainCode" class="col-sm-2 col-form-label">Train Code:</label>
+            <div class="col-sm-10">
+                <input type="text" id="trainCode" th:field="*{trainCode}" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="trainName" class="col-sm-2 col-form-label">Train Name:</label>
+            <div class="col-sm-10">
+                <input type="text" id="trainName" th:field="*{trainName}" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="imageFile" class="col-sm-2 col-form-label">Image:</label>
+            <div class="col-sm-10">
+                <input type="file" id="imageFile" name="imageFile" accept="image/png, image/jpeg" class="form-control-file" required/>
+            </div>
+        </div>
+
+        <!-- Hidden Status Field -->
+        <input type="hidden" th:field="*{statusTrain}" value="1"/>
+
+        <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary btn-block">Add Train</button>
+            </div>
+        </div>
+    </form>
+    <div class="text-center mt-3">
+        <a th:href="@{/trains}" class="btn btn-secondary">Back to Train List</a>
+    </div>
+</div>
+
+</body>
+</html>

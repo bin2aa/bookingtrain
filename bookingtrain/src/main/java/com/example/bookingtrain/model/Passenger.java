@@ -4,6 +4,7 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "passengers")
@@ -22,5 +23,9 @@ public class Passenger {
     private String phone;
 
     @Column(nullable = true)
+    private String identityId;
+
+    @Column(nullable = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateOfBirth;
 }

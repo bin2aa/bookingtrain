@@ -9,5 +9,5 @@ public interface IPassengerService {
     Passenger getById(Integer id);
     List<Passenger> getAll();
     Passenger save(Passenger passenger);
-    void delete(Passenger passenger);
+    void delete(int id);
 }
