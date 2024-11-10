@@ -41,20 +41,20 @@
             </li>
             <li class="nav-item">
                 <!-- <a class="nav-link" th:href="@{/carriages}"> -->
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Carriage</span>
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Carriage</span>
                 </a>
             </li>
             <li class="nav-item">
                 <!-- <a class="nav-link" th:href="@{/carriageTypes}">  -->
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Carriage type</span>
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Carriage type</span>
                 </a>
             </li>
             <li class="nav-item">
                 <!-- <a class="nav-link" th:href="@{/employees}"> -->
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Employee</span>
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Employee</span>
                 </a>
             </li>
 
@@ -76,6 +76,8 @@
                         <a class="collapse-item" th:href="@{/roles}">
                             <span>Role</span>
                         </a>
+
+                       
                         <a class="collapse-item" th:href="@{/roleOperations}">
                             <span>Role Operation</span>
                         </a>
@@ -224,6 +226,13 @@
 
                     <!-- Add Role Container -->
                     <div id="addRoleContainer"></div>
+
+                    <div id="addUserContainer"></div>
+
+                    <div id="addPermissionContainer"></div>
+
+                    <div id="addRoleOperationContainer"></div>
+
                     <div class="overlay"></div>
                     <!--    TABLE    -->
                     <div th:replace="~{::mainContent}"></div>

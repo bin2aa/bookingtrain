@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add object</title>
+</head>
+<body>
+    <h1>Add New object</h1>
+    <form th:action="@{/objects/addObject}" th:object="${object}" method="post">
+           <div>
+            <label for="objectName">objectName:</label>
+            <input type="text" id="objectName" th:field="*{objectName}" required>
+        </div>
+        <div>
+            <label for="price">price:</label>
+            <input type="text" id="price" th:field="*{price}" required>
+        </div>
+        <div>
+            <button type="submit">Add object</button>
+        </div>
+    </form>
+    <a th:href="@{/objects}">Back to object List</a>
+</body>
+</html>

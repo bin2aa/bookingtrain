@@ -7,10 +7,13 @@
 </head>
 
 <body th:replace="/fragments/body :: body">
-    <div class="container mt-5">
+
+
+    <!-- <div class="container mt-5"> -->
     <div th:fragment="mainContent">
         <h1 class="mb-4">User List</h1>
-        <a href="#" th:href="@{/users/newUser}">Thêm người dùng</a>
+
+        <a class="addUserLink" th:href="@{/users/newUser}">Thêm người dùng</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -22,26 +25,33 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableContent">
                 <tr th:each="user : ${users}">
                     <td th:text="${user.userId}"></td>
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.password}"></td>
-                    <td th:text="${user.role.roleName}"></td> 
-                    
-
-
+                    <td th:text="${user.role.roleName}"></td>
                     <td>
-                        <a th:href="@{/users/editUser/{userId}(userId=${user.userId})}" class="btn btn-warning btn-sm">Edit</a>    
-                        <a th:href="@{/users/deleteUser/{id}(id=${user.userId})}" class="btn btn-danger btn-sm" 
-                           onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                        <a th:href="@{/users/editUser/{userId}(userId=${user.userId})}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/users/deleteUser/{id}(id=${user.userId})}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                     </td>
-
                 </tr>
             </tbody>
         </table>
+        <div
+            th:replace="fragments/pagination :: paginationFragment (baseUrl='/users', currentPage=${currentPage}, totalPages=${totalPages})">
+        </div>
     </div>
+    <!-- </div> -->
+
+    <!-- Container cho form thêm mới -->
+    <!-- <div id="addUserContainer"></div> -->
+    <!-- <div class="overlay"></div> -->
+
+
 </body>
 
 </html>
