@@ -41,4 +41,7 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "scheduleId", insertable = false, updatable = false)
     private Schedule schedule;
+
+    @Column
+    private int statusBooking;
 }

@@ -9,5 +9,5 @@ public interface ITrainService {
     Train getById(Integer id);
     List<Train> getAllTrains();
     Train save(Train train);
-    void delete(Integer id);
+    boolean delete(Integer id);
 }

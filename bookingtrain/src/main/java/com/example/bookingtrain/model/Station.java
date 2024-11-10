@@ -1,6 +1,7 @@
 package com.example.bookingtrain.model;
 
 import javax.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -20,4 +21,7 @@ public class Station {
 
     @Column(nullable = true)
     private String stationCode;
+
+    @Column
+    private int statusStation;
 }

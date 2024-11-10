@@ -20,4 +20,10 @@ public class Train {
 
     @Column(nullable = true)
     private String trainCode;
+
+    @Column
+    private int statusTrain;
+
+
+
 }

@@ -10,5 +10,5 @@ public interface ITicketService {
     List<Ticket> getAllTicket();
     Ticket save(Ticket ticket);
     Ticket update(int id, Ticket ticket);
-    void delete(int id);
+    boolean delete(int id);
 }
