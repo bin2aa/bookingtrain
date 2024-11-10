@@ -50,7 +50,7 @@ public class PassengerController {
         return "redirect:/passengers";
     }
 
-    @GetMapping("/updatePassenger/{id}")
+    @GetMapping("/editPassenger/{id}")
     public String showUpdatePage(@PathVariable int id ,Model model) {
         Passenger p = passengerService.getById(id);
         model.addAttribute("passenger", p);

@@ -39,4 +39,7 @@ public class Route {
     @ManyToOne
     @JoinColumn(name = "trainId", insertable = false, updatable = false)
     private Train train;
+
+    @Column
+    private int statusRoute;
 }

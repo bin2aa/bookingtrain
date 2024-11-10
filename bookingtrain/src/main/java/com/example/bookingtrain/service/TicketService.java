@@ -21,7 +21,7 @@ public class TicketService implements ITicketService {
 
     // CRUD
     public Ticket getByID(int id) {
-        return repo.findById((long) id).orElse(null);
+        return repo.findById(id).orElse(null);
     }
 
     public List<Ticket> getAllTicket() {
