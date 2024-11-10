@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.toggle').forEach(function (toggle) {
-        toggle.addEventListener('change', function (event) {
+    document.addEventListener('change', function (event) {
+        const toggle = event.target.closest('.toggle');
+        if (toggle) {
             event.preventDefault();
             var roleId = toggle.dataset.roleId;
             var permissionId = toggle.dataset.permissionId;
@@ -38,6 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .finally(() => {
                     toggle.disabled = false;
                 });
-        });
+        }
     });
 });
