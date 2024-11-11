@@ -22,6 +22,12 @@ public class Station {
     @Column(nullable = true)
     private String stationCode;
 
-    @Column
+    @Column(nullable = true)
     private int statusStation;
+
+    @Column(nullable = true)
+    private String description;
+
+    @Column(nullable = true)
+    private String image;
 }

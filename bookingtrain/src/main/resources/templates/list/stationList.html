@@ -11,6 +11,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
+                    <a class="btn btn-primary mb-3" th:href="@{/stations/addStation}">Add Station</a>
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
@@ -18,24 +19,20 @@
                             <th>Station Code</th>
                             <th>Station Name</th>
                             <th>Status</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                         </thead>
-                        <tfoot>
-                        <tr>
-                            <th>Station ID</th>
-                            <th>Station Code</th>
-                            <th>Station Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                        </tfoot>
+    
                         <tbody>
                         <tr th:each="station : ${stationList}">
                             <td th:text="${station.stationId}"></td>
                             <td th:text="${station.stationCode}"></td>
                             <td th:text="${station.stationName}"></td>
                             <td th:text="${station.statusStation == 1 ? 'Active' : 'Inactive'}"></td>
+                            <td>
+                                <img th:src="@{'img/stationImg/' + ${station.image}}" alt="Station Image" style="width: 100px; height: auto;" />
+                            </td>
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/stations/editStation/{id} (id=${station.stationId})}">Edit</a>
                                 <a class="btn btn-danger btn-sm" th:href="@{/stations/deleteStation/{id} (id=${station.stationId})}"

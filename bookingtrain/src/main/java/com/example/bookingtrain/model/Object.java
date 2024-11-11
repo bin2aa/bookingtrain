@@ -21,8 +21,4 @@ public class Object {
     @Column(nullable = false)
     private Integer price;
 
-    @ManyToOne
-    @JoinColumn(name = "passengerId", insertable = false, updatable = false)
-    private Role passenger;
-
 }

@@ -11,12 +11,13 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Coache {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer coachId;
+    private Integer coacheId;
 
-    @Column(nullable = true)
-    private String coachCode;
+    @Column(nullable = false)
+    private int statusCoache;
 
     @Column(nullable = true)
     private Integer trainId;

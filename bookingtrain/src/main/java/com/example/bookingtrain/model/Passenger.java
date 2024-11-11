@@ -28,4 +28,11 @@ public class Passenger {
     @Column(nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateOfBirth;
+
+    @Column(nullable = true)
+    private Integer objectId;
+
+    @ManyToOne
+    @JoinColumn(name = "objectId", insertable = false, updatable = false)
+    private Object object;
 }

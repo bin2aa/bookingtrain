@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface TrainRepository extends JpaRepository<Train, Integer> {
 
     Train findByTrainName(String trainName);
-    Train findByTrainCode(String trainCode);
+
 }

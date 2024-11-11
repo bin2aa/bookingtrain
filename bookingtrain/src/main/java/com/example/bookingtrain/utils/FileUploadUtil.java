@@ -1,6 +1,5 @@
 package com.example.bookingtrain.utils;
 
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.nio.file.StandardCopyOption;
 public class FileUploadUtil {
 
     public static void saveFile(String uploadDir, String fileName,
-                                MultipartFile multipartFile) throws IOException {
+            MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
 
         if (!Files.exists(uploadPath)) {
