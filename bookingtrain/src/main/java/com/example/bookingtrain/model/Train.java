@@ -19,11 +19,12 @@ public class Train {
     private String trainName;
 
     @Column(nullable = true)
-    private String trainCode;
+    private String description;
 
-    @Column
-    private int statusTrain;
+    @Column(nullable = true)
+    private String image;
 
-
+    @Column(nullable = true)
+    private Integer statusTrain;
 
 }

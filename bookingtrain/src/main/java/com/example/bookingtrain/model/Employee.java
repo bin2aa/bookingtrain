@@ -1,6 +1,10 @@
 package com.example.bookingtrain.model;
 
+import java.time.LocalDate;
 import javax.persistence.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -19,7 +23,8 @@ public class Employee {
     private String employeeName;
 
     @Column(nullable = true)
-    private java.util.Date dateOfBirth;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
 
     @Column(nullable = true)
     private String address;
@@ -28,9 +33,9 @@ public class Employee {
     private String phone;
 
     @Column(nullable = true)
-    private Integer roleId;
+    private Integer userId;
 
     @ManyToOne
-    @JoinColumn(name = "roleId", insertable = false, updatable = false)
-    private Role role;
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    private User user;
 }

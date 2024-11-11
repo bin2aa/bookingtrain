@@ -24,4 +24,9 @@ public class Seat {
     @ManyToOne
     @JoinColumn(name = "coachId", insertable = false, updatable = false)
     private Coache coach;
+
+    @ManyToOne
+    @JoinColumn(name = "seatTypeId", insertable = false, updatable = false)
+    private SeatType seatType;
+
 }

@@ -22,16 +22,7 @@
                             <th>Action</th>
                         </tr>
                         </thead>
-                        <tfoot>
-                        <tr>
-                            <th>Id</th>
-                            <th>Booking Id</th>
-                            <th>Seat Id</th>
-                            <th>Passenger Id</th>
-                            <th>Is Active</th>
-                            <th>Action</th>
-                        </tr>
-                        </tfoot>
+                      
                         <tbody>
                         <tr th:each="ticket : ${ticketList}">
                             <td th:text="${ticket.ticketId}"></td>

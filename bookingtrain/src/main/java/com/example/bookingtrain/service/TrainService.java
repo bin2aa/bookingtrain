@@ -22,10 +22,6 @@ public class TrainService implements ITrainService {
         return repo.findByTrainName(trainName);
     }
 
-    public Train getByTrainCode(String trainCode) {
-        return repo.findByTrainCode(trainCode);
-    }
-
     @Override
     public Train getById(Integer id) {
         return repo.findById(id).orElse(null);

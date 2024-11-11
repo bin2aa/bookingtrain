@@ -2,11 +2,14 @@ package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Station;
 import com.example.bookingtrain.service.StationService;
+import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -21,41 +24,73 @@ public class StationController {
     }
 
     @GetMapping("")
-    public String getAllStations(Model model) {
-        List<Station> stations = stationService.getAll();
-        model.addAttribute("stationList", stations);
+    public String showList(Model model) {
+        List<Station> stationList = stationService.getAll();
+        model.addAttribute("stationList", stationList);
         return "list/stationList";
     }
 
     @GetMapping("/addStation")
-    public String addStationForm(Model model) {
+    public String showAddForm(Model model) {
         model.addAttribute("station", new Station());
         return "add/addStation";
     }
 
     @PostMapping("/saveStation")
-    public String saveStation(@ModelAttribute("station") Station station) {
-        if(station.getStationId() != null) {
-            Station existingStation = stationService.getById(station.getStationId());
-            existingStation.setStationName(station.getStationName());
-            existingStation.setStationCode(station.getStationCode());
+    public String saveStation(@ModelAttribute("station") Station station,
+            @RequestParam("imageFile") MultipartFile multipartFile,
+            Model model) {
+        try {
+            String fileName = multipartFile.getOriginalFilename();
+            station.setImage(fileName);
 
-            stationService.save(existingStation);
-        }else {
-            stationService.save(station);
+            Station savedStation = stationService.createStation(station);
+
+            String uploadDir = "img/stationImg/";
+
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("station", station);
+            return "add/addStation";
         }
         return "redirect:/stations";
     }
 
     @GetMapping("/editStation/{id}")
-    public String editStationForm(@PathVariable("id") int id, Model model) {
+    public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Station station = stationService.getById(id);
-        model.addAttribute("station", station);
-        return "edit/editStation";
+        if (station != null) {
+            model.addAttribute("station", station);
+            return "edit/editStation";
+        }
+        return "redirect:/stations";
+    }
+
+    @PostMapping("/updateStation")
+    public String updateStation(@ModelAttribute("station") Station station,
+            @RequestParam("imageFile") MultipartFile multipartFile,
+            Model model) {
+        try {
+            if (!multipartFile.isEmpty()) {
+                String fileName = multipartFile.getOriginalFilename();
+                station.setImage(fileName);
+
+                String uploadDir = "img/stationImg/";
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            }
+
+            stationService.updateStation(station.getStationId(), station);
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("station", station);
+            return "edit/editStation";
+        }
+        return "redirect:/stations";
     }
 
     @GetMapping("/deleteStation/{id}")
-    public String deleteStation(@PathVariable("id") int id) {
+    public String deleteStation(@PathVariable("id") Integer id) {
         stationService.deleteStation(id);
         return "redirect:/stations";
     }

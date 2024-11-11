@@ -2,7 +2,7 @@ package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Employee;
 import com.example.bookingtrain.service.EmployeeService;
-import com.example.bookingtrain.service.RoleService;
+import com.example.bookingtrain.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @Autowired
-    private RoleService roleService;
+    private UserService userService;
 
     @GetMapping
     public String getAllEmployees(Model model) {
@@ -28,7 +28,7 @@ public class EmployeeController {
     @GetMapping("/newEmployee")
     public String addEmployeeForm(Model model) {
         model.addAttribute("employee", new Employee());
-        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("users", userService.getAllUsers());
         return "add/addEmployee";
     }
 
@@ -42,7 +42,7 @@ public class EmployeeController {
     public String editEmployeeForm(@PathVariable Integer employeeID, Model model) {
         Employee employee = employeeService.getEmployeeById(employeeID);
         model.addAttribute("employee", employee);
-        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("users", userService.getAllUsers());
         return "edit/editEmployee";
     }
 

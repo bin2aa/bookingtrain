@@ -1,6 +1,7 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Train;
+// import com.example.bookingtrain.config.WebConfig;
 import com.example.bookingtrain.service.TrainService;
 import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,30 +38,29 @@ public class TrainController {
     }
 
     @PostMapping("/saveTrain")
-    public String saveTrain (@ModelAttribute("train") Train train,
-                             @RequestParam("imageFile") MultipartFile multipartFile,
-                             Model model){
-        if(train.getTrainId() != null) {
+    public String saveTrain(@ModelAttribute("train") Train train,
+            @RequestParam("imageFile") MultipartFile multipartFile,
+            Model model) {
+        if (train.getTrainId() != null) {
             Train existingTrain = trainService.getById(train.getTrainId());
             existingTrain.setTrainName(train.getTrainName());
-            existingTrain.setTrainCode(train.getTrainCode());
+            existingTrain.setDescription(train.getDescription());
             trainService.save(train);
-        }
-        else{
-            // Tạo train moi
+        } else {
+            // Tạo train mới
             train.setStatusTrain(1);
             try {
                 String fileName = multipartFile.getOriginalFilename();
-//                train.setImage(fileName);
+                train.setImage(fileName);
 
                 Train savedTrain = trainService.save(train);
 
-                String uploadDir = "/static/media/img/trainImg/" + savedTrain.getTrainId() + "/";
+                String uploadDir = "img/trainImg/";
 
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
-                model.addAttribute("train",train);
+                model.addAttribute("train", train);
                 return "add/addTrain";
             }
         }
@@ -71,7 +70,7 @@ public class TrainController {
     @GetMapping("/editTrain/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Train train = trainService.getById(id);
-        if(train != null){
+        if (train != null) {
             model.addAttribute("train", train);
             return "edit/editTrain";
         }
