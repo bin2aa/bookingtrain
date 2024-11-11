@@ -38,6 +38,19 @@ public class TrainService implements ITrainService {
     }
 
     @Override
+    public Train update(Integer id, Train updatedTrain) {
+        Train existingTrain = getById(id);
+        if (existingTrain != null) {
+            existingTrain.setTrainName(updatedTrain.getTrainName());
+            existingTrain.setDescription(updatedTrain.getDescription());
+            existingTrain.setStatusTrain(updatedTrain.getStatusTrain());
+            existingTrain.setImage(updatedTrain.getImage());
+            return repo.saveAndFlush(existingTrain);
+        }
+        return null;
+    }
+
+    @Override
     public boolean delete(Integer id) {
         Train train = getById(id);
         if (train != null) {

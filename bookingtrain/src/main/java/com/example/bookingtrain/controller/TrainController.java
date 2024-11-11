@@ -1,7 +1,6 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Train;
-// import com.example.bookingtrain.config.WebConfig;
 import com.example.bookingtrain.service.TrainService;
 import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequestMapping("/trains")
 public class TrainController {
 
-    private TrainService trainService;
+    private final TrainService trainService;
 
     @Autowired
     public TrainController(TrainService trainService) {
@@ -41,28 +40,17 @@ public class TrainController {
     public String saveTrain(@ModelAttribute("train") Train train,
             @RequestParam("imageFile") MultipartFile multipartFile,
             Model model) {
-        if (train.getTrainId() != null) {
-            Train existingTrain = trainService.getById(train.getTrainId());
-            existingTrain.setTrainName(train.getTrainName());
-            existingTrain.setDescription(train.getDescription());
-            trainService.save(train);
-        } else {
-            // Tạo train mới
-            train.setStatusTrain(1);
-            try {
-                String fileName = multipartFile.getOriginalFilename();
-                train.setImage(fileName);
+        try {
+            String fileName = multipartFile.getOriginalFilename();
+            train.setImage(fileName);
 
-                Train savedTrain = trainService.save(train);
+            String uploadDir = "img/trainImg/";
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
-                String uploadDir = "img/trainImg/";
-
-                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-                model.addAttribute("train", train);
-                return "add/addTrain";
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("train", train);
+            return "add/addTrain";
         }
         return "redirect:/trains";
     }
@@ -77,10 +65,40 @@ public class TrainController {
         return "redirect:/trains";
     }
 
+    @PostMapping("/updateTrain")
+    public String updateTrain(@ModelAttribute("train") Train train,
+            @RequestParam("imageFile") MultipartFile multipartFile,
+            Model model) {
+        try {
+            // Lấy thông tin tàu hiện tại từ cơ sở dữ liệu
+            Train existingTrain = trainService.getById(train.getTrainId());
+            if (existingTrain == null) {
+                return "redirect:/trains";
+            }
+
+            // Nếu người dùng không chọn ảnh mới thì giữ nguyên ảnh cũ
+            if (!multipartFile.isEmpty()) {
+                String fileName = multipartFile.getOriginalFilename();
+                train.setImage(fileName);
+
+                String uploadDir = "img/trainImg/";
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            } else {
+                train.setImage(existingTrain.getImage());
+            }
+
+            trainService.update(train.getTrainId(), train);
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("train", train);
+            return "edit/editTrain";
+        }
+        return "redirect:/trains";
+    }
+
     @GetMapping("/deleteTrain/{id}")
     public String deleteTrain(@PathVariable("id") Integer id) {
         trainService.delete(id);
         return "redirect:/trains";
     }
-
 }
