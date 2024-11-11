@@ -1,6 +1,7 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Station;
+import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.StationService;
 import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,22 @@ public class StationController {
             @RequestParam("imageFile") MultipartFile multipartFile,
             Model model) {
         try {
-            String fileName = multipartFile.getOriginalFilename();
-            station.setImage(fileName);
+            Station existingStation = stationService.getById(station.getStationId());
+            if (existingStation == null) {
+                return "redirect:/stations";
+            }
+            if (!multipartFile.isEmpty()) {
+                String fileName = multipartFile.getOriginalFilename();
+                station.setImage(fileName);
 
-            Station savedStation = stationService.createStation(station);
+                String uploadDir = "img/stationImg/";
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
-            String uploadDir = "img/stationImg/";
-
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            } else {
+                station.setImage(existingStation.getImage());
+            }
+            // Cập nhật thông tin trạm
+            stationService.updateStation(station.getStationId(), station);
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("station", station);

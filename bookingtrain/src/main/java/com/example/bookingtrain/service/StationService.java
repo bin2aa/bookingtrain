@@ -40,6 +40,7 @@ public class StationService implements IStationService {
             existingStation.setStationCode(updatedStation.getStationCode());
             existingStation.setStationName(updatedStation.getStationName());
             existingStation.setStatusStation(updatedStation.getStatusStation());
+            existingStation.setDescription(updatedStation.getDescription());
             existingStation.setImage(updatedStation.getImage());
             return stationRepository.saveAndFlush(existingStation);
         }

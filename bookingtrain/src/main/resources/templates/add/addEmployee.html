@@ -1,26 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="/fragments/header :: head">
+    <title>Add Employee</title>
 </head>
 
 <body th:replace="/fragments/body :: body">
-
-    <div class="container mt-5">
-        <h1 class="mb-4">Add New Employee</h1>
-        <form th:action="@{/employees/addEmployee}" th:object="${employee}" method="post" class="needs-validation"
-            novalidate>
-
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">Add Employee</h1>
+        <form th:action="@{/employees/addEmployee}" th:object="${employee}" method="post" class="needs-validation" novalidate>
             <div class="mb-3">
-                <label for="employeeName" class="form-label">Employee full name:</label>
+                <label for="employeeName" class="form-label">Employee Name:</label>
                 <input type="text" id="employeeName" th:field="*{employeeName}" class="form-control" required>
                 <div class="invalid-feedback">
-                    Please provide a valid name.
+                    Please provide a valid employee name.
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="dateOfBirth" class="form-label">Date Of Birth:</label>
+                <label for="dateOfBirth" class="form-label">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" class="form-control" required>
                 <div class="invalid-feedback">
                     Please provide a valid date of birth.
@@ -53,8 +51,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Add employee</button>
-            <a th:href="@{/employees}" class="btn btn-secondary">Back to employee List</a>
+            <button type="submit" class="btn btn-primary">Add Employee</button>
+            <a th:href="@{/employees}" class="btn btn-secondary">Back to Employee List</a>
         </form>
     </div>
 
