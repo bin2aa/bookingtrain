@@ -1,18 +1,22 @@
 package com.example.bookingtrain.config;
 
+import com.example.bookingtrain.DTO.CustomUserDetails;
+import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.service.CustomUserDetailsService;
 import net.bytebuddy.asm.MemberSubstitution;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import
-        org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import
-        org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -25,19 +29,37 @@ public class SecurityConfig {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests(configurer -> configurer
-                        .antMatchers("/login", "/handleLogin","/css/**", "/js/**", "/images/**").permitAll()
+                        .antMatchers("/login","/css/**", "/js/**", "/images/**").permitAll()
+                        .antMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .loginProcessingUrl("/handleLogin")
+                        .loginPage("/login")
                         .usernameParameter("email")
-                        .defaultSuccessUrl("/")
+                        .successHandler((request, response, authentication) -> {
+                            HttpSession session = request.getSession();
+
+                            Object principal = authentication.getPrincipal();
+                            if (principal instanceof CustomUserDetails) {
+                                CustomUserDetails authenticatedUser = (CustomUserDetails) principal;
+
+                                session.setAttribute("username", authenticatedUser.getName());
+                                session.setAttribute("userId", authenticatedUser.getUserId());
+                                session.setAttribute("role", authenticatedUser.getRole());
+                            }
+//                            session.setAttribute("user", authentication.getPrincipal()); // Lưu thông tin người dùng vào session
+                            response.sendRedirect("/");
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .permitAll()
-                );
+                )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // Luôn tạo session khi người dùng đăng nhập
+                        .maximumSessions(50) // Giới hạn số lượng session tối đa cho mỗi người dùng
+                        .maxSessionsPreventsLogin(true) // Ngăn người dùng đăng nhập từ thiết bị khác nếu đã đạt số lượng session tối đa
+                );;
 
         return http.build();
     }
@@ -61,6 +83,7 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

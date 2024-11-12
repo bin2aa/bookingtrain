@@ -1,14 +1,20 @@
 package com.example.bookingtrain.DTO;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.example.bookingtrain.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
     private User user;
+
+    public User getUser(){
+        return user;
+    }
 
     public CustomUserDetails(User user) {
         this.user = user;
@@ -16,7 +22,13 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+
+        switch(this.user.getRole().getRoleId()){
+            case 1:
+                return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            default:
+                return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
     }
 
     @Override
@@ -49,8 +61,12 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    public String getFullName() {
-        return user.getUsername();
+    public String getName(){ return user.getUsername();}
+
+    public int getUserId() {
+        return user.getUserId();
     }
+
+    public String getRole() {return user.getRole().getRoleName();}
 
 }
