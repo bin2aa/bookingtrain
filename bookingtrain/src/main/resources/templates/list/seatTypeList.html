@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head">
+
+</head>
+
+<body th:replace="/fragments/body :: body">
+
+
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">Seat Type List</h1>
+        <a th:href="@{/seatTypes/addSeatType}" class="btn btn-primary mb-3">Add Seat Type</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Seat Type Name</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="seatType : ${seatTypeList}">
+                    <td th:text="${seatType.seatTypeId}"></td>
+                    <td th:text="${seatType.seatTypeName}"></td>
+                    <td th:text="${seatType.price}"></td>
+                    <td>
+                        <a th:href="@{/seatTypes/editSeatType/{id}(id=${seatType.seatTypeId})}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/seatTypes/deleteSeatType/{id}(id=${seatType.seatTypeId})}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this seat type?');">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

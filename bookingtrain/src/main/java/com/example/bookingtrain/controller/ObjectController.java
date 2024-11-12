@@ -22,7 +22,7 @@ public class ObjectController {
     private PermissionService permissionService;
 
     @GetMapping // Xử lý yêu cầu GET tới đường dẫn /objects
-    public String getAllobjects(Model model) { // Model là một đối tượng dùng để truyền dữ liệu từ Controller tới View
+    public String getAllobjects(Model model) {
         List<Object> objects = objectService.getAllObjects(); // Lấy danh sách objects từ service
         model.addAttribute("objects", objects); // Thêm danh sách objects vào model
         return "list/objectList"; // Trả về template objectList.html

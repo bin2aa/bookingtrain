@@ -1,5 +1,6 @@
 package com.example.bookingtrain.model;
 
+import java.time.LocalDate;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class Passenger {
 
     @Column(nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private java.util.Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(nullable = true)
     private Integer objectId;

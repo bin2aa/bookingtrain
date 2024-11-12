@@ -1,11 +1,31 @@
-
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Nov 12, 2024 at 11:55 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Database: `bookingtrain1`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bookings`
+--
 
 CREATE TABLE `bookings` (
   `bookingId` int(11) NOT NULL,
@@ -17,16 +37,33 @@ CREATE TABLE `bookings` (
   `statusBooking` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `coaches`
+--
 
 CREATE TABLE `coaches` (
-  `coachId` int(11) NOT NULL,
+  `coacheId` int(11) NOT NULL,
+  `coacheName` varchar(255) DEFAULT NULL,
   `statusCoache` int(11) DEFAULT NULL,
-  `trainId` int(11) DEFAULT NULL,
-  `coacheId` int(11) NOT NULL
+  `trainId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `coaches`
+--
 
+INSERT INTO `coaches` (`coacheId`, `coacheName`, `statusCoache`, `trainId`) VALUES
+(1, 'Toa C+', 0, 1),
+(2, 'Toa B\r\n', 1, 2),
+(3, 'Toa C', 1, 18);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employees`
+--
 
 CREATE TABLE `employees` (
   `employeeId` int(11) NOT NULL,
@@ -37,20 +74,36 @@ CREATE TABLE `employees` (
   `userId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+--
+-- Dumping data for table `employees`
+--
 
 INSERT INTO `employees` (`employeeId`, `employeeName`, `dateOfBirth`, `address`, `phone`, `userId`) VALUES
 (1, '1', '2024-11-16', '1', '1', 1),
-(2, '2', '2024-11-13', '2', '2', 1);
+(2, '2', '2024-11-13', '2', '2', 1),
+(3, '1', '2024-11-24', '1', '1', 1),
+(4, '1', '2024-11-21', '123', '123', 7),
+(5, '141414141414', '2024-11-24', '14141', '14141414', 5),
+(6, '141414141414', '2024-11-24', '14141', '14141414', 11),
+(7, '141414141414', '2024-11-24', '14141', '14141414', 1),
+(8, '141414141414', '2024-11-24', '14141', '14141414', 7);
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `images`
+--
 
 CREATE TABLE `images` (
   `Id` int(11) NOT NULL,
   `filePath` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `objects`
+--
 
 CREATE TABLE `objects` (
   `objectId` int(11) NOT NULL,
@@ -58,19 +111,28 @@ CREATE TABLE `objects` (
   `price` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+--
+-- Dumping data for table `objects`
+--
 
 INSERT INTO `objects` (`objectId`, `objectName`, `price`) VALUES
-(1, 'Nguoi gia', 70);
+(1, 'Nguoi gia', 70),
+(2, 'Nguoi tre', 40);
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `operations`
+--
 
 CREATE TABLE `operations` (
   `operationId` int(11) NOT NULL,
   `operationName` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+--
+-- Dumping data for table `operations`
+--
 
 INSERT INTO `operations` (`operationId`, `operationName`) VALUES
 (1, 'Xem'),
@@ -78,7 +140,11 @@ INSERT INTO `operations` (`operationId`, `operationName`) VALUES
 (3, 'Xóa'),
 (4, 'Sửa');
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `passengers`
+--
 
 CREATE TABLE `passengers` (
   `passengerId` int(11) NOT NULL,
@@ -89,20 +155,39 @@ CREATE TABLE `passengers` (
   `objectId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `passengers`
+--
 
+INSERT INTO `passengers` (`passengerId`, `passengerName`, `phone`, `dateOfBirth`, `identityId`, `objectId`) VALUES
+(2, '1', '1', '2024-11-27 11:24:21', 1, 1),
+(3, '1', '2', '2024-11-03 11:41:56', 3, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permissions`
+--
 
 CREATE TABLE `permissions` (
   `permissionId` int(11) NOT NULL,
   `permissionName` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `permissions`
+--
 
 INSERT INTO `permissions` (`permissionId`, `permissionName`) VALUES
 (1, 'Quản lý vée'),
 (2, 'Quản lý ghế'),
 (3, 'Quản lý người dùng');
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `roleoperation`
+--
 
 CREATE TABLE `roleoperation` (
   `roleId` int(11) NOT NULL,
@@ -111,7 +196,9 @@ CREATE TABLE `roleoperation` (
   `statusId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+--
+-- Dumping data for table `roleoperation`
+--
 
 INSERT INTO `roleoperation` (`roleId`, `permissionId`, `operationId`, `statusId`) VALUES
 (1, 1, 1, 1),
@@ -123,6 +210,11 @@ INSERT INTO `roleoperation` (`roleId`, `permissionId`, `operationId`, `statusId`
 (3, 2, 1, 2),
 (6, 3, 4, 2);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
 
 CREATE TABLE `roles` (
   `roleId` int(11) NOT NULL,
@@ -130,7 +222,7 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Đang đổ dữ liệu cho bảng `roles`
+-- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`roleId`, `roleName`) VALUES
@@ -144,75 +236,82 @@ INSERT INTO `roles` (`roleId`, `roleName`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `routes`
+-- Table structure for table `routes`
 --
 
 CREATE TABLE `routes` (
   `routeId` int(11) NOT NULL,
   `trainId` int(11) DEFAULT NULL,
+  `routeName` varchar(255) DEFAULT NULL,
   `stationDepartureId` int(11) DEFAULT NULL,
   `stationArrivalId` int(11) DEFAULT NULL,
-  `routeName` varchar(255) DEFAULT NULL,
   `statusRoute` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `schedules`
+-- Table structure for table `schedules`
 --
 
 CREATE TABLE `schedules` (
   `scheduleId` int(11) NOT NULL,
   `trainId` int(11) DEFAULT NULL,
+  `routeId` int(11) DEFAULT NULL,
   `arrivalTime` datetime DEFAULT NULL,
   `departureTime` datetime DEFAULT NULL,
-  `routeId` int(11) DEFAULT NULL,
   `statusSchedule` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `seats`
+-- Table structure for table `seats`
 --
 
 CREATE TABLE `seats` (
   `seatId` int(11) NOT NULL,
-  `seatCode` varchar(10) DEFAULT NULL,
+  `coacheId` int(11) DEFAULT NULL,
   `seatTypeId` int(11) DEFAULT NULL,
-  `coachId` int(11) DEFAULT NULL,
-  `seatNumber` varchar(255) DEFAULT NULL
+  `seatNumber` varchar(255) DEFAULT NULL,
+  `coachId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `seats`
+--
+
+INSERT INTO `seats` (`seatId`, `coacheId`, `seatTypeId`, `seatNumber`, `coachId`) VALUES
+(1, 1, 3, '1', NULL),
+(2, 2, 2, '1123123', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `seattype`
+-- Table structure for table `seattypes`
 --
 
-CREATE TABLE `seattype` (
-  `seatTypeId` int(11) NOT NULL,
-  `seatTypeName` varchar(255) DEFAULT NULL,
-  `price` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `seat_types`
---
-
-CREATE TABLE `seat_types` (
+CREATE TABLE `seattypes` (
   `seatTypeId` int(11) NOT NULL,
   `price` double DEFAULT NULL,
   `seatTypeName` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `seattypes`
+--
+
+INSERT INTO `seattypes` (`seatTypeId`, `price`, `seatTypeName`) VALUES
+(1, 10, '334'),
+(2, 50, 'Vip'),
+(3, 10, '33'),
+(6, 10, '3'),
+(13, 1, 'Ghế thường');
+
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `stations`
+-- Table structure for table `stations`
 --
 
 CREATE TABLE `stations` (
@@ -224,10 +323,21 @@ CREATE TABLE `stations` (
   `statusStation` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `stations`
+--
+
+INSERT INTO `stations` (`stationId`, `stationName`, `description`, `image`, `stationCode`, `statusStation`) VALUES
+(1, '1', '1', 'HCM_wallpaper1.jpg', '1', 1),
+(2, '1233333333333333', '1231231', 'HCM_wallpaper1.jpg', '1', 1),
+(3, '1313123123123213', NULL, 'HCM_wallpaper1.jpg', '1', 1),
+(4, '1313', NULL, 'HCM_wallpaper1.jpg', '1313', 1),
+(5, '444', '444', 'HCM_wallpaper1.jpg', '4444', 0);
+
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `statusroleoperation`
+-- Table structure for table `statusroleoperation`
 --
 
 CREATE TABLE `statusroleoperation` (
@@ -236,7 +346,7 @@ CREATE TABLE `statusroleoperation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Đang đổ dữ liệu cho bảng `statusroleoperation`
+-- Dumping data for table `statusroleoperation`
 --
 
 INSERT INTO `statusroleoperation` (`statusId`, `statusName`) VALUES
@@ -246,7 +356,7 @@ INSERT INTO `statusroleoperation` (`statusId`, `statusName`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `tickets`
+-- Table structure for table `tickets`
 --
 
 CREATE TABLE `tickets` (
@@ -260,21 +370,34 @@ CREATE TABLE `tickets` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `trains`
+-- Table structure for table `trains`
 --
 
 CREATE TABLE `trains` (
   `trainId` int(11) NOT NULL,
+  `trainName` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `image` varchar(255) NOT NULL,
-  `statusTrain` int(11) NOT NULL,
-  `trainName` varchar(255) NOT NULL
+  `statusTrain` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `trains`
+--
+
+INSERT INTO `trains` (`trainId`, `trainName`, `description`, `image`, `statusTrain`) VALUES
+(1, '1', 'hâha', 'HCM_wallpaper1.jpg', 1),
+(2, 'Thịnh', 'Tàu provip số 1 thế giới. đi với 2000km/s', 'HCM_wallpaper1.jpg', 0),
+(14, '1', '1', 'HCM_wallpaper1.jpg', 1),
+(15, '1', '1', 'HCM_wallpaper1.jpg', 1),
+(16, '1', '1', 'HCM_wallpaper1.jpg', 1),
+(17, '1', '1', 'HCM_wallpaper1.jpg', 1),
+(18, '1123123', '11123123123', 'HCM_wallpaper1.jpg', 1);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -286,7 +409,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Đang đổ dữ liệu cho bảng `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`userId`, `email`, `password`, `username`, `roleID`) VALUES
@@ -301,11 +424,11 @@ INSERT INTO `users` (`userId`, `email`, `password`, `username`, `roleID`) VALUES
 (11, '1231313@gmail.com', '1', '1', 1);
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `bookings`
+-- Indexes for table `bookings`
 --
 ALTER TABLE `bookings`
   ADD PRIMARY KEY (`bookingId`),
@@ -314,52 +437,52 @@ ALTER TABLE `bookings`
   ADD KEY `scheduleId` (`scheduleId`);
 
 --
--- Chỉ mục cho bảng `coaches`
+-- Indexes for table `coaches`
 --
 ALTER TABLE `coaches`
-  ADD PRIMARY KEY (`coachId`),
+  ADD PRIMARY KEY (`coacheId`),
   ADD KEY `trainId` (`trainId`);
 
 --
--- Chỉ mục cho bảng `employees`
+-- Indexes for table `employees`
 --
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`employeeId`),
   ADD KEY `roleId` (`userId`);
 
 --
--- Chỉ mục cho bảng `images`
+-- Indexes for table `images`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`Id`);
 
 --
--- Chỉ mục cho bảng `objects`
+-- Indexes for table `objects`
 --
 ALTER TABLE `objects`
   ADD PRIMARY KEY (`objectId`);
 
 --
--- Chỉ mục cho bảng `operations`
+-- Indexes for table `operations`
 --
 ALTER TABLE `operations`
   ADD PRIMARY KEY (`operationId`);
 
 --
--- Chỉ mục cho bảng `passengers`
+-- Indexes for table `passengers`
 --
 ALTER TABLE `passengers`
   ADD PRIMARY KEY (`passengerId`),
   ADD KEY `FK8fke2l0oradn5yyqrq5uxpdpd` (`objectId`);
 
 --
--- Chỉ mục cho bảng `permissions`
+-- Indexes for table `permissions`
 --
 ALTER TABLE `permissions`
   ADD PRIMARY KEY (`permissionId`);
 
 --
--- Chỉ mục cho bảng `roleoperation`
+-- Indexes for table `roleoperation`
 --
 ALTER TABLE `roleoperation`
   ADD PRIMARY KEY (`roleId`,`permissionId`,`operationId`),
@@ -368,22 +491,22 @@ ALTER TABLE `roleoperation`
   ADD KEY `roleoperation_ibfk_4` (`statusId`);
 
 --
--- Chỉ mục cho bảng `roles`
+-- Indexes for table `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`roleId`);
 
 --
--- Chỉ mục cho bảng `routes`
+-- Indexes for table `routes`
 --
 ALTER TABLE `routes`
   ADD PRIMARY KEY (`routeId`),
   ADD KEY `trainId` (`trainId`),
-  ADD KEY `stationDepartureId` (`stationDepartureId`),
-  ADD KEY `stationArrivalId` (`stationArrivalId`);
+  ADD KEY `FK98e52pe83jl269upp8qy3eyw7` (`stationArrivalId`),
+  ADD KEY `FKk12tea84w96jkgbba6yye1nbe` (`stationDepartureId`);
 
 --
--- Chỉ mục cho bảng `schedules`
+-- Indexes for table `schedules`
 --
 ALTER TABLE `schedules`
   ADD PRIMARY KEY (`scheduleId`),
@@ -391,39 +514,33 @@ ALTER TABLE `schedules`
   ADD KEY `FK7o59nkqglakwmt6dyl8fk3ktl` (`routeId`);
 
 --
--- Chỉ mục cho bảng `seats`
+-- Indexes for table `seats`
 --
 ALTER TABLE `seats`
   ADD PRIMARY KEY (`seatId`),
-  ADD KEY `seatTypeId` (`seatTypeId`),
-  ADD KEY `coachId` (`coachId`);
+  ADD UNIQUE KEY `coachId` (`coacheId`),
+  ADD KEY `seats_ibfk_1` (`seatTypeId`);
 
 --
--- Chỉ mục cho bảng `seattype`
+-- Indexes for table `seattypes`
 --
-ALTER TABLE `seattype`
+ALTER TABLE `seattypes`
   ADD PRIMARY KEY (`seatTypeId`);
 
 --
--- Chỉ mục cho bảng `seat_types`
---
-ALTER TABLE `seat_types`
-  ADD PRIMARY KEY (`seatTypeId`);
-
---
--- Chỉ mục cho bảng `stations`
+-- Indexes for table `stations`
 --
 ALTER TABLE `stations`
   ADD PRIMARY KEY (`stationId`);
 
 --
--- Chỉ mục cho bảng `statusroleoperation`
+-- Indexes for table `statusroleoperation`
 --
 ALTER TABLE `statusroleoperation`
   ADD PRIMARY KEY (`statusId`);
 
 --
--- Chỉ mục cho bảng `tickets`
+-- Indexes for table `tickets`
 --
 ALTER TABLE `tickets`
   ADD PRIMARY KEY (`ticketId`),
@@ -431,13 +548,13 @@ ALTER TABLE `tickets`
   ADD KEY `passengerId` (`passengerId`);
 
 --
--- Chỉ mục cho bảng `trains`
+-- Indexes for table `trains`
 --
 ALTER TABLE `trains`
   ADD PRIMARY KEY (`trainId`);
 
 --
--- Chỉ mục cho bảng `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`userId`),
@@ -445,129 +562,123 @@ ALTER TABLE `users`
   ADD KEY `roleId` (`roleID`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `bookings`
+-- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
   MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT cho bảng `coaches`
+-- AUTO_INCREMENT for table `coaches`
 --
 ALTER TABLE `coaches`
-  MODIFY `coachId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `coacheId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT cho bảng `employees`
+-- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `employeeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT cho bảng `images`
+-- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT cho bảng `objects`
+-- AUTO_INCREMENT for table `objects`
 --
 ALTER TABLE `objects`
-  MODIFY `objectId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `objectId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT cho bảng `operations`
+-- AUTO_INCREMENT for table `operations`
 --
 ALTER TABLE `operations`
   MODIFY `operationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT cho bảng `passengers`
+-- AUTO_INCREMENT for table `passengers`
 --
 ALTER TABLE `passengers`
-  MODIFY `passengerId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `passengerId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT cho bảng `permissions`
+-- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
   MODIFY `permissionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT cho bảng `roles`
+-- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
   MODIFY `roleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT cho bảng `routes`
+-- AUTO_INCREMENT for table `routes`
 --
 ALTER TABLE `routes`
   MODIFY `routeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT cho bảng `schedules`
+-- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
   MODIFY `scheduleId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT cho bảng `seats`
+-- AUTO_INCREMENT for table `seats`
 --
 ALTER TABLE `seats`
-  MODIFY `seatId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `seatId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT cho bảng `seattype`
+-- AUTO_INCREMENT for table `seattypes`
 --
-ALTER TABLE `seattype`
-  MODIFY `seatTypeId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `seattypes`
+  MODIFY `seatTypeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT cho bảng `seat_types`
---
-ALTER TABLE `seat_types`
-  MODIFY `seatTypeId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `stations`
+-- AUTO_INCREMENT for table `stations`
 --
 ALTER TABLE `stations`
-  MODIFY `stationId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `stationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT cho bảng `statusroleoperation`
+-- AUTO_INCREMENT for table `statusroleoperation`
 --
 ALTER TABLE `statusroleoperation`
   MODIFY `statusId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT cho bảng `tickets`
+-- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
   MODIFY `ticketId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT cho bảng `trains`
+-- AUTO_INCREMENT for table `trains`
 --
 ALTER TABLE `trains`
-  MODIFY `trainId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `trainId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT cho bảng `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- Các ràng buộc cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Các ràng buộc cho bảng `bookings`
+-- Constraints for table `bookings`
 --
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
@@ -575,26 +686,26 @@ ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`scheduleId`) REFERENCES `schedules` (`scheduleId`);
 
 --
--- Các ràng buộc cho bảng `coaches`
+-- Constraints for table `coaches`
 --
 ALTER TABLE `coaches`
   ADD CONSTRAINT `coaches_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`);
 
 --
--- Các ràng buộc cho bảng `employees`
+-- Constraints for table `employees`
 --
 ALTER TABLE `employees`
   ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Các ràng buộc cho bảng `passengers`
+-- Constraints for table `passengers`
 --
 ALTER TABLE `passengers`
   ADD CONSTRAINT `FK8fke2l0oradn5yyqrq5uxpdpd` FOREIGN KEY (`objectId`) REFERENCES `objects` (`objectId`),
   ADD CONSTRAINT `passengers_ibfk_1` FOREIGN KEY (`objectId`) REFERENCES `operations` (`operationId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Các ràng buộc cho bảng `roleoperation`
+-- Constraints for table `roleoperation`
 --
 ALTER TABLE `roleoperation`
   ADD CONSTRAINT `roleoperation_ibfk_1` FOREIGN KEY (`roleId`) REFERENCES `roles` (`roleID`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -603,37 +714,36 @@ ALTER TABLE `roleoperation`
   ADD CONSTRAINT `roleoperation_ibfk_4` FOREIGN KEY (`statusId`) REFERENCES `statusroleoperation` (`statusId`);
 
 --
--- Các ràng buộc cho bảng `routes`
+-- Constraints for table `routes`
 --
 ALTER TABLE `routes`
-  ADD CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`),
-  ADD CONSTRAINT `routes_ibfk_2` FOREIGN KEY (`stationDepartureId`) REFERENCES `stations` (`stationId`),
-  ADD CONSTRAINT `routes_ibfk_3` FOREIGN KEY (`stationArrivalId`) REFERENCES `stations` (`stationId`);
+  ADD CONSTRAINT `FK98e52pe83jl269upp8qy3eyw7` FOREIGN KEY (`stationArrivalId`) REFERENCES `stations` (`stationId`),
+  ADD CONSTRAINT `FKk12tea84w96jkgbba6yye1nbe` FOREIGN KEY (`stationDepartureId`) REFERENCES `stations` (`stationId`),
+  ADD CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`);
 
 --
--- Các ràng buộc cho bảng `schedules`
+-- Constraints for table `schedules`
 --
 ALTER TABLE `schedules`
   ADD CONSTRAINT `FK7o59nkqglakwmt6dyl8fk3ktl` FOREIGN KEY (`routeId`) REFERENCES `routes` (`routeId`),
   ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`trainId`) REFERENCES `trains` (`trainId`);
 
 --
--- Các ràng buộc cho bảng `seats`
+-- Constraints for table `seats`
 --
 ALTER TABLE `seats`
-  ADD CONSTRAINT `FKrtx2hlkygx93tjyutrehrdrhh` FOREIGN KEY (`seatTypeId`) REFERENCES `seat_types` (`seatTypeId`),
-  ADD CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`seatTypeId`) REFERENCES `seattype` (`seatTypeId`),
-  ADD CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`coachId`) REFERENCES `coaches` (`coachId`);
+  ADD CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`seatTypeId`) REFERENCES `seattypes` (`seatTypeId`),
+  ADD CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`coacheId`) REFERENCES `coaches` (`coacheId`);
 
 --
--- Các ràng buộc cho bảng `tickets`
+-- Constraints for table `tickets`
 --
 ALTER TABLE `tickets`
   ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `bookings` (`bookingId`),
   ADD CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`passengerId`) REFERENCES `passengers` (`passengerId`);
 
 --
--- Các ràng buộc cho bảng `users`
+-- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`roleID`) REFERENCES `roles` (`roleID`);

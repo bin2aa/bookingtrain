@@ -1,7 +1,7 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Passenger;
-import com.example.bookingtrain.model.Station;
+import com.example.bookingtrain.service.ObjectService;
 import com.example.bookingtrain.service.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +16,12 @@ public class PassengerController {
 
     private PassengerService passengerService;
 
+    private ObjectService objectService;
+
     @Autowired
-    public PassengerController(PassengerService passengerService) {
+    public PassengerController(PassengerService passengerService, ObjectService objectService) {
         this.passengerService = passengerService;
+        this.objectService = objectService;
     }
 
     @GetMapping("")
@@ -36,14 +39,15 @@ public class PassengerController {
 
     @PostMapping("/savePassenger")
     public String savePassenger(@ModelAttribute("passenger") Passenger passenger) {
-        if(passenger.getPassengerId() == null){
+        if (passenger.getPassengerId() == null) {
             passengerService.save(passenger);
-        }else {
+        } else {
             Passenger exsitingPassenger = passengerService.getById(passenger.getPassengerId());
             exsitingPassenger.setPassengerName(passenger.getPassengerName());
             exsitingPassenger.setDateOfBirth(passenger.getDateOfBirth());
             exsitingPassenger.setPhone(passenger.getPhone());
             exsitingPassenger.setIdentityId(passenger.getIdentityId());
+            exsitingPassenger.setObject(passenger.getObject());
 
             passengerService.save(passenger);
         }
@@ -51,9 +55,10 @@ public class PassengerController {
     }
 
     @GetMapping("/editPassenger/{id}")
-    public String showUpdatePage(@PathVariable int id ,Model model) {
+    public String showUpdatePage(@PathVariable int id, Model model) {
         Passenger p = passengerService.getById(id);
         model.addAttribute("passenger", p);
+        model.addAttribute("objects", objectService.getAllObjects());
         return "edit/editPassenger";
     }
 

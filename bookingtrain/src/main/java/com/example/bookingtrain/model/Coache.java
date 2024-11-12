@@ -22,6 +22,9 @@ public class Coache {
     @Column(nullable = true)
     private Integer trainId;
 
+    @Column(nullable = true)
+    private String coacheName;
+
     @ManyToOne
     @JoinColumn(name = "trainId", insertable = false, updatable = false)
     private Train train;
