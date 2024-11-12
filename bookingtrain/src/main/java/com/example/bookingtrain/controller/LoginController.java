@@ -24,7 +24,7 @@ public class LoginController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("user", new User()); // Thêm đối tượng User vào mô hình
-        return "login/login";
+        return "login/login1";
     }
 
     @PostMapping("/login")
@@ -46,7 +46,7 @@ public class LoginController {
             return "redirect:/";
         } else {
             model.addAttribute("errorLogin", "Email hoặc mật khẩu không đúng");
-            return "login/login";
+            return "login/login1";
         }
     }
 
