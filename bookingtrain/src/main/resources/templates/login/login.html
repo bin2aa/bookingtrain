@@ -139,37 +139,37 @@
   </div>
 
   <script>
-    // $(document).ready(function () {
-    //   $('#registerForm').on('submit', function (event) {
-    //     event.preventDefault(); // Prevent default form submission
+    $(document).ready(function () {
+      $('#registerForm').on('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
 
-    //     $.ajax({
-    //       type: 'POST',
-    //       url: $(this).attr('action'), // Get the form action URL
-    //       data: $(this).serialize(), // Serialize form data
-    //       success: function (response) {
-    //         if (response === 'Success') {
-    //           window.location.href = '/login';
-    //         } else {
-    //           let errorMessage = '';
-    //           if (response === 'PasswordNotMatch') {
-    //             errorMessage = 'Mật khẩu và mật khẩu xác nhận không khớp';
-    //           } else if (response === 'EmailExisted') {
-    //             errorMessage = 'Email đã tồn tại';
-    //           } else {
-    //             errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại.';
-    //           }
-    //           $('#errorRegisterMessage').text(errorMessage);
-    //           $('#errorRegister').show();
-    //         }
-    //       },
-    //       error: function () {
-    //         $('#errorRegisterMessage').text('Có lỗi xảy ra trong quá trình gửi yêu cầu. Vui lòng thử lại.');
-    //         $('#errorRegister').show();
-    //       }
-    //     });
-    //   });
-    // });
+        $.ajax({
+          type: 'POST',
+          url: $(this).attr('action'), // Get the form action URL
+          data: $(this).serialize(), // Serialize form data
+          success: function (response) {
+            if (response === 'Success') {
+              window.location.href = '/login';
+            } else {
+              let errorMessage = '';
+              if (response === 'PasswordNotMatch') {
+                errorMessage = 'Mật khẩu và mật khẩu xác nhận không khớp';
+              } else if (response === 'EmailExisted') {
+                errorMessage = 'Email đã tồn tại';
+              } else {
+                errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại.';
+              }
+              $('#errorRegisterMessage').text(errorMessage);
+              $('#errorRegister').show();
+            }
+          },
+          error: function () {
+            $('#errorRegisterMessage').text('Có lỗi xảy ra trong quá trình gửi yêu cầu. Vui lòng thử lại.');
+            $('#errorRegister').show();
+          }
+        });
+      });
+    });
 
   </script>
 
