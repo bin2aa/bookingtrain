@@ -1,7 +1,7 @@
 package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Schedule;
-import com.example.bookingtrain.repository.ShceduleRepository;
+import com.example.bookingtrain.repository.ScheduleRepository;
 import com.example.bookingtrain.service.inter.IScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,10 @@ import java.util.List;
 @Service
 public class ScheduleService implements IScheduleService {
 
-    private ShceduleRepository shceduleRepository;
+    private ScheduleRepository shceduleRepository;
 
     @Autowired
-    public ScheduleService(ShceduleRepository shceduleRepository) {
+    public ScheduleService(ScheduleRepository shceduleRepository) {
         this.shceduleRepository = shceduleRepository;
     }
 

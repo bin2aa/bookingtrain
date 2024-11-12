@@ -19,11 +19,14 @@ public class Seat {
     private String seatNumber;
 
     @Column(nullable = true)
-    private Integer coachId;
+    private Integer coacheId;
+
+    @Column(nullable = true)
+    private Integer seatTypeId;
 
     @ManyToOne
-    @JoinColumn(name = "coachId", insertable = false, updatable = false)
-    private Coache coach;
+    @JoinColumn(name = "coacheId", insertable = false, updatable = false)
+    private Coache coache;
 
     @ManyToOne
     @JoinColumn(name = "seatTypeId", insertable = false, updatable = false)

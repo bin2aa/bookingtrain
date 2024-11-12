@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head">
+    <title>Seat List</title>
+</head>
+
+<body th:replace="/fragments/body :: body">
+
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">Seat List</h1>
+        <a th:href="@{/seats/addSeat}" class="btn btn-primary mb-3">Add Seat</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Seat Number</th>
+                    <th>Coach Name</th>
+                    <th>Seat Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="seat : ${seatList}">
+                    <td th:text="${seat.seatId}"></td>
+                    <td th:text="${seat.seatNumber}"></td>
+                    <td th:text="${seat.coache.coacheName}"></td>
+                    <td th:text="${seat.seatType.seatTypeName}"></td>
+                    <td>
+                        <a th:href="@{/seats/editSeat/{id}(id=${seat.seatId})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/seats/deleteSeat/{id}(id=${seat.seatId})}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this seat?');">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

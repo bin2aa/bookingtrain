@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head">
+    <title>Edit Coache</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body th:replace="/fragments/body :: body">
+
+    <div th:fragment="mainContent" class="container mt-5">
+        <h1 class="text-center mb-4">Edit Coache</h1>
+        <form class="form align-content-center" th:action="@{/coachees/updateCoache}" th:object="${coache}"
+            method="post">
+
+            <input type="hidden" th:field="*{coacheId}" />
+
+            <div class="form-group">
+                <label for="coacheName">Coache Name:</label>
+                <input type="text" id="coacheName" th:field="*{coacheName}" class="form-control" required>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="statusCoache">Status Coache</label>
+                <select id="statusCoache" th:field="*{statusCoache}" class="form-control" required>
+                    <option value="1" th:selected="${coache.statusCoache == 1}">Active</option>
+                    <option value="0" th:selected="${coache.statusCoache == 0}">Inactive</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="trainId">Train</label>
+                <select id="trainId" th:field="*{trainId}" class="form-control" required>
+                    <option th:each="train : ${trainList}" th:value="${train.trainId}" th:text="${train.trainName}">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/coachees}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+</body>
+
+</html>

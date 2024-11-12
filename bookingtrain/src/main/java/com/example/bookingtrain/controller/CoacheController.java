@@ -30,7 +30,7 @@ public class CoacheController {
         return "list/coacheList";
     }
 
-    @GetMapping("/newcoache")
+    @GetMapping("/newCoache")
     public String showAddPage(Model model) {
         var trainList = trainService.getAllTrains();
 
@@ -50,6 +50,22 @@ public class CoacheController {
             existingCoache.setTrainId(coache.getTrainId());
             coacheService.save(coache);
         }
+        return "redirect:/coachees";
+    }
+
+    @GetMapping("/editCoache/{id}")
+    public String showEditPage(@PathVariable int id, Model model) {
+        Coache coache = coacheService.getById(id);
+        var trainList = trainService.getAllTrains();
+
+        model.addAttribute("trainList", trainList);
+        model.addAttribute("coache", coache);
+        return "edit/editCoache";
+    }
+
+    @PostMapping("/updateCoache")
+    public String updateCoache(@ModelAttribute("coache") Coache coache) {
+        coacheService.update(coache);
         return "redirect:/coachees";
     }
 

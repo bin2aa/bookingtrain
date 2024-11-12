@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head">
+    <title>Add Seat</title>
+</head>
+
+<body th:replace="/fragments/body :: body">
+
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">Add Seat</h1>
+        <form th:action="@{/seats/saveSeat}" th:object="${seat}" method="post">
+            <div class="form-group">
+                <label for="seatNumber">Seat Number</label>
+                <input type="text" id="seatNumber" th:field="*{seatNumber}" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="coacheId">Coache</label>
+                <select id="coacheId" th:field="*{coacheId}" class="form-control" required>
+                    <option th:each="coache : ${coacheList}" th:value="${coache.coacheId}" th:text="${coache.coacheName}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="seatTypeId">Seat Type</label>
+                <select id="seatTypeId" th:field="*{seatTypeId}" class="form-control" required>
+                    <option th:each="seatType : ${seatTypeList}" th:value="${seatType.seatTypeId}"
+                        th:text="${seatType.seatTypeName}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/seats}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+</body>
+
+</html>

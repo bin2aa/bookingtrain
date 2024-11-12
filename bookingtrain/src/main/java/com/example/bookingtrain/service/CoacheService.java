@@ -30,6 +30,10 @@ public class CoacheService implements ICoacheService {
         return coacheRepository.save(coache);
     }
 
+    public Coache update(Coache coache) {
+        return coacheRepository.saveAndFlush(coache);
+    }
+
     public boolean delete(int id) {
         Coache coache = coacheRepository.findById(id).orElse(null);
         if (coache != null) {
