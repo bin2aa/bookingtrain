@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+</head>
+<body>
+<div id="passengerList">
+    <h2>Passenger Information</h2>
+    <ul id="passengerDetails"></ul>
+</div>
+
+<script>
+    // Lấy dữ liệu hành khách từ localStorage với khóa passengerData
+    const passengers = JSON.parse(localStorage.getItem('passengerData'));
+
+    // Tìm phần tử UL để hiển thị danh sách hành khách
+    const passengerDetails = document.getElementById('passengerDetails');
+
+    // Kiểm tra nếu có dữ liệu trong localStorage
+    if (passengers && passengers.length > 0) {
+        // Duyệt qua từng hành khách và hiển thị thông tin
+        passengers.forEach(passenger => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Full Name: ${passenger.fullName}, Date of Birth: ${passenger.dateOfBirth}, Phone: ${passenger.phone}, Seat ID: ${passenger.seatId}`;
+            passengerDetails.appendChild(listItem);
+        });
+    } else {
+        // Thông báo nếu không có dữ liệu hành khách
+        passengerDetails.textContent = "No passenger data available.";
+    }
+</script>
+</body>
+</html>

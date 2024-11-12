@@ -2,8 +2,7 @@ package com.example.bookingtrain.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import javax.persistence.Embeddable;
+import jakarta.persistence.*;
 
 @Embeddable
 public class RoleOperationId implements Serializable {

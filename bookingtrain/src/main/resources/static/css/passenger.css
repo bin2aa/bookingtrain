@@ -1,0 +1,72 @@
+.scrollable-form-container {
+    max-height: 550px;
+    overflow-y: auto;
+    padding-right: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Styling */
+.summary-card, .summary-item {
+    background-color: #343a40;
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+/* Centering text */
+.text-center-custom {
+    text-align: center;
+}
+
+/* Custom styling for form elements */
+.form-control {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom {
+    border-radius: 30px;
+    font-size: 16px;
+}
+
+.btn-new-passenger {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-buy-ticket {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Title background and padding */
+.header-title {
+    background-color: #dc3545;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Adjusting margins and spacing for a cleaner look */
+.mb-4, .mt-4 {
+    margin-bottom: 1.5rem !important;
+    margin-top: 1.5rem !important;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+/* Customizing footer position */
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}

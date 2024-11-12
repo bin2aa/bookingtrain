@@ -1,11 +1,10 @@
 package com.example.bookingtrain.model;
 
-import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "passengers")
 @Data

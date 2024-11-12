@@ -2,10 +2,8 @@ package com.example.bookingtrain.model;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.Date;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "routes")
 @Data
@@ -15,9 +13,6 @@ public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer routeId;
-
-    @Column(nullable = true)
-    private String routeName;
 
     @Column(nullable = true)
     private Integer stationDepartureId;

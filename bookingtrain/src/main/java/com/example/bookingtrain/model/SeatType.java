@@ -1,12 +1,11 @@
 package com.example.bookingtrain.model;
 
-import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
+import jakarta.persistence.*;
 @Entity
-@Table(name = "seat_types")
+@Table(name = "seattypes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,5 +18,5 @@ public class SeatType {
     private String seatTypeName;
 
     @Column(nullable = true)
-    private Double price;
+    private int price;
 }

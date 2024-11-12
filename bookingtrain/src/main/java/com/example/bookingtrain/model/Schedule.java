@@ -3,13 +3,10 @@ package com.example.bookingtrain.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import javax.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.persistence.*;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "schedules")
@@ -22,26 +19,22 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer scheduleId;
 
-    @Column(nullable = true)
-    private Integer routeId;
+    @Column(name = "endDeparture")
+    private Instant arrivalTime;
 
-    @Column(nullable = true)
-    private Integer trainId;
+    @Column(name = "startDeparture")
+    private Instant departureTime;
 
-    @Column(nullable = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private java.util.Date departureTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stationArrivalId")
+    private Station stationArrival;
 
-    @Column(nullable = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private java.util.Date arrivalTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stationDepartureId")
+    private Station stationDeparture;
 
-    @ManyToOne
-    @JoinColumn(name = "routeId", insertable = false, updatable = false)
-    private Route route;
-
-    @ManyToOne
-    @JoinColumn(name = "trainId", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainId")
     private Train train;
 
     @Column

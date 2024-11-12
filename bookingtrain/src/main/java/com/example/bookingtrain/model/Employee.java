@@ -1,7 +1,7 @@
 package com.example.bookingtrain.model;
 
 import java.time.LocalDate;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
