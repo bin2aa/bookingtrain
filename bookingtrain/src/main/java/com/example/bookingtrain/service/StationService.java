@@ -11,54 +11,44 @@ import java.util.List;
 @Service
 public class StationService implements IStationService {
 
-    private final StationRepository stationRepo;
+    private final StationRepository stationRepository;
 
     @Autowired
     public StationService(StationRepository stationRepository) {
-        this.stationRepo = stationRepository;
+        this.stationRepository = stationRepository;
     }
 
     @Override
     public Station getById(int id) {
-        return stationRepo.findById(id).orElse(null);
+        return stationRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Station> getAll() {
-        return stationRepo.findAll();
+        return stationRepository.findAll();
     }
 
     @Override
     public Station createStation(Station station) {
-        station.setStatusStation(1);
-        return stationRepo.save(station);
+        return stationRepository.save(station);
     }
 
     @Override
     public Station updateStation(int id, Station updatedStation) {
-        Station existedStation = getById(id);
-        if (existedStation != null) {
-            existedStation.setStationCode(updatedStation.getStationCode());
-            existedStation.setStationName(updatedStation.getStationName());
-            existedStation.setStatusStation(1);
+        Station existingStation = stationRepository.findById(id).orElse(null);
+        if (existingStation != null) {
+            existingStation.setStationCode(updatedStation.getStationCode());
+            existingStation.setStationName(updatedStation.getStationName());
+            existingStation.setStatusStation(updatedStation.getStatusStation());
+            existingStation.setDescription(updatedStation.getDescription());
+            existingStation.setImage(updatedStation.getImage());
+            return stationRepository.saveAndFlush(existingStation);
         }
-        return existedStation;
-    }
-
-    public Station save(Station station) {
-        return stationRepo.save(station);
+        return null;
     }
 
     @Override
     public void deleteStation(int id) {
-        Station station = getById(id);
-        if (station != null) {
-            station.setStatusStation(0);
-            stationRepo.save(station);
-        }
+        stationRepository.deleteById(id);
     }
-
-//    public List<Station> getALlBy
-
-
 }

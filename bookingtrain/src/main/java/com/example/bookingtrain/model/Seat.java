@@ -1,10 +1,9 @@
 package com.example.bookingtrain.model;
 
-import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "seats")
 @Data
@@ -23,5 +22,10 @@ public class Seat {
 
     @ManyToOne
     @JoinColumn(name = "coachId", insertable = false, updatable = false)
-    private Coache coach;
+    private Coach coach;
+
+    @ManyToOne
+    @JoinColumn(name = "seatTypeId", insertable = false, updatable = false)
+    private SeatType seatType;
+
 }

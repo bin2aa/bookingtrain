@@ -21,6 +21,29 @@ public class PassengerController {
         this.passengerService = passengerService;
     }
 
+    @PostMapping("/ticket/passenger")
+    public String passenger(@RequestParam("trainId") int trainId,
+                            @RequestParam("trainCode") String trainCode,
+                            @RequestParam("stationDeparture") String stationDeparture,
+                            @RequestParam("stationArrival") String stationArrival,
+                            @RequestParam("timeDeparture") String timeDeparture,
+                            @RequestParam("dateDeparture") String dateDeparture,
+                            @RequestParam("timeArrival") String timeArrival,
+                            @RequestParam("dateArrival") String dateArrival, Model model) {
+        model.addAttribute("passenger", new Passenger());
+
+        model.addAttribute("trainCode", trainCode);
+        model.addAttribute("stationDeparture", stationDeparture);
+        model.addAttribute("stationArrival", stationArrival);
+        model.addAttribute("timeDeparture", timeDeparture);
+        model.addAttribute("dateDeparture", dateDeparture);
+        model.addAttribute("timeArrival", timeArrival);
+        model.addAttribute("dateArrival", dateArrival);
+
+        return "Client/Components/Passenger";
+    }
+
+
     @GetMapping("")
     public String showList(Model model) {
         List<Passenger> passengerList = passengerService.getAll();

@@ -8,12 +8,12 @@
 
 <div th:fragment="mainContent" class="container mt-5">
     <h1 class="text-center mb-4">Add Couch</h1>
-    <form class="form align-content-center" th:action="@{/couches/saveCouch}" th:object="${couch}" method="post">
+    <form class="form align-content-center" th:action="@{/coachs/saveCoach}" th:object="${coach}" method="post">
 
         <div class="form-group row">
             <label for="trainId" class="col-sm-2 col-form-label">Train:</label>
             <div class="col-sm-10">
-                <select id="trainId" th:field="*{trainId}" class="form-control" required>
+                <select id="trainId" th:field="*{coach.trainId}" class="form-control" required>
                     <option value="" disabled selected>Select Train</option>
                     <option th:each="train : ${trainList}" th:value="${train.trainId}" th:text="${train.trainName}"></option>
                 </select>
@@ -21,7 +21,7 @@
         </div>
 
         <!-- Hidden Status Field, setting default status as Active -->
-        <input type="hidden" th:field="*{statusCouch}" value="1"/>
+        <input type="hidden" th:field="*{coach.statusCoach}" value="1"/>
 
         <div class="form-group row">
             <div class="col-sm-10 offset-sm-2">
@@ -31,7 +31,7 @@
     </form>
 
     <div class="text-center mt-3">
-        <a th:href="@{/couches}" class="btn btn-secondary">Back to Couch List</a>
+        <a th:href="@{/couchs}" class="btn btn-secondary">Back to Couch List</a>
     </div>
 </div>
 

@@ -1,11 +1,10 @@
 package com.example.bookingtrain.model;
 
-import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "stations")
 @Data
@@ -22,6 +21,12 @@ public class Station {
     @Column(nullable = true)
     private String stationCode;
 
-    @Column
+    @Column(nullable = true)
     private int statusStation;
+
+    @Column(nullable = true)
+    private String description;
+
+    @Column(nullable = true)
+    private String image;
 }

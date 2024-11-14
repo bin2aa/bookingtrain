@@ -2,7 +2,7 @@ package com.example.bookingtrain.model;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Entity

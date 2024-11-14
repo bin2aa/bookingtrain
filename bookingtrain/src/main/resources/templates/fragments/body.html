@@ -1,6 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+
+
 <body id="page-top">
     <div id="wrapper">
         <!-- Sidebar -->
@@ -39,24 +41,57 @@
                     <span>Users</span>
                 </a>
             </li>
+
             <li class="nav-item">
-                <!-- <a class="nav-link" th:href="@{/carriages}"> -->
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Carriage</span>
+                <a class="nav-link" th:href="@{/trains}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Trains</span>
                 </a>
             </li>
+
             <li class="nav-item">
-                <!-- <a class="nav-link" th:href="@{/carriageTypes}">  -->
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Carriage type</span>
+                <a class="nav-link" th:href="@{/stations}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Station</span>
                 </a>
             </li>
+
             <li class="nav-item">
-                <!-- <a class="nav-link" th:href="@{/employees}"> -->
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Employee</span>
+                <a class="nav-link" th:href="@{/schedules}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Schedule</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/tickets}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Ticket</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/passengers}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Passenger</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/Objects}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Object</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/employees}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Employee</span>
+                </a>
+            </li>
+
+
 
             <li class="nav-item">
 
@@ -77,7 +112,7 @@
                             <span>Role</span>
                         </a>
 
-                       
+
                         <a class="collapse-item" th:href="@{/roleOperations}">
                             <span>Role Operation</span>
                         </a>

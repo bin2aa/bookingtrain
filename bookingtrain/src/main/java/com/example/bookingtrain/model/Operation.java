@@ -1,11 +1,9 @@
 package com.example.bookingtrain.model;
 
-import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "operations")
 @Data

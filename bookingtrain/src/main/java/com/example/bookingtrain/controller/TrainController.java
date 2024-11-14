@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 @RequestMapping("/trains")
 public class TrainController {
 
-    private TrainService trainService;
+    private final TrainService trainService;
 
     @Autowired
     public TrainController(TrainService trainService) {
@@ -38,32 +37,20 @@ public class TrainController {
     }
 
     @PostMapping("/saveTrain")
-    public String saveTrain (@ModelAttribute("train") Train train,
-                             @RequestParam("imageFile") MultipartFile multipartFile,
-                             Model model){
-        if(train.getTrainId() != null) {
-            Train existingTrain = trainService.getById(train.getTrainId());
-            existingTrain.setTrainName(train.getTrainName());
-            existingTrain.setTrainCode(train.getTrainCode());
-            trainService.save(train);
-        }
-        else{
-            // Tạo train moi
-            train.setStatusTrain(1);
-            try {
-                String fileName = multipartFile.getOriginalFilename();
-//                train.setImage(fileName);
+    public String saveTrain(@ModelAttribute("train") Train train,
+            @RequestParam("imageFile") MultipartFile multipartFile,
+            Model model) {
+        try {
+            String fileName = multipartFile.getOriginalFilename();
+            train.setImage(fileName);
 
-                Train savedTrain = trainService.save(train);
+            String uploadDir = "img/trainImg/";
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
-                String uploadDir = "/static/media/img/trainImg/" + savedTrain.getTrainId() + "/";
-
-                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            }catch (IOException e){
-                e.printStackTrace();
-                model.addAttribute("train",train);
-                return "add/addTrain";
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("train", train);
+            return "add/addTrain";
         }
         return "redirect:/trains";
     }
@@ -71,7 +58,38 @@ public class TrainController {
     @GetMapping("/editTrain/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Train train = trainService.getById(id);
-        if(train != null){
+        if (train != null) {
+            model.addAttribute("train", train);
+            return "edit/editTrain";
+        }
+        return "redirect:/trains";
+    }
+
+    @PostMapping("/updateTrain")
+    public String updateTrain(@ModelAttribute("train") Train train,
+            @RequestParam("imageFile") MultipartFile multipartFile,
+            Model model) {
+        try {
+            // Lấy thông tin tàu hiện tại từ cơ sở dữ liệu
+            Train existingTrain = trainService.getById(train.getTrainId());
+            if (existingTrain == null) {
+                return "redirect:/trains";
+            }
+
+            // Nếu người dùng không chọn ảnh mới thì giữ nguyên ảnh cũ
+            if (!multipartFile.isEmpty()) {
+                String fileName = multipartFile.getOriginalFilename();
+                train.setImage(fileName);
+
+                String uploadDir = "img/trainImg/";
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            } else {
+                train.setImage(existingTrain.getImage());
+            }
+
+            trainService.update(train.getTrainId(), train);
+        } catch (IOException e) {
+            e.printStackTrace();
             model.addAttribute("train", train);
             return "edit/editTrain";
         }
@@ -83,5 +101,4 @@ public class TrainController {
         trainService.delete(id);
         return "redirect:/trains";
     }
-
 }

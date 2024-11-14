@@ -1,54 +1,54 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="/fragments/header :: head"></head>
 <body th:replace="/fragments/body :: body">
 
-<div>
-    <div th:fragment="mainContent">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Train Information</h6>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th>Train ID</th>
-                            <th>Train Code</th>
-                            <th>Train Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th>Train ID</th>
-                            <th>Train Code</th>
-                            <th>Train Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                        </tfoot>
-                        <tbody>
-                        <tr th:each="train : ${trainList}">
-                            <td th:text="${train.trainId}"></td>
-                            <td th:text="${train.trainCode}"></td>
-                            <td th:text="${train.trainName}"></td>
-                            <td th:text="${train.statusTrain == 1 ? 'Active' : 'Inactive'}"></td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" th:href="@{/trains/editTrain/{id} (id=${train.trainId})}">Edit</a>
-                                <a class="btn btn-danger btn-sm" th:href="@{/trains/deleteTrain/{id} (id=${train.trainId})}" method="delete"
-                                   onclick="return confirm('Are you sure you want to delete this train?');">Delete</a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+    <div>
+        <div th:fragment="mainContent">
+                <h1 class="mb-4">Train information</h1>
+
+                <a class="addTrainLink btn btn-primary mb-3" th:href="@{/trains/addTrain}">Thêm Tàu vào hệ
+                    thống</a>
+                    
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Train ID</th>
+                                    <th>Train Name</th>
+                                    <th>Description</th>
+                                    <th>Image</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="train : ${trainList}">
+                                    <td th:text="${train.trainId}"></td>
+                                    <td th:text="${train.trainName}"></td>
+                                    <td th:text="${train.description}"></td>
+                                    <td>
+                                        <img th:src="@{'img/trainImg/' + ${train.image}}" alt="Train Image" style="width: 100px; height: auto;" />
+                                    </td>
+                                    <td th:text="${train.statusTrain == 1 ? 'Active' : 'Inactive'}"></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                            th:href="@{/trains/editTrain/{id} (id=${train.trainId})}">Edit</a>
+                                        <a class="btn btn-danger btn-sm"
+                                            th:href="@{/trains/deleteTrain/{id} (id=${train.trainId})}" method="delete"
+                                            onclick="return confirm('Are you sure you want to delete this train?');">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
+
 </html>

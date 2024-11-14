@@ -52,7 +52,6 @@ public class RouteController {
             routeService.save(route);
         }else{
             Route exsitingRoute = routeService.getById(route.getRouteId());
-            exsitingRoute.setRouteName(route.getRouteName());
             exsitingRoute.setStationArrivalId(route.getStationArrivalId());
             exsitingRoute.setStationDepartureId(route.getStationDepartureId());
             exsitingRoute.setTrainId(route.getTrainId());

@@ -19,6 +19,10 @@ public class UserService {
         return userRepository.findAllOrderByUserId(pageable);
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public User getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
     }

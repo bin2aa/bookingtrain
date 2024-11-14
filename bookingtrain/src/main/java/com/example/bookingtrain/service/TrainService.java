@@ -22,10 +22,6 @@ public class TrainService implements ITrainService {
         return repo.findByTrainName(trainName);
     }
 
-    public Train getByTrainCode(String trainCode) {
-        return repo.findByTrainCode(trainCode);
-    }
-
     @Override
     public Train getById(Integer id) {
         return repo.findById(id).orElse(null);
@@ -39,6 +35,19 @@ public class TrainService implements ITrainService {
     @Override
     public Train save(Train train) {
         return repo.save(train);
+    }
+
+    @Override
+    public Train update(Integer id, Train updatedTrain) {
+        Train existingTrain = getById(id);
+        if (existingTrain != null) {
+            existingTrain.setTrainName(updatedTrain.getTrainName());
+            existingTrain.setDescription(updatedTrain.getDescription());
+            existingTrain.setStatusTrain(updatedTrain.getStatusTrain());
+            existingTrain.setImage(updatedTrain.getImage());
+            return repo.saveAndFlush(existingTrain);
+        }
+        return null;
     }
 
     @Override

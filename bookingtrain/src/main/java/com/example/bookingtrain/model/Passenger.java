@@ -1,11 +1,10 @@
 package com.example.bookingtrain.model;
 
-import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "passengers")
 @Data
@@ -28,4 +27,11 @@ public class Passenger {
     @Column(nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateOfBirth;
+
+    @Column(nullable = true)
+    private Integer objectId;
+
+    @ManyToOne
+    @JoinColumn(name = "objectId", insertable = false, updatable = false)
+    private Object object;
 }
