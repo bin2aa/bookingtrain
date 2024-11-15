@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Booking Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/passenger.css"> <!-- Ensure this file exists for custom styles -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div class="fixed-top w-100">
+    <div th:replace="Client/Header :: Header"></div>
+</div>
+
+<div class="container mt-5 pt-5">
+    <div class="text-center mb-4">
+        <h2 class="header-title">Passenger Booking</h2>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Summary Section -->
+        <div class="summary-item">
+            <h5 class="card-title text-center">Train Details</h5>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Train Code:</strong></div>
+                <div class="col-6 text-right" th:text="${trainCode}"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Departure Station:</strong></div>
+                <div class="col-6 text-right" th:text="${stationDeparture}"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Arrival Station:</strong></div>
+                <div class="col-6 text-right" th:text="${stationArrival}"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Departure Time:</strong></div>
+                <div class="col-6 text-right" th:text="${timeDeparture}"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Arrival Time:</strong></div>
+                <div class="col-6 text-right" th:text="${timeArrival}"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Departure Date:</strong></div>
+                <div class="col-6 text-right" th:text="${dateDeparture}"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6 text-left"><strong>Arrival Date:</strong></div>
+                <div class="col-6 text-right" th:text="${dateArrival}"></div>
+            </div>
+        </div>
+
+        <!-- Passenger Form Section -->
+        <div class="col-md-7">
+            <form action="/tickets/addPassengers" method="POST">
+                <div class="scrollable-form-container" style="padding-left: 15px">
+                    <div id="passengerForms">
+                        <!-- Initial Passenger Form -->
+                        <div class="mb-4" id="passengerForm_1">
+                            <h5 class="text-center-custom">Passenger 1</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fullName_1">Full Name:</label>
+                                        <input type="text" id="fullName_1" name="passengers[0].fullName" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="dateOfBirth_1">Date of Birth:</label>
+                                        <input type="date" id="dateOfBirth_1" name="passengers[0].dateOfBirth" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone_1">Phone:</label>
+                                        <input type="text" id="phone_1" name="passengers[0].phone" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="seats_1">Seat:</label>
+                                    <select id="seats_1" name="passengers[0].seatId" class="form-control">
+                                        <option value="">-- Choose a seat --</option>
+                                        <th:block th:each="seatItem : ${seat}">
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons remain fixed below the scrollable form container -->
+                <div class="d-flex justify-content-center" style="margin-bottom: 1.5rem; margin-top: 1.5rem">
+                    <button type="button" id="addPassengerBtn" class="btn btn-new-passenger btn-custom mr-3">Add New Passenger</button>
+                    <button type="submit" class="btn btn-buy-ticket btn-custom">Buy Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer" style="margin-top: 1.5rem">
+    <div th:replace="Client/Footer :: Footer"></div>
+</div>
+
+<script>
+    let passengerCount = 1;
+
+    // Function to dynamically load available seats into the dropdown
+    function loadSeats(passengerIndex) {
+        // Retrieve the trainId from localStorage
+        const trainId = localStorage.getItem('trainId');
+
+        if (trainId) {
+            // Make a GET request to fetch the seats for the specific trainId
+            $.get(`/seats/all?trainId=${trainId}`, function(data) {
+                // Clear the current dropdown and add a default option
+                $(`#seats_${passengerIndex}`).empty().append('<option value="">-- Choose a seat --</option>');
+
+                // Check if there are seats in the response data
+                if (data && data.length > 0) {
+                    // Iterate over the seat data and populate the dropdown
+                    data.forEach(seat => {
+                        // Append each seat to the dropdown with its seatCode and coacheId
+                        $(`#seats_${passengerIndex}`).append(
+                            `<option value="${seat.seatId}">SeatCode: ${seat.seatCode} - CoacheCode: ${seat.coacheCode}</option>`
+                        );
+                    });
+                } else {
+                    // If no seats are found, display a message in the dropdown
+                    $(`#seats_${passengerIndex}`).append('<option value="">No seats available</option>');
+                }
+            }).fail(function() {
+                // Handle any errors in the request
+                alert('Error loading seat data. Please try again later.');
+            });
+        } else {
+            // If no trainId is found in localStorage, notify the user
+            alert('Train ID not found. Please select a train first.');
+        }
+    }
+
+
+    // Function to save form data to local storage
+    function saveFormData() {
+        const passengerData = [];
+        for (let i = 1; i <= passengerCount; i++) {
+            passengerData.push({
+                fullName: $(`#fullName_${i}`).val(),
+                dateOfBirth: $(`#dateOfBirth_${i}`).val(),
+                phone: $(`#phone_${i}`).val(),
+                seatId: $(`#seats_${i}`).val(),
+            });
+        }
+        localStorage.setItem('passengerData', JSON.stringify(passengerData));
+    }
+
+    // Function to load form data from local storage
+    function loadFormData() {
+        const savedData = JSON.parse(localStorage.getItem('passengerData'));
+        if (savedData) {
+            savedData.forEach((data, index) => {
+                if (index > 0) {
+                    addPassengerForm(); // Add extra passenger forms as needed
+                }
+                $(`#fullName_${index + 1}`).val(data.fullName);
+                $(`#dateOfBirth_${index + 1}`).val(data.dateOfBirth);
+                $(`#phone_${index + 1}`).val(data.phone);
+                $(`#seats_${index + 1}`).val(data.seatId);
+            });
+        }
+    }
+
+    // Function to add a new passenger form and load seats
+    function addPassengerForm() {
+        passengerCount++;
+        const newPassengerForm = `
+            <div class="mb-4" id="passengerForm_${passengerCount}">
+                <h5 class="text-center-custom">Passenger ${passengerCount}</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fullName_${passengerCount}">Full Name:</label>
+                            <input type="text" id="fullName_${passengerCount}" name="passengers[${passengerCount - 1}].fullName" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dateOfBirth_${passengerCount}">Date of Birth:</label>
+                            <input type="date" id="dateOfBirth_${passengerCount}" name="passengers[${passengerCount - 1}].dateOfBirth" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="phone_${passengerCount}">Phone:</label>
+                            <input type="text" id="phone_${passengerCount}" name="passengers[${passengerCount - 1}].phone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="seats_${passengerCount}">Seat:</label>
+                        <select id="seats_${passengerCount}" name="passengers[${passengerCount - 1}].seatId" class="form-control">
+                            <option value="">-- Choose a seat --</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        `;
+        $('#passengerForms').append(newPassengerForm);
+        loadSeats(passengerCount); // Load seats for the new passenger form
+
+        // Add change event to newly created form fields to save data to local storage
+        $(`#passengerForm_${passengerCount} input, #passengerForm_${passengerCount} select`).on('change', saveFormData);
+    }
+
+    // Event listener for form changes to trigger save to local storage
+    $(document).on('change', '#passengerForms input, #passengerForms select', saveFormData);
+
+    // Add event listener for the "New Passenger" button
+    $('#addPassengerBtn').on('click', addPassengerForm);
+
+    // Initially load available seats for the first passenger and populate form with saved data
+    $(document).ready(function() {
+        loadSeats(1);
+        loadFormData();
+    });
+</script>
+
+</body>
+</html>

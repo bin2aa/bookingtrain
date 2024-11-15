@@ -4,6 +4,8 @@ import com.example.bookingtrain.model.Station;
 import com.example.bookingtrain.repository.StationRepository;
 import com.example.bookingtrain.service.inter.IStationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,10 @@ public class StationService implements IStationService {
     @Autowired
     public StationService(StationRepository stationRepository) {
         this.stationRepository = stationRepository;
+    }
+
+    public Page<Station> getAllStations(Pageable pageable) {
+        return stationRepository.findAll(pageable);
     }
 
     @Override

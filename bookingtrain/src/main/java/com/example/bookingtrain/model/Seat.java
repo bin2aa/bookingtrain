@@ -31,5 +31,4 @@ public class Seat {
     @ManyToOne
     @JoinColumn(name = "seatTypeId", insertable = false, updatable = false)
     private SeatType seatType;
-
 }

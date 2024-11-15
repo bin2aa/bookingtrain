@@ -4,7 +4,9 @@ import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.repository.TrainRepository;
 import com.example.bookingtrain.service.inter.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,6 +22,10 @@ public class TrainService implements ITrainService {
 
     public Train getByTrainName(String trainName) {
         return repo.findByTrainName(trainName);
+    }
+
+    public Page<Train> getAllTrains(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     @Override

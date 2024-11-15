@@ -3,18 +3,15 @@
 
 <head th:replace="/fragments/header :: head">
     <title>User List</title>
-  
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body th:replace="/fragments/body :: body">
-
-
-    <!-- <div class="container mt-5"> -->
-    <div th:fragment="mainContent">
+    <div th:fragment="mainContent" class="container mt-5">
         <h1 class="mb-4">User List</h1>
 
         <a class="addUserLink btn btn-primary mb-3" th:href="@{/users/newUser}">Thêm người dùng</a>
-        <table class="table table-striped">
+        <table class="table table-striped table-light">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -33,8 +30,7 @@
                     <td th:text="${user.password}"></td>
                     <td th:text="${user.role.roleName}"></td>
                     <td>
-                        <a th:href="@{/users/editUser/{userId}(userId=${user.userId})}"
-                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/users/editUser/{userId}(userId=${user.userId})}" class="btn btn-warning btn-sm">Edit</a>
                         <a th:href="@{/users/deleteUser/{id}(id=${user.userId})}" class="btn btn-danger btn-sm"
                             onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                     </td>
@@ -45,13 +41,6 @@
             th:replace="fragments/pagination :: paginationFragment (baseUrl='/users', currentPage=${currentPage}, totalPages=${totalPages})">
         </div>
     </div>
-    <!-- </div> -->
-
-    <!-- Container cho form thêm mới -->
-    <!-- <div id="addUserContainer"></div> -->
-    <!-- <div class="overlay"></div> -->
-
-
 </body>
 
 </html>

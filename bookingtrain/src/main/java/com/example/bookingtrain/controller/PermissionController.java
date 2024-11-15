@@ -3,6 +3,10 @@ package com.example.bookingtrain.controller;
 import com.example.bookingtrain.model.Permission;
 import com.example.bookingtrain.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +21,15 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @GetMapping
-    public String getAllPermissions(Model model) {
-        List<Permission> permissions = permissionService.getAllPermissions();
-        model.addAttribute("permissions", permissions);
+    public String getAllPermissions(@RequestParam(defaultValue = "0") int page, Model model) {
+        // List<Permission> permissions = permissionService.getAllPermissions();
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("permissionId").ascending());
+        Page<Permission> permissionPage = permissionService.getAllPermissions(pageable);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", permissionPage.getTotalPages());
+        model.addAttribute("baseUrl", "/permissions");
+        model.addAttribute("permissions", permissionPage);
         return "list/permissionList";
     }
 

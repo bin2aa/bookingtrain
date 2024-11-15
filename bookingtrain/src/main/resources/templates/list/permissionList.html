@@ -17,7 +17,7 @@
                     <th>Tên</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableContent">
                 <tr th:each="permission : ${permissions}">
                     <td th:text="${permission.permissionId}"></td>
                     <td th:text="${permission.permissionName}"></td>
@@ -32,6 +32,7 @@
                 </tr>
             </tbody>
         </table>
+        <div th:replace="fragments/pagination :: paginationFragment (baseUrl='/permissions', currentPage=${currentPage}, totalPages=${totalPages})"></div>
     </div>
 
     <!-- <div id="addPermissionContainer"></div>

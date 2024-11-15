@@ -20,7 +20,7 @@
                     <th>User ID</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableContent">
                 <tr th:each="employee : ${employees}">
                     <td th:text="${employee.employeeId}"></td>
                     <td th:text="${employee.employeeName}"></td>
@@ -29,13 +29,18 @@
                     <td th:text="${employee.phone}"></td>
                     <td th:text="${employee.user.username}"></td>
                     <td>
-                        <a th:href="@{/employees/editEmployee/{employeeId}(employeeId=${employee.employeeId})}" class="btn btn-warning btn-sm">Edit</a>
-                        <a th:href="@{/employees/deleteEmployee/{id}(id=${employee.employeeId})}" class="btn btn-danger btn-sm" 
-                           onclick="return confirm('Are you sure you want to delete this employee?');">Delete</a>
+                        <a th:href="@{/employees/editEmployee/{employeeId}(employeeId=${employee.employeeId})}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/employees/deleteEmployee/{id}(id=${employee.employeeId})}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this employee?');">Delete</a>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <div
+            th:replace="fragments/pagination :: paginationFragment (baseUrl='/employees', currentPage=${currentPage}, totalPages=${totalPages})">
+        </div>
     </div>
 </body>
 

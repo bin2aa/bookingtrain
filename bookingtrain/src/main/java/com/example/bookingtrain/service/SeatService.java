@@ -1,8 +1,11 @@
 package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Seat;
+import com.example.bookingtrain.model.SeatType;
 import com.example.bookingtrain.repository.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +22,10 @@ public class SeatService {
 
     public List<Seat> getAllSeats() {
         return seatRepository.findAll();
+    }
+
+    public Page<Seat> getAllSeats(Pageable pageable) {
+        return seatRepository.findAll(pageable);
     }
 
     public Seat getSeatById(Integer id) {

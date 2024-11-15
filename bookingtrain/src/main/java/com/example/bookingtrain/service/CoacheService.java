@@ -1,9 +1,12 @@
 package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Coache;
+import com.example.bookingtrain.model.Route;
 import com.example.bookingtrain.repository.CoacheRepository;
 import com.example.bookingtrain.service.inter.ICoacheService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,10 @@ public class CoacheService implements ICoacheService {
 
     public List<Coache> getAll() {
         return coacheRepository.findAll();
+    }
+
+    public Page<Coache> getAllCoaches(Pageable pageable) {
+        return coacheRepository.findAll(pageable);
     }
 
     public Coache getById(int id) {

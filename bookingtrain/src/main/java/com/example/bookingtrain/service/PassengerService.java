@@ -4,6 +4,8 @@ import com.example.bookingtrain.model.Passenger;
 import com.example.bookingtrain.repository.PassengerRepository;
 import com.example.bookingtrain.service.inter.IPassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,10 @@ public class PassengerService implements IPassengerService {
 
     public List<Passenger> getAll() {
         return passengerRepository.findAll();
+    }
+
+    public Page<Passenger> getAllPassengers(Pageable pageable) {
+        return passengerRepository.findAll(pageable);
     }
 
     public Passenger save(Passenger passenger) {

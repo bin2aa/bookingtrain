@@ -1,17 +1,73 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Train</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        /* Custom Sidebar Colors */
+        .bg-gradient-primary {
+            background: linear-gradient(180deg, #1E3A8A 10%, #1E40AF 100%);
+        }
 
+        /* Adjust Sidebar Icons */
+        .nav-item .nav-link .fas {
+            margin-right: 10px;
+        }
+
+        /* Active Nav Item */
+        .nav-item.active .nav-link {
+            background-color: #374151;
+            color: #fff;
+        }
+
+        /* Sidebar Hover Effect */
+        .nav-item .nav-link:hover {
+            background-color: #1E40AF;
+            color: #fff;
+        }
+
+        /* Topbar Styling */
+        .topbar {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer Styling */
+        .sticky-footer {
+            background-color: #f8f9fc;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: none;
+        }
+
+        .scroll-to-top.show {
+            display: block;
+        }
+    </style>
+</head>
 
 <body id="page-top">
+
+
     <div id="wrapper">
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-train"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">Booking Train</div>
             </a>
@@ -20,10 +76,11 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" th:href="@{/}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -31,146 +88,128 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Pages
+                Management
             </div>
 
-            <!--     MENU    -->
+            <!-- Menu Items -->
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/users}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-users"></i>
                     <span>Users</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/trains}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-train"></i>
                     <span>Trains</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/stations}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Station</span>
+                    <i class="fas fa-fw fa-map-marker-alt"></i>
+                    <span>Stations</span>
                 </a>
             </li>
-            
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/schedules}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Schedule</span>
+                    <i class="fas fa-fw fa-calendar-alt"></i>
+                    <span>Schedules</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/routes}">
+                    <i class="fas fa-fw fa-route"></i>
+                    <span>Routes</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/tickets}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Ticket</span>
+                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <span>Tickets</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/passengers}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Passenger</span>
+                    <i class="fas fa-fw fa-user-friends"></i>
+                    <span>Passengers</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/objects}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Object</span>
+                    <i class="fas fa-fw fa-cube"></i>
+                    <span>Objects</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/employees}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Employee</span>
+                    <i class="fas fa-fw fa-user-tie"></i>
+                    <span>Employees</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/coachees}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Coache</span>
+                    <i class="fas fa-fw fa-bus"></i>
+                    <span>Coachees</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/seatTypes}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Seat Type</span>
+                    <i class="fas fa-fw fa-chair"></i>
+                    <span>Seat Types</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/seats}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Seat</span>
+                    <i class="fas fa-fw fa-couch"></i>
+                    <span>Seats</span>
                 </a>
             </li>
 
 
 
+
+            <!-- Nav Item - Administration Collapse Menu -->
             <li class="nav-item">
-
-            </li>
-
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-                    aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdministration"
+                    aria-expanded="false" aria-controls="collapseAdministration">
+                    <i class="fas fa-fw fa-tools"></i>
                     <span>Administration</span>
                 </a>
-                <div id="collapsePages" class="collapse " aria-labelledby="headingPages"
+                <div id="collapseAdministration" class="collapse" aria-labelledby="headingAdministration"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" th:href="@{/roles}">
-                            <span>Role</span>
-                        </a>
-
-
-                        <a class="collapse-item" th:href="@{/roleOperations}">
-                            <span>Role Operation</span>
-                        </a>
-                        <a class="collapse-item" th:href="@{/operations}">
-                            <span>Operation</span>
-                        </a>
-                        <a class="collapse-item" th:href="@{/statusRoleOperations}">
-                            <span>Status Role Operation</span>
-                        </a>
-                        <a class="collapse-item" th:href="@{/permissions}">
-                            <span>Permission</span>
-                        </a>
-
-                        <!-- login -->
+                        <h6 class="collapse-header">Settings:</h6>
+                        <a class="collapse-item" th:href="@{/roles}"><i
+                                class="fas fa-user-tag fa-sm fa-fw mr-2 text-gray-400"></i> Role</a>
+                        <a class="collapse-item" th:href="@{/roleOperations}"><i
+                                class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i> Role Operations</a>
+                        <a class="collapse-item" th:href="@{/operations}"><i
+                                class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Operations</a>
+                        <a class="collapse-item" th:href="@{/statusRoleOperations}"><i
+                                class="fas fa-clipboard-check fa-sm fa-fw mr-2 text-gray-400"></i> Status Role
+                            Operations</a>
+                        <a class="collapse-item" th:href="@{/permissions}"><i
+                                class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i> Permissions</a>
                         <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:
-                            <a th:href="@{/login}">Login</a> <br>
-                            <a class="collapse-item active" href="home.html">Blank Page</a>>
-                        </h6>
+                        <h6 class="collapse-header">Other Pages:</h6>
+                        <a class="collapse-item" th:href="@{/login}"><i
+                                class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i> Login</a>
+                        <a class="collapse-item" href="home.html"><i
+                                class="fas fa-file fa-sm fa-fw mr-2 text-gray-400"></i> Blank Page</a>
                     </div>
                 </div>
             </li>
-
-            <!-- Nav Item - Charts -->
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="charts.html">-->
-            <!--                    <i class="fas fa-fw fa-chart-area"></i>-->
-            <!--                    <span>Charts</span></a>-->
-            <!--            </li>-->
-
-            <!-- Nav Item - Tables -->
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="tables.html">-->
-            <!--                    <i class="fas fa-fw fa-table"></i>-->
-            <!--                    <span>Tables</span></a>-->
-            <!--            </li>-->
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -194,7 +233,7 @@
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
+                        <i class="fas fa-bars"></i>
                     </button>
 
                     <!-- Topbar Search -->
@@ -214,39 +253,14 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                                    th:text="${session.username}"></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                    th:text="${session.username}">User Name</span>
+                                <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
                             </a>
-
 
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -279,32 +293,34 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <h1 class="h3 mb-4 text-gray-800">Nguyen Thanh Thinh</h1>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Welcome, Nguyen Thanh Thinh</h1>
 
-                    <!-- Add Role Container -->
+                    <!-- Content Sections -->
                     <div id="addRoleContainer"></div>
-
                     <div id="addUserContainer"></div>
-
                     <div id="addPermissionContainer"></div>
-
                     <div id="addRoleOperationContainer"></div>
 
-                    <div class="overlay"></div>
-                    <!--    TABLE    -->
+                    <!-- Table Content -->
                     <div th:replace="~{::mainContent}"></div>
+                    <div class="overlay"></div>
 
                 </div>
 
             </div>
             <!-- End of Main Content -->
+
+            <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Booking Train 2024</span>
+                        <span>&copy; Booking Train 2024</span>
                     </div>
                 </div>
             </footer>
+            <!-- End of Footer -->
+
         </div>
     </div>
 
@@ -314,16 +330,49 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
         aria-hidden="true">
-        <!-- Modal Content Here -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- JavaScript Libraries -->
-    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="/js/sb-admin-2.min.js"></script>
+    <script>
+        // Scroll to Top Button Show/Hide
+        $(document).ready(function () {
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 100) {
+                    $('.scroll-to-top').fadeIn();
+                } else {
+                    $('.scroll-to-top').fadeOut();
+                }
+            });
+
+            // Smooth Scroll to Top
+            $('.scroll-to-top').click(function (e) {
+                e.preventDefault();
+                $('html, body').animate({ scrollTop: 0 }, 800);
+                return false;
+            });
+        });
+    </script>
 </body>
 
 </html>
