@@ -3,6 +3,10 @@ package com.example.bookingtrain.controller;
 import com.example.bookingtrain.model.SeatType;
 import com.example.bookingtrain.service.SeatTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +21,14 @@ public class SeatTypeController {
     private SeatTypeService seatTypeService;
 
     @GetMapping("")
-    public String showList(Model model) {
-        List<SeatType> seatTypeList = seatTypeService.getAllSeatTypes();
-        model.addAttribute("seatTypeList", seatTypeList);
+    public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("seatTypeId").ascending());
+        Page<SeatType> seatTypePage = seatTypeService.getAllSeatTypes(pageable);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", seatTypePage.getTotalPages());
+        model.addAttribute("baseUrl", "/seatTypes");
+        model.addAttribute("seatTypeList", seatTypePage);
         return "list/seatTypeList";
     }
 

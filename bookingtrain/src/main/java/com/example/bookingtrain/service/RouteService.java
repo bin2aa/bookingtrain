@@ -1,43 +1,53 @@
- package com.example.bookingtrain.service;
+package com.example.bookingtrain.service;
 
- import com.example.bookingtrain.model.Route;
- import com.example.bookingtrain.repository.RouteRepository;
- import com.example.bookingtrain.service.inter.IRouteService;
- import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.stereotype.Service;
+import com.example.bookingtrain.model.Route;
+import com.example.bookingtrain.repository.RouteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
- import java.util.List;
+import java.util.List;
 
- @Service
- public class RouteService implements IRouteService {
+@Service
+public class RouteService {
 
- private RouteRepository repo;
+    @Autowired
+    private RouteRepository routeRepository;
 
- @Autowired
- public RouteService(RouteRepository repo) {
- this.repo = repo;
- }
+    public List<Route> getAllRoutes() {
+        return routeRepository.findAll();
+    }
 
- public List<Route> getAllRoutes() {
- return repo.findAll();
- }
+    public Page<Route> getAllRoutes(Pageable pageable) {
+        return routeRepository.findAll(pageable);
+    }
 
- public Route getById(int id) {
- return repo.findById(id).orElse(null);
- }
+    public Route getRouteById(Integer id) {
+        return routeRepository.findById(id).orElse(null);
+    }
 
- public Route save(Route route) {
-// route.setIsActive(1);
- return repo.save(route);
- }
+    public Route createRoute(Route route) {
+        if (route.getStatusRoute() == 0) {
+            route.setStatusRoute(1);
+        }
+        return routeRepository.save(route);
+    }
 
- public Route update(Route route) {
- return repo.save(route);
- }
+    public Route updateRoute(Route route) {
+        Route existingRoute = routeRepository.findById(route.getRouteId()).orElse(null);
+        if (existingRoute != null) {
+            existingRoute.setRouteName(route.getRouteName());
+            existingRoute.setStationDepartureId(route.getStationDepartureId());
+            existingRoute.setStationArrivalId(route.getStationArrivalId());
+            existingRoute.setTrainId(route.getTrainId());
+            existingRoute.setStatusRoute(route.getStatusRoute());
+            return routeRepository.saveAndFlush(existingRoute);
+        }
+        return null;
+    }
 
- public Route delete(int id) {
- Route route = repo.getById(id);
-// route.setIsActive(0);
- return repo.save(route);
- }
- }
+    public void deleteRoute(Integer id) {
+        routeRepository.deleteById(id);
+    }
+}

@@ -29,7 +29,7 @@ public class UserController {
     public String getAllUsers(@RequestParam(defaultValue = "0") int page, Model model) { // Model là một đối tượng dùng
                                                                                          // để truyền dữ liệu
                                                                                          // từController tới View
-        int pageSize = 3;
+        int pageSize = 5;
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("userId").ascending());
         Page<User> usersPage = userService.getAllUsers(pageable); // Lấy danh sách users từ service

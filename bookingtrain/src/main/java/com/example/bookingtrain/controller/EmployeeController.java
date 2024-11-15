@@ -1,10 +1,15 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Employee;
+import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.EmployeeService;
 import com.example.bookingtrain.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +25,15 @@ public class EmployeeController {
     private UserService userService;
 
     @GetMapping
-    public String getAllEmployees(Model model) {
-        model.addAttribute("employees", employeeService.getAllEmployees());
+    public String getAllEmployees(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("employeeId").ascending());
+        Page<Employee> employeePage = employeeService.getAllEmployees(pageable);
+
+        model.addAttribute("employees", employeePage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", employeePage.getTotalPages());
+        model.addAttribute("baseUrl", "/employees");
         return "list/employeeList";
     }
 

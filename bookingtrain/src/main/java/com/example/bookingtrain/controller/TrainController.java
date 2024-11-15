@@ -4,6 +4,10 @@ import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.TrainService;
 import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +28,15 @@ public class TrainController {
     }
 
     @GetMapping("")
-    public String showList(Model model) {
-        List<Train> trainList = trainService.getAllTrains();
-        model.addAttribute("trainList", trainList);
+    public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("trainId").ascending());
+        Page<Train> trainPage = trainService.getAllTrains(pageable); // Lấy danh sách trains từ service
+
+        model.addAttribute("trainList", trainPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", trainPage.getTotalPages());
+        model.addAttribute("baseUrl", "/trains");
         return "list/trainList";
     }
 

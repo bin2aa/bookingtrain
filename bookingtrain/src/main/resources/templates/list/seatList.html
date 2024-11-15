@@ -20,7 +20,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableContent">
                 <tr th:each="seat : ${seatList}">
                     <td th:text="${seat.seatId}"></td>
                     <td th:text="${seat.seatNumber}"></td>
@@ -34,7 +34,9 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+        <div
+            th:replace="fragments/pagination :: paginationFragment (baseUrl='/seats', currentPage=${currentPage}, totalPages=${totalPages})">
+        </div>
 
 </body>
 

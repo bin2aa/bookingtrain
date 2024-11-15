@@ -7,7 +7,7 @@
 
     <div th:fragment="mainContent">
         <h1 class="mb-4">Stations</h1>
-        
+
         <div class="card-body">
             <div class="table-responsive">
                 <a class="btn btn-primary mb-3" th:href="@{/stations/addStation}">Add Station</a>
@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="tableContent">
                         <tr th:each="station : ${stationList}">
                             <td th:text="${station.stationId}"></td>
                             <td th:text="${station.stationName}"></td>
@@ -46,6 +46,9 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div
+            th:replace="fragments/pagination :: paginationFragment (baseUrl='/stations', currentPage=${currentPage}, totalPages=${totalPages})">
         </div>
     </div>
 

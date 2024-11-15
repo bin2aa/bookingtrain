@@ -1,9 +1,14 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Coache;
+import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.CoacheService;
 import com.example.bookingtrain.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +29,18 @@ public class CoacheController {
     }
 
     @GetMapping("")
-    public String showListPage(Model model) {
-        List<Coache> coacheList = coacheService.getAll();
-        model.addAttribute("coacheList", coacheList);
+    public String showListPage(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("coacheId").ascending());
+        Page<Coache> coachePage = coacheService.getAllCoaches(pageable);
+
+        model.addAttribute("coacheList", coachePage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", coachePage.getTotalPages());
+        model.addAttribute("baseUrl", "/coachees");
+
+        // Page<Coache> coacheList = coacheService.getAll();
+        // model.addAttribute("coacheList", coacheList);
         return "list/coacheList";
     }
 

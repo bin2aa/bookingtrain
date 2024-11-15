@@ -30,11 +30,20 @@ public class Schedule {
 
     @Column(nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private java.util.Date departureTime;
+    private java.util.Date endDeparture;
 
     @Column(nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private java.util.Date arrivalTime;
+    private java.util.Date startDeparture;
+
+    @Column(nullable = true)
+    private Integer stationDepartureId;
+
+    @Column(nullable = true)
+    private Integer stationArrivalId;
+
+    @Column(nullable = true)
+    private int statusSchedule;
 
     @ManyToOne
     @JoinColumn(name = "routeId", insertable = false, updatable = false)
@@ -44,6 +53,12 @@ public class Schedule {
     @JoinColumn(name = "trainId", insertable = false, updatable = false)
     private Train train;
 
-    @Column
-    private int statusSchedule;
+    @ManyToOne
+    @JoinColumn(name = "stationDepartureId", insertable = false, updatable = false)
+    private Station stationDeparture;
+
+    @ManyToOne
+    @JoinColumn(name = "stationArrivalId", insertable = false, updatable = false)
+    private Station stationArrival;
+
 }

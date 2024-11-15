@@ -1,9 +1,12 @@
 package com.example.bookingtrain.service;
 
+import com.example.bookingtrain.model.Passenger;
 import com.example.bookingtrain.model.Permission;
 import com.example.bookingtrain.repository.PermissionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,6 +18,10 @@ public class PermissionService {
 
     public List<Permission> getAllPermissions() {
         return permissionRepository.findAll();
+    }
+
+    public Page<Permission> getAllPermissions(Pageable pageable) {
+        return permissionRepository.findAll(pageable);
     }
 
     public Permission getPermissionById(Integer id) {

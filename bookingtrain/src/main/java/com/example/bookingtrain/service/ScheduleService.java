@@ -2,42 +2,51 @@ package com.example.bookingtrain.service;
 
 import com.example.bookingtrain.model.Schedule;
 import com.example.bookingtrain.repository.ScheduleRepository;
-import com.example.bookingtrain.service.inter.IScheduleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 @Service
-public class ScheduleService implements IScheduleService {
-
-    private ScheduleRepository shceduleRepository;
+public class ScheduleService {
 
     @Autowired
-    public ScheduleService(ScheduleRepository shceduleRepository) {
-        this.shceduleRepository = shceduleRepository;
+    private ScheduleRepository scheduleRepository;
+
+    public List<Schedule> getAllSchedules() {
+        return scheduleRepository.findAll();
     }
 
-    public List<Schedule> getAll() {
-        return shceduleRepository.findAll();
+    public Page<Schedule> getAllSchedules(Pageable pageable) {
+        return scheduleRepository.findAll(pageable);
     }
 
-    public Schedule getById(int id) {
-        return shceduleRepository.findById(id).orElse(null);
+    public Schedule getScheduleById(Integer id) {
+        return scheduleRepository.findById(id).orElse(null);
     }
 
-    public Schedule save(Schedule schedule) {
-        return shceduleRepository.save(schedule);
+    public Schedule createSchedule(Schedule schedule) {
+        return scheduleRepository.save(schedule);
     }
 
-    public boolean delete(int id) {
-        Schedule schedule = getById(id);
-        if (schedule != null) {
-            schedule.setStatusSchedule(0);
-            shceduleRepository.save(schedule);
-            return true;
+    public Schedule updateSchedule(Schedule schedule) {
+        Schedule existingSchedule = scheduleRepository.findById(schedule.getScheduleId()).orElse(null);
+        if (existingSchedule != null) {
+            existingSchedule.setTrainId(schedule.getTrainId());
+            existingSchedule.setRouteId(schedule.getRouteId());
+            existingSchedule.setStationDepartureId(schedule.getStationDepartureId());
+            existingSchedule.setStationArrivalId(schedule.getStationArrivalId());
+            existingSchedule.setStartDeparture(schedule.getStartDeparture());
+            existingSchedule.setEndDeparture(schedule.getEndDeparture());
+            existingSchedule.setStatusSchedule(schedule.getStatusSchedule());
+            return scheduleRepository.saveAndFlush(existingSchedule);
         }
-        return false;
+        return null;
     }
 
+    public void deleteSchedule(Integer id) {
+        scheduleRepository.deleteById(id);
+    }
 }

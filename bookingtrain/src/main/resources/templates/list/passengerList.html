@@ -26,7 +26,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="tableContent">
                                 <tr th:each="passenger : ${passengerList}">
                                     <td th:text="${passenger.passengerId}"></td>
                                     <td th:text="${passenger.passengerName}"></td>
@@ -46,6 +46,9 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div
+                th:replace="fragments/pagination :: paginationFragment (baseUrl='/passengers', currentPage=${currentPage}, totalPages=${totalPages})">
             </div>
         </div>
     </div>
