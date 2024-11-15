@@ -17,7 +17,7 @@ public class FileUploadUtil {
 
         boolean checkExsit = Files.exists(uploadPath.toAbsolutePath());
         if (!checkExsit) {
-            Files.createDirectories(uploadPath);
+            Files.createDirectories(uploadPath.toAbsolutePath());
         }
 
         try (InputStream inputStream = multipartFile.getInputStream()) {

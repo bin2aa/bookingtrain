@@ -12,7 +12,7 @@
 
      @Override
      public void addResourceHandlers(ResourceHandlerRegistry registry) {
-         exposeDirectory("images/trainImg", registry);
+         exposeDirectory("/static/images/trainImg", registry);
 //         registry.addResourceHandler("/**")
 //                 .addResourceLocations("classpath:/static/","classpath:/images/")
 //                 .setCachePeriod(0);
