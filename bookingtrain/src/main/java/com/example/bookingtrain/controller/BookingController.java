@@ -17,7 +17,7 @@ public class BookingController {
 
     private BookingService bookingService;
     private UserService userService;
-    private RouteService routeService;
+    private ScheduleService scheduleService;
     private PassengerService passengerService;
     private EmployeeService employeeService;
 
@@ -40,13 +40,13 @@ public class BookingController {
         List<Passenger> passengerList = passengerService.getAll();
         List<User> userList = userService.getAllUsers();
         List<Employee> employeeList = employeeService.getAllEmployees();
-        List<Route> routeList = routeService.getAllRoutes();
+        List<Schedule> scheduleList = scheduleService.getAll();
 
         model.addAttribute("booking", booking);
         model.addAttribute("userList",userList);
         model.addAttribute("passengerList",passengerList);
         model.addAttribute("employeeList",employeeList);
-        model.addAttribute("routeList",routeList);
+        model.addAttribute("scheduleList",scheduleList);
         return "add/addBooking";
     }
 
@@ -71,6 +71,16 @@ public class BookingController {
     public String showEditPage(@PathVariable int id, Model model) {
         Booking booking = bookingService.getById(id);
         model.addAttribute("booking", booking);
+        List<Passenger> passengerList = passengerService.getAll();
+        List<User> userList = userService.getAllUsers();
+        List<Employee> employeeList = employeeService.getAllEmployees();
+        List<Schedule> scheduleList = scheduleService.getAll();
+
+        model.addAttribute("booking", booking);
+        model.addAttribute("userList",userList);
+        model.addAttribute("passengerList",passengerList);
+        model.addAttribute("employeeList",employeeList);
+        model.addAttribute("scheduleList",scheduleList);
         return "edit/editBooking";
     }
 
