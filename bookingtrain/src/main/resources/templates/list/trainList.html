@@ -7,11 +7,10 @@
     <div>
         <div th:fragment="mainContent">
                 <h1 class="mb-4">Train information</h1>
-
-                <a class="addTrainLink btn btn-primary mb-3" th:href="@{/trains/addTrain}">Thêm Tàu vào hệ
-                    thống</a>
                     
                 <div class="card-body">
+                    <a class="addTrainLink btn btn-primary mb-3" th:href="@{/trains/addTrain}">Thêm Tàu vào hệ
+                        thống</a>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -30,7 +29,7 @@
                                     <td th:text="${train.trainName}"></td>
                                     <td th:text="${train.description}"></td>
                                     <td>
-                                        <img th:src="@{'img/trainImg/' + ${train.image}}" alt="Train Image" style="width: 100px; height: auto;" />
+                                        <img th:src="@{/images/trainImg/{image} (image=${train.image})}" alt="Train Image" style="width: 100px; height: auto;" />
                                     </td>
                                     <td th:text="${train.statusTrain == 1 ? 'Active' : 'Inactive'}"></td>
                                     <td>

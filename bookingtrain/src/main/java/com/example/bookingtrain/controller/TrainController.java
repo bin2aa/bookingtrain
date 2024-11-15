@@ -6,6 +6,7 @@ import com.example.bookingtrain.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,8 +45,10 @@ public class TrainController {
             String fileName = multipartFile.getOriginalFilename();
             train.setImage(fileName);
 
-            String uploadDir = "img/trainImg/";
+            Train newTrain = trainService.save(train);
+            String uploadDir = "/images/trainImg/" + newTrain.getTrainId();
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,10 +81,10 @@ public class TrainController {
 
             // Nếu người dùng không chọn ảnh mới thì giữ nguyên ảnh cũ
             if (!multipartFile.isEmpty()) {
-                String fileName = multipartFile.getOriginalFilename();
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
                 train.setImage(fileName);
 
-                String uploadDir = "img/trainImg/";
+                String uploadDir = "/static/images/trainImg/" + train.getTrainId();
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
             } else {
                 train.setImage(existingTrain.getImage());

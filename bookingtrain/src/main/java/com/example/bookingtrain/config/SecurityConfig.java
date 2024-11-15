@@ -1,14 +1,15 @@
 package com.example.bookingtrain.config;
 
 import com.example.bookingtrain.DTO.CustomUserDetails;
-import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.service.CustomUserDetailsService;
-import net.bytebuddy.asm.MemberSubstitution;
+//import net.bytebuddy.asm.MemberSubstitution;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.servlet.http.HttpSession;
+//import javax.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -26,11 +27,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors().and()
-                .csrf().disable()
                 .authorizeRequests(configurer -> configurer
-                        .antMatchers("/login","/css/**", "/js/**", "/images/**").permitAll()
-                        .antMatchers("/**").hasRole("ADMIN")
+                        .requestMatchers("/login","/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

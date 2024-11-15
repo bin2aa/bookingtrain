@@ -15,7 +15,8 @@ public class FileUploadUtil {
             MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
 
-        if (!Files.exists(uploadPath)) {
+        boolean checkExsit = Files.exists(uploadPath.toAbsolutePath());
+        if (!checkExsit) {
             Files.createDirectories(uploadPath);
         }
 
