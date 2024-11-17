@@ -1,5 +1,7 @@
 package com.example.bookingtrain.controller;
 
+import com.example.bookingtrain.DTO.TrainScheduleDTO;
+import com.example.bookingtrain.service.StationService;
 import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.TrainService;
 import com.example.bookingtrain.utils.FileUploadUtil;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/trains")
@@ -22,21 +25,32 @@ public class TrainController {
 
     private final TrainService trainService;
 
+    private final StationService stationService;
+
     @Autowired
-    public TrainController(TrainService trainService) {
+    public TrainController(TrainService trainService, StationService stationService) {
         this.trainService = trainService;
+
+        this.stationService = stationService;
     }
 
     @GetMapping("")
-    public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 1;
+    public String showList(@RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String search,
+            Model model) {
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("trainId").ascending());
-        Page<Train> trainPage = trainService.getAllTrains(pageable); // Lấy danh sách trains từ service
-
+        Page<Train> trainPage;
+        if (search != null && !search.isEmpty()) {
+            trainPage = trainService.searchTrainsByName(search, pageable);
+        } else {
+            trainPage = trainService.getAllTrains(pageable);
+        }
         model.addAttribute("trainList", trainPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", trainPage.getTotalPages());
         model.addAttribute("baseUrl", "/trains");
+        model.addAttribute("search", search); // Thêm tham số search vào model để giữ lại giá trị tìm kiếm
+
         return "list/trainList";
     }
 
@@ -62,6 +76,7 @@ public class TrainController {
             model.addAttribute("train", train);
             return "add/addTrain";
         }
+        trainService.save(train);
         return "redirect:/trains";
     }
 
@@ -73,6 +88,21 @@ public class TrainController {
             return "edit/editTrain";
         }
         return "redirect:/trains";
+    }
+
+    @PostMapping("/editJson")
+    @ResponseBody
+    public String editTrainStatus(@RequestBody Map<String, Integer> payload) {
+        Integer trainId = payload.get("trainId");
+        Integer statusTrain = payload.get("statusTrain");
+
+        Train train = trainService.getById(trainId);
+        if (train == null) {
+            return "error";
+        }
+        train.setStatusTrain(statusTrain);
+        trainService.update(trainId, train);
+        return "success";
     }
 
     @PostMapping("/updateTrain")
@@ -111,4 +141,11 @@ public class TrainController {
         trainService.delete(id);
         return "redirect:/trains";
     }
+
+    // @GetMapping("/client/train")
+    // public String showTrainList(Model model) {
+    // List<TrainScheduleDTO> trainSchedules = stationService.getTrainSchedules();
+    // model.addAttribute("trainSchedules", trainSchedules);
+    // return "Client/Components/Train";
+    // }
 }

@@ -5,16 +5,13 @@
     <meta charset="UTF-8">
     <title>Role Operation List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/css/toggleOnOff.css">
-
-
 </head>
 
 <body th:replace="/fragments/body :: body">
     <div th:fragment="mainContent">
         <h1 class="mb-4">RoleOperation List</h1>
-        
+
         <a class="addRoleOperationLink" th:href="@{/roleOperations/newRoleOperation}">Thêm chức vụ</a>
         <div id="tableContent" th:fragment="tableContent">
             <table class="table table-striped">
@@ -50,78 +47,24 @@
                                     th:data-operation-id="${roleOperation.id.operationId}"
                                     th:data-status="${roleOperation.statusId}">
                                 <span class="slider"></span>
-                                <span class="card-side"></span>
                             </label>
                         </td>
                         <td>
-                            <a
-                                th:href="@{/roleOperations/editRoleOperation/{roleId}-{permissionId}-{operationId}(roleId=${roleOperation.id.roleId}, permissionId=${roleOperation.id.permissionId}, operationId=${roleOperation.id.operationId})}">Edit</a>
+                            <!-- <a th:href="@{/roleOperations/editRoleOperation/{roleId}-{permissionId}-{operationId}(roleId=${roleOperation.id.roleId}, permissionId=${roleOperation.id.permissionId}, operationId=${roleOperation.id.operationId})}"
+                                class="btn btn-warning btn-sm">Edit</a> -->
+                            <a th:href="@{/roleOperations/deleteRoleOperation/{roleId}-{permissionId}-{operationId}(roleId=${roleOperation.id.roleId}, permissionId=${roleOperation.id.permissionId}, operationId=${roleOperation.id.operationId})}"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this role operation?');">Delete</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-            <div 
+            <div
                 th:replace="fragments/pagination :: paginationFragment (baseUrl='/roleOperations', currentPage=${currentPage}, totalPages=${totalPages})">
             </div>
-
         </div>
     </div>
-<!-- 
-    <div id="addRoleOperationContainer"></div>
-    <div class="overlay"></div> -->
-
 </body>
 
 </html>
-
-<script>
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     function setupPaginationEventListeners() {
-    //         const paginationContainer = document.querySelector("#pagination");
-
-    //         paginationContainer.addEventListener("click", function (e) {
-    //             const target = e.target;
-
-    //             // Chỉ xử lý nếu người dùng nhấn vào liên kết phân trang
-    //             if (target.classList.contains("page-link")) {
-    //                 e.preventDefault(); // Ngăn chặn hành vi mặc định tải lại trang
-
-    //                 const url = target.getAttribute("href"); // Lấy URL của trang mới
-
-    //                 // Gọi fetch đến URL của trang mới
-    //                 fetch(url, {
-    //                     method: "GET",
-    //                     headers: {
-    //                         "X-Requested-With": "XMLHttpRequest" // Đảm bảo yêu cầu là AJAX
-    //                     }
-    //                 })
-    //                     .then(response => {
-    //                         if (!response.ok) {
-    //                             throw new Error("Network response was not ok");
-    //                         }
-    //                         return response.text();
-    //                     })
-    //                     .then(html => {
-    //                         // Sử dụng DOMParser để phân tích cú pháp HTML
-    //                         const parser = new DOMParser();
-    //                         const doc = parser.parseFromString(html, 'text/html');
-
-    //                         // Cập nhật nội dung của bảng (#tableContent) và phần phân trang (#pagination)
-    //                         const newTableContent = doc.querySelector("#tableContent").innerHTML;
-    //                         document.querySelector("#tableContent").innerHTML = newTableContent;
-
-    //                         const newPagination = doc.querySelector("#pagination").innerHTML;
-    //                         document.querySelector("#pagination").innerHTML = newPagination;
-    //                         // Gán lại sự kiện click cho các liên kết phân trang
-    //                         setupPaginationEventListeners();
-    //                     })
-    //                     .catch(error => {
-    //                         console.error("Error loading page:", error);
-    //                     });
-    //             }
-    //         });
-    //     }
-    //     setupPaginationEventListeners();
-    // });
-</script>

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/schedules")
@@ -36,15 +37,24 @@ public class ScheduleController {
     }
 
     @GetMapping("")
-    public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
+    public String showList(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            Model model) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("scheduleId").ascending());
-        Page<Schedule> schedulePage = scheduleService.getAllSchedules(pageable); // Lấy danh sách trains từ service
+        Page<Schedule> schedulePage;
+
+        if (search != null && !search.isEmpty()) {
+            schedulePage = scheduleService.searchSchedulesByTrainName(search, pageable);
+        } else {
+            schedulePage = scheduleService.getAllSchedules(pageable);
+        }
 
         model.addAttribute("scheduleList", schedulePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", schedulePage.getTotalPages());
         model.addAttribute("baseUrl", "/schedules");
+        model.addAttribute("search", search);
         return "list/scheduleList";
     }
 
@@ -66,13 +76,45 @@ public class ScheduleController {
     }
 
     @PostMapping("/saveSchedule")
-    public String saveSchedule(@ModelAttribute("schedule") Schedule schedule) {
+    public String saveSchedule(@ModelAttribute("schedule") Schedule schedule, Model model) {
+        if (schedule.getStationDepartureId().equals(schedule.getStationArrivalId())) {
+            var departureList = stationService.getAll();
+            var arrivalList = stationService.getAll();
+            var trainList = trainService.getAllTrains();
+            var routeList = routeService.getAllRoutes();
+            var stationList = stationService.getAll();
+
+            model.addAttribute("departureList", departureList);
+            model.addAttribute("arrivalList", arrivalList);
+            model.addAttribute("trainList", trainList);
+            model.addAttribute("routeList", routeList);
+            model.addAttribute("stationList", stationList);
+            model.addAttribute("schedule", schedule);
+            model.addAttribute("errorMessage", "Station Arrival and Station Departure cannot be the same.");
+            return "add/addSchedule";
+        }
         scheduleService.createSchedule(schedule);
         return "redirect:/schedules";
     }
 
     @PostMapping("/updateSchedule")
-    public String updateSchedule(@ModelAttribute("schedule") Schedule schedule) {
+    public String updateSchedule(@ModelAttribute("schedule") Schedule schedule, Model model) {
+        if (schedule.getStationDepartureId().equals(schedule.getStationArrivalId())) {
+            var departureList = stationService.getAll();
+            var arrivalList = stationService.getAll();
+            var trainList = trainService.getAllTrains();
+            var routeList = routeService.getAllRoutes();
+            var stationList = stationService.getAll();
+
+            model.addAttribute("departureList", departureList);
+            model.addAttribute("arrivalList", arrivalList);
+            model.addAttribute("trainList", trainList);
+            model.addAttribute("routeList", routeList);
+            model.addAttribute("stationList", stationList);
+            model.addAttribute("schedule", schedule);
+            model.addAttribute("errorMessage", "Station Arrival and Station Departure cannot be the same.");
+            return "edit/editSchedule";
+        }
         scheduleService.updateSchedule(schedule);
         return "redirect:/schedules";
     }
@@ -91,9 +133,23 @@ public class ScheduleController {
         model.addAttribute("trainList", trainList);
         model.addAttribute("routeList", routeList);
         model.addAttribute("stationList", stationList);
-
         model.addAttribute("schedule", schedule);
         return "edit/editSchedule";
+    }
+
+    @PostMapping("/editJson")
+    @ResponseBody
+    public String editScheduleStatus(@RequestBody Map<String, Integer> payload) {
+        Integer scheduleId = payload.get("scheduleId");
+        Integer statusSchedule = payload.get("statusSchedule");
+
+        Schedule schedule = scheduleService.getScheduleById(scheduleId);
+        if (schedule == null) {
+            return "error";
+        }
+        schedule.setStatusSchedule(statusSchedule);
+        scheduleService.updateSchedule(schedule);
+        return "success";
     }
 
     @GetMapping("/deleteSchedule/{id}")

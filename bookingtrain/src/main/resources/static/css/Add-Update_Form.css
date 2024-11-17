@@ -1,7 +1,14 @@
 #addRoleContainer,
 #addUserContainer,
 #addPermissionContainer,
-#addRoleOperationContainer {
+#addRoleOperationContainer,
+#addTrainContainer,
+#addStationContainer,
+#addScheduleContainer,
+#addRouteContainer,
+#addObjectContainer,
+#addEmployeeContainer
+ {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -23,8 +30,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Đen nhẹ hơn */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Đen nhẹ hơn */
     z-index: 9998;
     display: none;
 }
-

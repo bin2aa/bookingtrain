@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Các Ga</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .station-card {
+            transition: transform 0.3s ease;
+        }
+
+        .station-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-top w-100">
+        <div th:replace="Client/Header :: Header"></div>
+    </div>
+    <div class="container my-5">
+        <h1 class="text-center mb-5">Danh Sách Các Ga</h1>
+        <div class="row" id="stationGrid">
+            <!-- Sử dụng Thymeleaf để lặp qua danh sách các ga và hiển thị -->
+            <div th:each="station : ${stations}" class="col-md-4 mb-4">
+                <div class="card station-card">
+                    <img th:src="@{/img/stationImg/{image}(image=${station.image})}" class="card-img-top"
+                        th:alt="${station.stationName}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${station.stationName}">Tên Ga</h5>
+                        <p class="card-text">Mã Ga: <span th:text="${station.stationCode}">Mã Ga</span></p>
+                        <p class="card-text">Trạng Thái: <span
+                                th:text="${station.statusStation == 1 ? 'Đang hoạt động' : 'Không hoạt động'}">Trạng
+                                Thái</span></p>
+                        <p class="card-text">Mô Tả: <span
+                                th:text="${station.description != null ? station.description : 'Không có mô tả'}">Mô
+                                Tả</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

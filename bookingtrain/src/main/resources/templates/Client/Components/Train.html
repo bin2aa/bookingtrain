@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Các Chuyến Tàu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div th:replace="Client/Header :: Header"></div>
+    <div class="container my-5">
+        <h1 class="text-center mb-5">Danh Sách Các Chuyến Tàu</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tên Tàu</th>
+                            <th>Mã Chuyến</th>
+                            <th>Thời Gian Đi</th>
+                            <th>Thời Gian Đến</th>
+                            <th>Giá Vé Cơ Bản</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="trainSchedule : ${trainSchedules}">
+                            <td th:text="${trainSchedule.trainName}">Tên Tàu</td>
+                            <td th:text="${trainSchedule.routeName}">Mã Chuyến</td>
+                            <td th:text="${#dates.format(trainSchedule.startDeparture, 'dd/MM/yyyy HH:mm')}">Thời Gian
+                                Đi</td>
+                            <td th:text="${#dates.format(trainSchedule.endDeparture, 'dd/MM/yyyy HH:mm')}">Thời Gian Đến
+                            </td>
+                            <td th:text="${trainSchedule.basePrice}">Giá Vé Cơ Bản</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

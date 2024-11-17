@@ -15,4 +15,6 @@ public interface TrainRepository extends JpaRepository<Train, Integer> {
 
     Page<Train> findAll(Pageable pageable);
 
+    Page<Train> findByTrainNameContaining(String trainName, Pageable pageable);
+
 }

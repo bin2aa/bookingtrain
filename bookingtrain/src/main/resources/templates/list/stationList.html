@@ -8,9 +8,25 @@
     <div th:fragment="mainContent">
         <h1 class="mb-4">Stations</h1>
 
+        <a class="addStationLink btn btn-primary mb-3" th:href="@{/stations/addStation}">Add Station</a>
+
+
+        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+            method="get" action="/stations">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control bg-light border-0 small"
+                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
         <div class="card-body">
             <div class="table-responsive">
-                <a class="btn btn-primary mb-3" th:href="@{/stations/addStation}">Add Station</a>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -30,7 +46,14 @@
                             <td th:text="${station.stationName}"></td>
                             <td th:text="${station.description}"></td>
                             <td th:text="${station.stationCode}"></td>
-                            <td th:text="${station.statusStation == 1 ? 'Active' : 'Inactive'}"></td>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" class="toggle" th:checked="${station.statusStation == 1}"
+                                        th:data-station-id="${station.stationId}"
+                                        th:data-status="${station.statusStation}">
+                                    <span class="slider"></span>
+                                </label>
+                            </td>
                             <td>
                                 <img th:src="@{'img/stationImg/' + ${station.image}}" alt="Station Image"
                                     style="width: 100px; height: auto;" />

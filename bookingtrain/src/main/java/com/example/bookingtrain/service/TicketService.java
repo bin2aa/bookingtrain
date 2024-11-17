@@ -4,6 +4,8 @@ import com.example.bookingtrain.model.Ticket;
 import com.example.bookingtrain.repository.TicketRepository;
 import com.example.bookingtrain.service.inter.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,20 +14,26 @@ import java.util.List;
 public class TicketService implements ITicketService {
 
     private final TicketRepository repo;
-    // private Passenger
 
     @Autowired
     public TicketService(TicketRepository ticketRepository) {
         this.repo = ticketRepository;
     }
 
-    // CRUD
     public Ticket getByID(int id) {
         return repo.findById(id).orElse(null);
     }
 
     public List<Ticket> getAllTicket() {
         return repo.findAll();
+    }
+
+    public Page<Ticket> getAllTickets(Pageable pageable) {
+        return repo.findAll(pageable);
+    }
+
+    public Page<Ticket> searchTicketsByPassengerName(String passengerName, Pageable pageable) {
+        return repo.findByPassengerNameContaining(passengerName, pageable);
     }
 
     public Ticket save(Ticket ticket) {

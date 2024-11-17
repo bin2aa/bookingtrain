@@ -25,6 +25,6 @@ public class Train {
     private String image;
 
     @Column(nullable = true)
-    private Integer statusTrain;
+    private Integer statusTrain = 1;
 
 }

@@ -12,6 +12,21 @@
                     <h6 class="m-0 font-weight-bold text-primary">Passengers Information</h6>
                 </div>
                 <div class="card-body">
+                    <!-- Search Passenger -->
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+                        method="get" action="/passengers">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control bg-light border-0 small"
+                                placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2"
+                                th:value="${search}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -31,8 +46,8 @@
                                     <td th:text="${passenger.passengerId}"></td>
                                     <td th:text="${passenger.passengerName}"></td>
                                     <td th:text="${passenger.dateOfBirth}"></td>
-                                    <td th:text="${passenger.identityId}"></td>
                                     <td th:text="${passenger.phone}"></td>
+                                    <td th:text="${passenger.identityId}"></td>
                                     <td th:text="${passenger.objectId}"></td>
                                     <td>
                                         <a class="btn btn-primary btn-sm"

@@ -1,6 +1,8 @@
 package com.example.bookingtrain.service;
 
+import com.example.bookingtrain.DTO.TrainScheduleDTO;
 import com.example.bookingtrain.model.Station;
+import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.repository.StationRepository;
 import com.example.bookingtrain.service.inter.IStationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +25,10 @@ public class StationService implements IStationService {
 
     public Page<Station> getAllStations(Pageable pageable) {
         return stationRepository.findAll(pageable);
+    }
+
+    public Page<Station> searchStationsByName(String stationName, Pageable pageable) {
+        return stationRepository.findByStationNameContaining(stationName, pageable);
     }
 
     @Override
@@ -57,4 +64,10 @@ public class StationService implements IStationService {
     public void deleteStation(int id) {
         stationRepository.deleteById(id);
     }
+
+    public List<TrainScheduleDTO> getTrainSchedules() {
+        List<TrainScheduleDTO> trainSchedules = new ArrayList<>();
+        return trainSchedules;
+    }
+
 }

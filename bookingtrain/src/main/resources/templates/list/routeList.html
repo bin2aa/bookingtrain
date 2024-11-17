@@ -28,15 +28,25 @@
                     <td th:text="${route.stationDeparture.stationName}"></td>
                     <td th:text="${route.stationArrival.stationName}"></td>
                     <td th:text="${route.train.trainName}"></td>
-                    <td th:text="${route.statusRoute == 1 ? 'Active' : 'Inactive'}"></td>
                     <td>
-                        <a th:href="@{/routes/editRoute/{routeId}(routeId=${route.routeId})}" class="btn btn-warning btn-sm">Edit</a>
-                        <a th:href="@{/routes/deleteRoute/{id}(id=${route.routeId})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this route?');">Delete</a>
+                        <label class="switch">
+                            <input type="checkbox" class="toggle" th:checked="${route.statusRoute == 1}"
+                                th:data-route-id="${route.routeId}" th:data-status="${route.statusRoute}">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <a th:href="@{/routes/editRoute/{routeId}(routeId=${route.routeId})}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/routes/deleteRoute/{id}(id=${route.routeId})}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this route?');">Delete</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div th:replace="fragments/pagination :: paginationFragment (baseUrl='/routes', currentPage=${currentPage}, totalPages=${totalPages})"></div>
+        <div
+            th:replace="fragments/pagination :: paginationFragment (baseUrl='/routes', currentPage=${currentPage}, totalPages=${totalPages})">
+        </div>
     </div>
 </body>
 
