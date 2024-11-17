@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface StationRepository extends JpaRepository<Station, Integer> {
 
     Page<Station> findAll(Pageable pageable);
+
+    Page<Station> findByStationNameContaining(String stationName, Pageable pageable);
 }

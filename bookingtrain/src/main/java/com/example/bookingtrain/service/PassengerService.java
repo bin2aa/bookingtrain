@@ -32,6 +32,10 @@ public class PassengerService implements IPassengerService {
         return passengerRepository.findAll(pageable);
     }
 
+    public Page<Passenger> searchPassengersByName(String passengerName, Pageable pageable) {
+        return passengerRepository.findByPassengerNameContaining(passengerName, pageable);
+    }
+
     public Passenger save(Passenger passenger) {
         return passengerRepository.save(passenger);
     }

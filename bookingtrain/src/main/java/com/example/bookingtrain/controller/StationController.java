@@ -1,5 +1,6 @@
 package com.example.bookingtrain.controller;
 
+import com.example.bookingtrain.DTO.TrainScheduleDTO;
 import com.example.bookingtrain.model.Station;
 import com.example.bookingtrain.model.Train;
 import com.example.bookingtrain.service.StationService;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/stations")
@@ -29,16 +31,23 @@ public class StationController {
     }
 
     @GetMapping("")
-    public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
+    public String showList(@RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String search,
+            Model model) {
         int pageSize = 1;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("stationId").ascending());
-        Page<Station> stationPage = stationService.getAllStations(pageable); // Lấy danh sách trains từ service
+        Page<Station> stationPage;
+        if (search != null && !search.isEmpty()) {
+            stationPage = stationService.searchStationsByName(search, pageable);
+        } else {
+            stationPage = stationService.getAllStations(pageable);
+        }
 
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", stationPage.getTotalPages());
         model.addAttribute("baseUrl", "/stations");
         // List<Station> stationList = stationService.getAll();
         model.addAttribute("stationList", stationPage);
+        model.addAttribute("search", search);
         return "list/stationList";
     }
 
@@ -53,22 +62,15 @@ public class StationController {
             @RequestParam("imageFile") MultipartFile multipartFile,
             Model model) {
         try {
-            Station existingStation = stationService.getById(station.getStationId());
-            if (existingStation == null) {
-                return "redirect:/stations";
-            }
             if (!multipartFile.isEmpty()) {
                 String fileName = multipartFile.getOriginalFilename();
                 station.setImage(fileName);
 
                 String uploadDir = "img/stationImg/";
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-
-            } else {
-                station.setImage(existingStation.getImage());
             }
-            // Cập nhật thông tin trạm
-            stationService.updateStation(station.getStationId(), station);
+            // Tạo mới trạm
+            stationService.createStation(station);
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("station", station);
@@ -87,17 +89,38 @@ public class StationController {
         return "redirect:/stations";
     }
 
+    @PostMapping("/editJson")
+    @ResponseBody
+    public String editStationStatus(@RequestBody Map<String, Integer> payload) {
+        Integer stationId = payload.get("stationId");
+        Integer statusStation = payload.get("statusStation");
+
+        Station station = stationService.getById(stationId);
+        if (station == null) {
+            return "error";
+        }
+        station.setStatusStation(statusStation);
+        stationService.updateStation(stationId, station);
+        return "success";
+    }
+
     @PostMapping("/updateStation")
     public String updateStation(@ModelAttribute("station") Station station,
             @RequestParam("imageFile") MultipartFile multipartFile,
             Model model) {
         try {
+            Station existingStation = stationService.getById(station.getStationId());
+            if (existingStation == null) {
+                return "redirect:/stations";
+            }
             if (!multipartFile.isEmpty()) {
                 String fileName = multipartFile.getOriginalFilename();
                 station.setImage(fileName);
 
                 String uploadDir = "img/stationImg/";
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            } else {
+                station.setImage(existingStation.getImage());
             }
 
             stationService.updateStation(station.getStationId(), station);
@@ -114,4 +137,12 @@ public class StationController {
         stationService.deleteStation(id);
         return "redirect:/stations";
     }
+
+    @GetMapping("/client/stations")
+    public String showStationList(Model model) {
+        List<Station> stations = stationService.getAll();
+        model.addAttribute("stations", stations);
+        return "Client/Components/Station";
+    }
+
 }

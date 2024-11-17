@@ -1,5 +1,6 @@
 package com.example.bookingtrain.controller;
 
+import com.example.bookingtrain.DTO.TrainDetailsDTO;
 import com.example.bookingtrain.model.Passenger;
 import com.example.bookingtrain.service.ObjectService;
 import com.example.bookingtrain.service.PassengerService;
@@ -29,17 +30,24 @@ public class PassengerController {
     }
 
     @GetMapping("")
-    public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
-        // List<Passenger> passengerList = passengerService.getAll();
-
+    public String showList(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            Model model) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("passengerId").ascending());
-        Page<Passenger> passengerPage = passengerService.getAllPassengers(pageable);
+        Page<Passenger> passengerPage;
+
+        if (search != null && !search.isEmpty()) {
+            passengerPage = passengerService.searchPassengersByName(search, pageable);
+        } else {
+            passengerPage = passengerService.getAllPassengers(pageable);
+        }
+
+        model.addAttribute("passengerList", passengerPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", passengerPage.getTotalPages());
         model.addAttribute("baseUrl", "/passengers");
-
-        model.addAttribute("passengerList", passengerPage);
+        model.addAttribute("search", search);
         return "list/passengerList";
     }
 
@@ -80,25 +88,17 @@ public class PassengerController {
         return "redirect:/passengers";
     }
 
-    @PostMapping("/ticket/passenger")
-    public String passenger(@RequestParam("trainId") int trainId,
-            @RequestParam("trainCode") String trainCode,
-            @RequestParam("stationDeparture") String stationDeparture,
-            @RequestParam("stationArrival") String stationArrival,
-            @RequestParam("timeDeparture") String timeDeparture,
-            @RequestParam("dateDeparture") String dateDeparture,
-            @RequestParam("timeArrival") String timeArrival,
-            @RequestParam("dateArrival") String dateArrival, Model model) {
+    @GetMapping("/ticket/passenger")
+    public String passenger(TrainDetailsDTO trainDetails, Model model) {
         model.addAttribute("passenger", new Passenger());
 
-        model.addAttribute("trainCode", trainCode);
-        model.addAttribute("stationDeparture", stationDeparture);
-        model.addAttribute("stationArrival", stationArrival);
-        model.addAttribute("timeDeparture", timeDeparture);
-        model.addAttribute("dateDeparture", dateDeparture);
-        model.addAttribute("timeArrival", timeArrival);
-        model.addAttribute("dateArrival", dateArrival);
-
+        model.addAttribute("trainCode", trainDetails.getTrainCode());
+        model.addAttribute("stationDeparture", trainDetails.getStationDeparture());
+        model.addAttribute("stationArrival", trainDetails.getStationArrival());
+        model.addAttribute("timeDeparture", trainDetails.getTimeDeparture());
+        model.addAttribute("dateDeparture", trainDetails.getDateDeparture());
+        model.addAttribute("timeArrival", trainDetails.getTimeArrival());
+        model.addAttribute("dateArrival", trainDetails.getDateArrival());
         return "Client/Components/Passenger";
     }
 

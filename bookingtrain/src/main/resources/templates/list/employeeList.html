@@ -8,7 +8,7 @@
 <body th:replace="/fragments/body :: body">
     <div th:fragment="mainContent">
         <h1 class="mb-4">Employee List</h1>
-        <a th:href="@{/employees/newEmployee}">Thêm người dùng</a>
+        <a class="addEmployeeLink" th:href="@{/employees/newEmployee}">Thêm người dùng</a>
         <table class="table table-striped">
             <thead>
                 <tr>

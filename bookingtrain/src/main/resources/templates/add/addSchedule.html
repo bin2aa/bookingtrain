@@ -1,17 +1,19 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 
-<head th:replace="/fragments/header :: head">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<head >
 </head>
 
-<body th:replace="/fragments/body :: body">
+<body >
 
     <div th:fragment="mainContent" class="container mt-5">
         <h1 class="text-center mb-4">Add Schedule</h1>
         <form class="form align-content-center" th:action="@{/schedules/saveSchedule}" th:object="${schedule}"
             method="post">
+
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <p th:text="${errorMessage}"></p>
+            </div>
 
             <div class="form-group row">
                 <label for="trainId" class="col-sm-2 col-form-label">Train ID:</label>
@@ -38,26 +40,38 @@
                 </div>
             </div>
 
-
-            <div>
-                <label for="stationArrivalId">Station Arrival:</label>
-                <select id="stationArrivalId" th:field="*{stationArrivalId}" required>
-                    <option value="">Select Station</option>
-                    <option th:each="station : ${stationList}" th:value="${station.stationId}"
-                        th:text="${station.stationName}"></option>
-                </select>
+            <div class="form-group row">
+                <label for="stationArrivalId" class="col-sm-2 col-form-label">Station Arrival:</label>
+                <div class="col-sm-10">
+                    <select id="stationArrivalId" th:field="*{stationArrivalId}" class="form-control" required>
+                        <option value="">Select Station</option>
+                        <option th:each="station : ${stationList}" th:value="${station.stationId}"
+                            th:text="${station.stationName}"></option>
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label for="stationDepartureId">Station Departure:</label>
-                <select id="stationDepartureId" th:field="*{stationDepartureId}" required>
-                    <option value="">Select Station</option>
-                    <option th:each="station : ${stationList}" th:value="${station.stationId}"
-                        th:text="${station.stationName}"></option>
-                </select>
+            <div class="form-group row">
+                <label for="stationDepartureId" class="col-sm-2 col-form-label">Station Departure:</label>
+                <div class="col-sm-10">
+                    <select id="stationDepartureId" th:field="*{stationDepartureId}" class="form-control" required>
+                        <option value="">Select Station</option>
+                        <option th:each="station : ${stationList}" th:value="${station.stationId}"
+                            th:text="${station.stationName}"></option>
+                    </select>
+                </div>
             </div>
 
-           
+            <div class="form-group row">
+                <label for="routeId" class="col-sm-2 col-form-label">Route:</label>
+                <div class="col-sm-10">
+                    <select id="routeId" th:field="*{routeId}" class="form-control" required>
+                        <option value="">Select Route</option>
+                        <option th:each="route : ${routeList}" th:value="${route.routeId}" th:text="${route.routeName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
 
             <!-- Hidden Status Field -->
             <input type="hidden" th:field="*{statusSchedule}" value="1" />

@@ -23,6 +23,10 @@ public class ScheduleService {
         return scheduleRepository.findAll(pageable);
     }
 
+    public Page<Schedule> searchSchedulesByTrainName(String trainName, Pageable pageable) {
+        return scheduleRepository.findByTrainNameContaining(trainName, pageable);
+    }
+
     public Schedule getScheduleById(Integer id) {
         return scheduleRepository.findById(id).orElse(null);
     }

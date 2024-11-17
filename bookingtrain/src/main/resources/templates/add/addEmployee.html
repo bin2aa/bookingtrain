@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="/fragments/header :: head">
+<head>
     <title>Add Employee</title>
 </head>
 
-<body th:replace="/fragments/body :: body">
+<body>
     <div th:fragment="mainContent">
         <h1 class="mb-4">Add Employee</h1>
-        <form th:action="@{/employees/addEmployee}" th:object="${employee}" method="post" class="needs-validation" novalidate>
+        <form th:action="@{/employees/addEmployee}" th:object="${employee}" method="post" class="needs-validation"
+            novalidate>
             <div class="mb-3">
                 <label for="employeeName" class="form-label">Employee Name:</label>
                 <input type="text" id="employeeName" th:field="*{employeeName}" class="form-control" required>

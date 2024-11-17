@@ -28,6 +28,10 @@ public class TrainService implements ITrainService {
         return repo.findAll(pageable);
     }
 
+    public Page<Train> searchTrainsByName(String trainName, Pageable pageable) {
+        return repo.findByTrainNameContaining(trainName, pageable);
+    }
+
     @Override
     public Train getById(Integer id) {
         return repo.findById(id).orElse(null);

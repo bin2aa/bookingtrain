@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/routes")
@@ -69,6 +70,21 @@ public class RouteController {
     public String editRoute(@ModelAttribute Route route) {
         routeService.updateRoute(route);
         return "redirect:/routes";
+    }
+
+    @PostMapping("/editJson")
+    @ResponseBody
+    public String editRouteStatus(@RequestBody Map<String, Integer> payload) {
+        Integer routeId = payload.get("routeId");
+        Integer statusRoute = payload.get("statusRoute");
+
+        Route route = routeService.getRouteById(routeId);
+        if (route == null) {
+            return "error";
+        }
+        route.setStatusRoute(statusRoute);
+        routeService.updateRoute(route);
+        return "success";
     }
 
     @GetMapping("/deleteRoute/{id}")

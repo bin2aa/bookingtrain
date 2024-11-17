@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -15,8 +16,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    public Page<User> searchUsersByUsername(String username, Pageable pageable) {
+        return userRepository.findByUsernameContaining(username, pageable);
     }
 
     public List<User> getAllUsers() {
@@ -28,6 +36,7 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getRoleId() == null) {
             user.setRoleId(1); // Đặt mặc định chỉ khi roleId không được cung cấp
         }
@@ -35,6 +44,11 @@ public class UserService {
     }
 
     public User updateUser(User user) {
+        // return userRepository.saveAndFlush(user);
+        User existingUser = userRepository.findById(user.getUserId()).orElse(null);
+        if (existingUser != null && !passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.saveAndFlush(user);
     }
 
@@ -52,8 +66,8 @@ public class UserService {
 
     public boolean authenticate(String email, String password) {
         User user = findByEmail(email);
+        return user != null && passwordEncoder.matches(password, user.getPassword()); // Kiểm tra mật khẩu
 
-        return user != null && user.getPassword().equals(password); // Kiểm tra mật khẩu có khớp không
     }
 
     public boolean isEmailExisted(String email) {

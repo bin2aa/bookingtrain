@@ -13,6 +13,11 @@
         <form class="form align-content-center" th:action="@{/schedules/updateSchedule}" th:object="${schedule}"
             method="post">
             <input type="hidden" th:field="*{scheduleId}" />
+
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <p th:text="${errorMessage}"></p>
+            </div>
+
             <div class="form-group row">
                 <label for="trainId" class="col-sm-2 col-form-label">Train ID:</label>
                 <div class="col-sm-10">
@@ -27,7 +32,7 @@
             <div class="form-group row">
                 <label for="startDeparture" class="col-sm-2 col-form-label">Start Departure:</label>
                 <div class="col-sm-10">
-                    <input type="date" id="departureTime" th:field="*{departureTime}" class="form-control" required />
+                    <input type="date" id="startDeparture" th:field="*{startDeparture}" class="form-control" required />
                 </div>
             </div>
 
@@ -38,22 +43,37 @@
                 </div>
             </div>
 
-            <div>
-                <label for="stationDepartureId">Station Departure:</label>
-                <select id="stationDepartureId" th:field="*{stationDepartureId}" required>
-                    <option value="">Select Station</option>
-                    <option th:each="station : ${stationList}" th:value="${station.stationId}"
-                        th:text="${station.stationName}"></option>
-                </select>
+            <div class="form-group row">
+                <label for="stationArrivalId" class="col-sm-2 col-form-label">Station Arrival:</label>
+                <div class="col-sm-10">
+                    <select id="stationArrivalId" th:field="*{stationArrivalId}" class="form-control" required>
+                        <option value="">Select Station</option>
+                        <option th:each="station : ${stationList}" th:value="${station.stationId}"
+                            th:text="${station.stationName}"></option>
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label for="stationArrivalId">Station Arrival:</label>
-                <select id="stationArrivalId" th:field="*{stationArrivalId}" required>
-                    <option value="">Select Station</option>
-                    <option th:each="station : ${stationList}" th:value="${station.stationId}"
-                        th:text="${station.stationName}"></option>
-                </select>
+            <div class="form-group row">
+                <label for="stationDepartureId" class="col-sm-2 col-form-label">Station Departure:</label>
+                <div class="col-sm-10">
+                    <select id="stationDepartureId" th:field="*{stationDepartureId}" class="form-control" required>
+                        <option value="">Select Station</option>
+                        <option th:each="station : ${stationList}" th:value="${station.stationId}"
+                            th:text="${station.stationName}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="routeId" class="col-sm-2 col-form-label">Route:</label>
+                <div class="col-sm-10">
+                    <select id="routeId" th:field="*{routeId}" class="form-control" required>
+                        <option value="">Select Route</option>
+                        <option th:each="route : ${routeList}" th:value="${route.routeId}" th:text="${route.routeName}">
+                        </option>
+                    </select>
+                </div>
             </div>
 
             <!-- Hidden Status Field -->

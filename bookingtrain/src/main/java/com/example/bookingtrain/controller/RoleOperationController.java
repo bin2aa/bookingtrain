@@ -42,7 +42,7 @@ public class RoleOperationController {
 
     @GetMapping
     public String getAllRoleOperations(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 3; // Số lượng mục trên mỗi trang
+        int pageSize = 10; // Số lượng mục trên mỗi trang
         Pageable pageable = PageRequest.of(page, pageSize,
                 Sort.by("id.roleId").ascending().and(Sort.by("id.permissionId")).and(Sort.by("id.operationId")));
         Page<RoleOperation> roleOperationsPage = roleOperationService.getAllRoleOperations(pageable);
@@ -117,7 +117,7 @@ public class RoleOperationController {
         roleOperation.setOperation(operationService.getOperationById(operationId));
         roleOperation.setStatusRoleOperation(statusRoleOperationService.getStatusRoleOperationById(statusId));
         roleOperationService.updateRoleOperation(roleOperation);
-        return "susscess";
+        return "success";
     }
 
     @GetMapping("/deleteRoleOperation/{roleId}-{permissionId}-{operationId}")
