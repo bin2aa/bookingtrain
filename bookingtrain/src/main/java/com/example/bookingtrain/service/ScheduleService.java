@@ -35,7 +35,6 @@ public class ScheduleService {
         Schedule existingSchedule = scheduleRepository.findById(schedule.getScheduleId()).orElse(null);
         if (existingSchedule != null) {
             existingSchedule.setTrainId(schedule.getTrainId());
-            existingSchedule.setRouteId(schedule.getRouteId());
             existingSchedule.setStationDepartureId(schedule.getStationDepartureId());
             existingSchedule.setStationArrivalId(schedule.getStationArrivalId());
             existingSchedule.setStartDeparture(schedule.getStartDeparture());

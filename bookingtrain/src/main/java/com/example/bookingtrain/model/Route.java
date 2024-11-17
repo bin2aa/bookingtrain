@@ -16,8 +16,6 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer routeId;
 
-    @Column(nullable = true)
-    private String routeName;
 
     @Column(nullable = true)
     private Integer stationDepartureId;

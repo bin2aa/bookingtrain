@@ -23,9 +23,6 @@ public class Schedule {
     private Integer scheduleId;
 
     @Column(nullable = true)
-    private Integer routeId;
-
-    @Column(nullable = true)
     private Integer trainId;
 
     @Column(nullable = true)
@@ -44,10 +41,6 @@ public class Schedule {
 
     @Column(nullable = true)
     private int statusSchedule;
-
-    @ManyToOne
-    @JoinColumn(name = "routeId", insertable = false, updatable = false)
-    private Route route;
 
     @ManyToOne
     @JoinColumn(name = "trainId", insertable = false, updatable = false)

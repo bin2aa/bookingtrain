@@ -14,7 +14,39 @@
 
 <div class="container mt-5 pt-5">
     <div class="d-flex flex-column">
-        <!-- Phần Tickets Found bên phải -->
+        <div class="col-md-12">
+            <div class="d-flex justify-content-center">
+                <form class="d-flex" th:action="@{/searchTickets}" method="get">
+                    <div class="border p-4 rounded shadow-sm w-100">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="stationDeparture" class="font-weight-bold">Departure:</label>
+                                <select id="stationDeparture" name="sd" class="form-control" required>
+                                    <option value="" disabled selected>Select departure station</option>
+                                    <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="stationArrival" class="font-weight-bold">Arrival:</label>
+                                <select id="stationArrival" name="sa" class="form-control" required>
+                                    <option value="" disabled selected>Select arrival station</option>
+                                    <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="dateStart" class="font-weight-bold">Travelling Date:</label>
+                                <input type="date" id="dateStart" name="da" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary px-5 ms-3">Search Tickets</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="col-md-12">
             <h3 class="mb-4">Tickets Found</h3>
 

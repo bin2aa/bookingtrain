@@ -37,7 +37,6 @@ public class RouteService {
     public Route updateRoute(Route route) {
         Route existingRoute = routeRepository.findById(route.getRouteId()).orElse(null);
         if (existingRoute != null) {
-            existingRoute.setRouteName(route.getRouteName());
             existingRoute.setStationDepartureId(route.getStationDepartureId());
             existingRoute.setStationArrivalId(route.getStationArrivalId());
             existingRoute.setTrainId(route.getTrainId());
