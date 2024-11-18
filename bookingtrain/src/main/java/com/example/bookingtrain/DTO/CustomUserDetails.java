@@ -26,6 +26,10 @@ public class CustomUserDetails implements UserDetails {
         switch(this.user.getRole().getRoleId()){
             case 1:
                 return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//            case 2:
+//                switch(this.user.get){
+//
+//                }
             default:
                 return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
         }

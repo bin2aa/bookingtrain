@@ -17,12 +17,14 @@ public class OperationController {
     private OperationService operationService;
 
     @GetMapping
+    // XEM
     public String getAllOperations(Model model) {
         List<Operation> operations = operationService.getAllOperations();
         model.addAttribute("operations", operations);
         return "list/operationList";
     }
 
+    // XEM
     @GetMapping("/newOperation")
     public String addOperationForm(Model model) {
         model.addAttribute("operation", new Operation());
