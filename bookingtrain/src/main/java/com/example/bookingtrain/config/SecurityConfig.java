@@ -1,10 +1,13 @@
 package com.example.bookingtrain.config;
 
+import com.example.bookingtrain.DTO.CustomUserDetails;
+import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -26,14 +30,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**","/js/**","/img/**").permitAll()
-                .antMatchers("/home/**").permitAll() // User, Admin truy cập được /home/
-                .antMatchers("/**","/admin/**").hasRole("ADMIN") // Admin truy cập đưọc / , /admin
+                .antMatchers("/stations/client/**").authenticated() // Ai dang nhập thi được truy cập
+                .antMatchers("/account/**").authenticated()
+                .antMatchers("/home/**").permitAll() // Public "/home"
+                .antMatchers("/**","/admin/**").hasRole("ADMIN") // Admin truy cập đưọc "/" , "/admin"
                 .and() // Neu chua dang nhập mà truy cap trang admin thi show form login
                 .formLogin()
                     .loginPage("/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    .defaultSuccessUrl("/home", true)
+                    .successHandler((request, response, authentication) -> {
+                        CustomUserDetails userDetails= (CustomUserDetails) authentication.getPrincipal();
+                        String userName = userDetails.getUser().getUsername();
+                        String role = userDetails.getUser().getRole().getRoleName();
+                        int userId = userDetails.getUser().getUserId();
+                        User user = userDetails.getUser();
+
+                        request.getSession().setAttribute("username", userName);
+                        request.getSession().setAttribute("userId", userId);
+                        request.getSession().setAttribute("role", role);
+                        request.getSession().setAttribute("user", user);
+                        response.sendRedirect("/home");
+                    })
+//                    .defaultSuccessUrl("/home", true)
                     .permitAll()
                 .and()
                 .logout()
