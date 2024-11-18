@@ -19,7 +19,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll() // Cho phép truy cập tất cả các URL mà không cần đăng nhập
+                .antMatchers("/css/**","/js/**","/img/**").permitAll()
+                .antMatchers("/home/**").permitAll() // Cho phép truy cập tất cả các URL mà không cần đăng nhập
+                .antMatchers("/").hasRole("ADMIN")
+                .formLogin
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable(); // Tắt CSRF để đơn giản hóa cấu hình
