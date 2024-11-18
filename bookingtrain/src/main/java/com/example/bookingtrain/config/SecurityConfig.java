@@ -29,7 +29,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests(configurer -> configurer
                         .requestMatchers("/login","/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/**").hasRole("ADMIN")
+                        .requestMatchers("/**", "/home/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -47,7 +48,7 @@ public class SecurityConfig {
                                 session.setAttribute("role", authenticatedUser.getRole());
                             }
 //                            session.setAttribute("user", authentication.getPrincipal()); // Lưu thông tin người dùng vào session
-                            response.sendRedirect("/");
+                            response.sendRedirect("/home");
                         })
                         .permitAll()
                 )

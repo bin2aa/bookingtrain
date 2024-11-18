@@ -15,12 +15,12 @@ public class HomeController {
     @Autowired
     private StationService stationService;
 
-    @GetMapping("/")
+    @GetMapping("/admin")
     public String home() {
         return "home";
     }
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String showStation(Model model) {
         List<Station> stations = stationService.getAll();
         model.addAttribute("stations", stations);
