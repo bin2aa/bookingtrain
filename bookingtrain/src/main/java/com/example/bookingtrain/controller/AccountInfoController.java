@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -53,10 +50,10 @@ public class AccountInfoController {
     public String accountInfo(@ModelAttribute("user") User user,
                               @ModelAttribute("employee") Employee employee,
                               RedirectAttributes redirectAttributes, Model model) {
-        User existingUser = userService.getUserById(user.getUserId());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setUsername(user.getUsername());
+//        User existingUser = userService.getUserById(user.getUserId());
+//        existingUser.setEmail(user.getEmail());
+//        existingUser.setPassword(user.getPassword());
+//        existingUser.setUsername(user.getUsername());
 
         Employee existingEmployee = employeeService.findByUserId(user.getUserId());
         existingEmployee.setEmployeeName(employee.getEmployeeName());
@@ -64,12 +61,19 @@ public class AccountInfoController {
         existingEmployee.setPhone(employee.getPhone());
         existingEmployee.setDateOfBirth(employee.getDateOfBirth());
 
-        User updatedUser = userService.updateUser(existingUser);
+        User updatedUser = userService.updateUser(user.getUserId(), user);
         Employee updatedEmployee = employeeService.updateEmployee(existingEmployee);
 
         model.addAttribute("user", updatedUser);
         model.addAttribute("employee", updatedEmployee);
         redirectAttributes.addFlashAttribute("message","Information updated successfully");
         return "redirect:/account";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/deleteAccount/{id}")
+    public String deleteAccount(@PathVariable Integer id) {
+        userService.deleteUser(id);
+        return "redirect:/home";
     }
 }

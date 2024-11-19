@@ -23,16 +23,17 @@
             </div>
         </div>
         <div class="col-md-5 border-right">
-            <div class="alert alert-success" role="alert" th:if="${message}">
-                <span th:text="${message}"></span>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
-            </div>
             <div class="p-3 py-5">
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-right">Profile Settings</h4>
                 </div>
-                <input type="hidden" th:field="*{userId}">
+                <div class="alert alert-success" role="alert" th:if="${message}">
+                    <span th:text="${message}"></span>
+                </div>
+
+                <input type="hidden" th:field="*{userId}"/>
+                <input type="hidden" th:field="*{roleId}"/>
 
                 <!-- --Address, -Birthday, --Name, --Phone Number, --userId -->
                 <!-- --Email, --Password, --Username, -roleId -->
@@ -55,9 +56,11 @@
                     </div>
                 </div>
                 <div class="mt-5 text-center">
-                    <button class="btn btn-primary profile-button" th:href="@{/home}">Back To Home</button>
+                    <a class="btn btn-primary profile-button" th:href="@{/home}">Back To Home</a>
                     <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
-                    <button class="btn btn-danger profile-button">Delete Profile</button>
+                    <a class="btn btn-danger profile-button"
+                       th:href="@{/account/deleteAccount/{id} (id=${user.userId})}" method="delete"
+                        onclick="return confirm('Xác nhận tự hủy?');">Delete Profile</a>
                 </div>
             </div>
         </div>
@@ -75,7 +78,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="labels">Role</label>
-                        <lable class="labels form-control" th:text="${user.role.roleName}"></lable>
+                        <label class="labels form-control" th:text="${user.role.roleName}"></label>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -84,8 +87,8 @@
                         <input type="email" th:field="*{email}" class="form-control" placeholder="enter email address" required>
                     </div>
                     <div class="col-md-12">
-                        <label class="labels">Password</label>
-                        <label th:text="*{password}" class="form-control" />
+                        <label class="labels">Hashed Password</label>
+                        <input type="text" th:field="*{password}" class="form-control overflow-hidden" placeholder="enter new raw password" required/>
                     </div>
                 </div>
             </div>
