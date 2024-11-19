@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**","/js/**","/img/**").permitAll()
+                .antMatchers("/register").permitAll()
                 .antMatchers("/stations/client/**").authenticated() // Ai dang nhập thi được truy cập
                 .antMatchers("/account/**").authenticated()
                 .antMatchers("/home/**").permitAll() // Public "/home"
