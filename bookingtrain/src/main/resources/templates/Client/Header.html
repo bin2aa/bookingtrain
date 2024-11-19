@@ -24,7 +24,7 @@
         <div style="padding-right: 100px; display: flex; align-items: center;">
             <!-- Kiểm tra neu nguoi dung đăng nhập -->
             <div th:if="${session.username != null}" style="margin-right: 15px; color: #C4C5CA;">
-                Welcome, <strong th:text="${session.username}"></strong>
+                Welcome, <a class="text-decoration-none nav-link" th:text="${session.username}" th:href="@{/account}"></a>
             </div>
             <div th:if="${session.username == null}">
                 <a th:href="@{/login}" class="btn" style="color: #6E6D72; background-color: #1c1b20">Login</a>
