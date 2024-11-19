@@ -55,7 +55,7 @@ public class AccountInfoController {
                               RedirectAttributes redirectAttributes, Model model) {
         User existingUser = userService.getUserById(user.getUserId());
         existingUser.setEmail(user.getEmail());
-//        existingUser.setPassword(user.getPassword());
+        existingUser.setPassword(user.getPassword());
         existingUser.setUsername(user.getUsername());
 
         Employee existingEmployee = employeeService.findByUserId(user.getUserId());
