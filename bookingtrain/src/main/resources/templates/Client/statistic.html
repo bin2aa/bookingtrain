@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: head"></div>
+    <style>
+        /* Basic Layout and Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Container for the charts */
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .chart-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive layout for charts */
+        #trainRunsByMonthChart, #arrivalByStationChart {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 400px;
+        }
+
+        /* Styling for month selection dropdown */
+        .month-select-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .month-select-container select {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            width: 150px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card for each section */
+        .card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body th:replace="fragments/body :: body">
+
+<div>
+    <div th:fragment="mainContent">
+        <!-- Import axios and Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            // Define the loadChartData function globally
+            function loadChartData(endpoint, chartId, chartType, labelsKey, dataKey, chartOptions = {}) {
+                axios.get(endpoint)
+                    .then(response => {
+                        const labels = response.data.map(item => item[labelsKey]);
+                        const data = response.data.map(item => item[dataKey]);
+
+                        // Clear the existing chart before creating a new one
+                        const ctx = document.getElementById(chartId).getContext('2d');
+
+                        // Check if there is an existing chart instance and destroy it if it exists
+                        if (window[chartId] instanceof Chart) {
+                            window[chartId].destroy(); // Destroy the old chart instance if exists
+                        }
+
+                        // Create a new chart
+                        window[chartId] = new Chart(ctx, {
+                            type: chartType,
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Count',
+                                    data: data,
+                                    backgroundColor: [
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(231, 233, 237, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(231, 233, 237, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: chartOptions
+                        });
+                    })
+                    .catch(error => console.error(error));
+            }
+
+            // Hàm gọi API để load dữ liệu khi chọn tháng
+            function loadCharts() {
+                const selectedMonth = document.getElementById("monthSelect").value;
+
+                // Tùy chỉnh endpoint theo tháng đã chọn
+                loadChartData(`/statistics/train-runs-by-month?month=${selectedMonth}`, 'trainRunsByMonthChart', 'bar', 'trainCode', 'totalRuns', {
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return Number.isInteger(value) ? value : '';
+                                },
+                                stepSize: 1
+                            }
+                        }
+                    }
+                });
+
+                loadChartData(`/statistics/arrival-by-station?month=${selectedMonth}`, 'arrivalByStationChart', 'pie', 'stationArrivalId', 'arrivalCount', {
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                });
+            }
+
+            // Gọi hàm loadCharts khi trang được tải
+            document.addEventListener("DOMContentLoaded", function () {
+                loadCharts(); // Call loadCharts when the page loads
+            });
+        </script>
+
+        <div class="container">
+            <div class="month-select-container">
+                <div class="card">
+                    <div class="card-header">Chọn Tháng</div>
+                    <div class="form-group">
+                        <select id="monthSelect" class="form-control" onchange="loadCharts()">
+                            <option value="1">Tháng 1</option>
+                            <option value="2">Tháng 2</option>
+                            <option value="3">Tháng 3</option>
+                            <option value="4">Tháng 4</option>
+                            <option value="5">Tháng 5</option>
+                            <option value="6">Tháng 6</option>
+                            <option value="7">Tháng 7</option>
+                            <option value="8">Tháng 8</option>
+                            <option value="9">Tháng 9</option>
+                            <option value="10">Tháng 10</option>
+                            <option value="11">Tháng 11</option>
+                            <option value="12">Tháng 12</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <canvas id="trainRunsByMonthChart"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="arrivalByStationChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

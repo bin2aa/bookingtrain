@@ -18,7 +18,6 @@ public class BookingService implements IBookingService {
         this.bookingRepository = bookingRepository;
     }
 
-
     @Override
     public Booking getById(int id) {
         return bookingRepository.findById(id).orElse(null);
