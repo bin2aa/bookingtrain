@@ -43,7 +43,7 @@ public class LoginController {
             session.setAttribute("userId", authenticatedUser.getUserId());
             session.setAttribute("role", authenticatedUser.getRole().getRoleName());
 
-            return "redirect:/";
+            return "redirect:/home";
         } else {
             model.addAttribute("errorLogin", "Email hoặc mật khẩu không đúng");
             return "login/login";

@@ -88,17 +88,25 @@ public class PassengerController {
         return "redirect:/passengers";
     }
 
-    @GetMapping("/ticket/passenger")
-    public String passenger(TrainDetailsDTO trainDetails, Model model) {
+    @PostMapping("/ticket/passenger")
+    public String passenger(@RequestParam("trainId") int trainId,
+            @RequestParam("trainCode") String trainCode,
+            @RequestParam("stationDeparture") String stationDeparture,
+            @RequestParam("stationArrival") String stationArrival,
+            @RequestParam("timeDeparture") String timeDeparture,
+            @RequestParam("dateDeparture") String dateDeparture,
+            @RequestParam("timeArrival") String timeArrival,
+            @RequestParam("dateArrival") String dateArrival, Model model) {
         model.addAttribute("passenger", new Passenger());
 
-        model.addAttribute("trainCode", trainDetails.getTrainCode());
-        model.addAttribute("stationDeparture", trainDetails.getStationDeparture());
-        model.addAttribute("stationArrival", trainDetails.getStationArrival());
-        model.addAttribute("timeDeparture", trainDetails.getTimeDeparture());
-        model.addAttribute("dateDeparture", trainDetails.getDateDeparture());
-        model.addAttribute("timeArrival", trainDetails.getTimeArrival());
-        model.addAttribute("dateArrival", trainDetails.getDateArrival());
+        model.addAttribute("trainCode", trainCode);
+        model.addAttribute("stationDeparture", stationDeparture);
+        model.addAttribute("stationArrival", stationArrival);
+        model.addAttribute("timeDeparture", timeDeparture);
+        model.addAttribute("dateDeparture", dateDeparture);
+        model.addAttribute("timeArrival", timeArrival);
+        model.addAttribute("dateArrival", dateArrival);
+
         return "Client/Components/Passenger";
     }
 

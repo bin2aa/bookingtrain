@@ -99,7 +99,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+
+
     </dependencies>
+
+    
 
     <repositories>
         <repository>
@@ -107,6 +119,8 @@
             <url>https://repo.jpaspringbuddy.com</url>
         </repository>
     </repositories>
+
+    
 
     <build>
         <plugins>

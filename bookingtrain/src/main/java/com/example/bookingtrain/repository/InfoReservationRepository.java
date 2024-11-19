@@ -3,6 +3,9 @@ package com.example.bookingtrain.repository;
 import com.example.bookingtrain.DTO.InforReservationDTO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,28 +18,43 @@ public class InfoReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<InforReservationDTO> findAvailableSeatsByStations(Long stationDepartureId, Long stationArrivalId,
-            String dateStart) {
+    public Page<InforReservationDTO> findAvailableSeatsByStationsWithPagination(
+            Long stationDepartureId,
+            Long stationArrivalId,
+            String dateStart,
+            Pageable pageable) {
+
         String sql = "SELECT " +
                 "tr.trainId AS trainId, " +
-                "sd.stationName AS Departure, " + // Ga khởi hành
-                "sa.stationName AS Arrival, " + // Ga đến
-                "tr.trainName AS trainCode, " + // Tên tàu
-                "DATE(sc.startDeparture) AS DepartureDate, " + // Ngày khởi hành
-                "TIME(sc.startDeparture) AS DepartureTime, " + // Thời gian khởi hành
-                "DATE(sc.endDeparture) AS ArrivalDate, " + // Ngày đến
-                "TIME(sc.endDeparture) AS ArrivalTime " + // Thời gian đến
+                "sd.stationName AS Departure, " +
+                "sa.stationName AS Arrival, " +
+                "tr.trainName AS trainCode, " +
+                "DATE(sc.startDeparture) AS DepartureDate, " +
+                "TIME(sc.startDeparture) AS DepartureTime, " +
+                "DATE(sc.endDeparture) AS ArrivalDate, " +
+                "TIME(sc.endDeparture) AS ArrivalTime " +
                 "FROM schedules sc " +
-                "JOIN trains tr ON sc.trainId = tr.trainId " + // Kết nối với bảng trains
-                "JOIN routes ro ON ro.trainId = tr.trainId " + // Kết nối với bảng routes
-                "JOIN stations sd ON sd.stationId = ro.stationDepartureId " + // Kết nối với bảng stations (Ga khởi
-                                                                              // hành)
-                "JOIN stations sa ON sa.stationId = ro.stationArrivalId " + // Kết nối với bảng stations (Ga đến)
+                "JOIN trains tr ON sc.trainId = tr.trainId " +
+                "JOIN routes ro ON ro.trainId = tr.trainId " +
+                "JOIN stations sd ON sd.stationId = ro.stationDepartureId " +
+                "JOIN stations sa ON sa.stationId = ro.stationArrivalId " +
                 "WHERE ro.stationDepartureId = ? " +
                 "AND ro.stationArrivalId = ? " +
-                "AND DATE(sc.startDeparture) = ?"; // So sánh ngày khởi hành
+                "AND DATE(sc.startDeparture) = ? " +
+                "LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+        // Lấy tổng số lượng bản ghi cho phân trang
+        String countSql = "SELECT COUNT(*) FROM schedules sc " +
+                "JOIN trains tr ON sc.trainId = tr.trainId " +
+                "JOIN routes ro ON ro.trainId = tr.trainId " +
+                "WHERE ro.stationDepartureId = ? " +
+                "AND ro.stationArrivalId = ? " +
+                "AND DATE(sc.startDeparture) = ?";
+
+        int total = jdbcTemplate.queryForObject(countSql, Integer.class,
+                stationDepartureId, stationArrivalId, dateStart);
+
+        List<InforReservationDTO> tickets = jdbcTemplate.query(sql, (rs, rowNum) -> {
             InforReservationDTO ticketInfo = new InforReservationDTO();
             ticketInfo.setTrainId(rs.getInt("trainId"));
             ticketInfo.setStationDeparture(rs.getString("Departure"));
@@ -47,7 +65,9 @@ public class InfoReservationRepository {
             ticketInfo.setDateArrivalFormatted(rs.getString("ArrivalDate"));
             ticketInfo.setTimeArrivalFormatted(rs.getString("ArrivalTime"));
             return ticketInfo;
-        }, stationDepartureId, stationArrivalId, dateStart);
-    }
+        }, stationDepartureId, stationArrivalId, dateStart,
+                pageable.getPageSize(), pageable.getOffset());
 
+        return new PageImpl<>(tickets, pageable, total);
+    }
 }
