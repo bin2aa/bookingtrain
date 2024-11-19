@@ -13,7 +13,7 @@ public class HomeController {
     @Autowired
     private StationService stationService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String home() {
         return "home";
     }

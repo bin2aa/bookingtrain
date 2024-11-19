@@ -1,16 +1,20 @@
 package com.example.bookingtrain.DTO;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import com.example.bookingtrain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 public class CustomUserDetails implements UserDetails {
 
     private User user;
+
+    public User getUser() {
+        return user;
+    }
 
     public CustomUserDetails(User user) {
         this.user = user;
@@ -50,10 +54,6 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public User getUser() {
-        return user;
     }
 
 }
