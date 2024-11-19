@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/fragments/header :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<!--  Giao diện admin -->
+<body th:replace="/fragments/body :: body">
+<div th:fragment="mainContent">
+    <div th:replace="/fragments/AccountInfoSection :: sectionBody(${user}, 1)">
+
+    </div>
+</div>
+</body>
+</html>
