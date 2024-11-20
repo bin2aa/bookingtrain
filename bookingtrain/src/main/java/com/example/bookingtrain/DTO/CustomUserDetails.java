@@ -22,17 +22,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        switch (this.user.getRole().getRoleId()) {
-            case 1:
-                return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            // case 2:
-            // switch(this.user.get){
-            //
-            // }
-            default:
-                return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-        }
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" +user.getRole().getRoleName().toUpperCase());
+        return Arrays.asList(authority);
     }
 
     @Override
@@ -63,18 +54,6 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public String getName() {
-        return user.getUsername();
-    }
-
-    public int getUserId() {
-        return user.getUserId();
-    }
-
-    public String getRole() {
-        return user.getRole().getRoleName();
     }
 
 }

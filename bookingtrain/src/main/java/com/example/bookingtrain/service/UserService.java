@@ -52,6 +52,28 @@ public class UserService {
         return userRepository.saveAndFlush(user);
     }
 
+    // ***** ConKienHuy
+    public User updateUser(Integer userId, User updatedUser) {
+        int checkSuccess = 0;
+        User existingUser = getUserById(userId);
+        if(existingUser != null) {
+            existingUser.setUsername(updatedUser.getUsername());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setRoleId(updatedUser.getRoleId());
+
+            if(!passwordEncoder.matches(updatedUser.getPassword(), existingUser.getPassword()) || !updatedUser.getPassword().equals(existingUser.getPassword())) {
+                String hashedPassword = passwordEncoder.encode(updatedUser.getPassword());
+                existingUser.setPassword(hashedPassword);
+                checkSuccess = userRepository.updateUserWithNewHashedPass(updatedUser);
+            }
+             else checkSuccess = userRepository.updateUserWithOldHashedPass(updatedUser);
+        }
+
+        if(checkSuccess != 0)
+            return existingUser;
+        else return null;
+    }
+
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }

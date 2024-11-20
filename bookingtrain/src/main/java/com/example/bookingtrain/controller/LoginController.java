@@ -3,6 +3,7 @@ package com.example.bookingtrain.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +28,8 @@ public class LoginController {
         return "login/login";
     }
 
-    @PostMapping("/login")
+    @GetMapping("/loginHandler")
+    @PreAuthorize("isAuthenticated()")
     public String login(@ModelAttribute("user") User user, Model model, HttpSession session) {
         // if (userService.authenticate(user.getEmail(), user.getPassword())) {
         // return "redirect:/";

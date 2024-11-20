@@ -42,4 +42,8 @@ public class EmployeeService {
     public Employee findByEmployeeFullName(String employeeName) {
         return employeeRepository.findByEmployeeName(employeeName);
     }
+
+    public Employee findByUserId(Integer userId) {
+        return employeeRepository.findByUserId(userId);
+    }
 }

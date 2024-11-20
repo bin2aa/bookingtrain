@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/fragments/AccountInfoSection :: sectionHeader">
+
+</head>
+
+<!-- Phần giao diện user  -->
+<body>
+<div class="fixed-top">
+    <div th:replace="/Client/Header :: Header"></div>
+</div>
+<div th:replace="/fragments/AccountInfoSection :: sectionBody(${user}, 2)">
+
+</div>
+</body>
+</html>
