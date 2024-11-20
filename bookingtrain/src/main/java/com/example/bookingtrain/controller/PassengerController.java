@@ -90,6 +90,7 @@ public class PassengerController {
 
     @PostMapping("/ticket/passenger")
     public String passenger(@RequestParam("trainId") int trainId,
+            @RequestParam("scheduleId") int scheduleId,
             @RequestParam("trainCode") String trainCode,
             @RequestParam("stationDeparture") String stationDeparture,
             @RequestParam("stationArrival") String stationArrival,
@@ -98,7 +99,7 @@ public class PassengerController {
             @RequestParam("timeArrival") String timeArrival,
             @RequestParam("dateArrival") String dateArrival, Model model) {
         model.addAttribute("passenger", new Passenger());
-
+        model.addAttribute("scheduleId", scheduleId);
         model.addAttribute("trainCode", trainCode);
         model.addAttribute("stationDeparture", stationDeparture);
         model.addAttribute("stationArrival", stationArrival);

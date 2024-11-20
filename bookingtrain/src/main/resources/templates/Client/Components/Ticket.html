@@ -85,9 +85,14 @@
                             </div>
                         </div>
                         <div class="col-md-2 text-center">
+                            <div>
+                                <h6 class="text-center">Route:</h6>
+                                <p class="ticket-info" th:text="${ticket.scheduleDeparture} + ' - ' + ${ticket.scheduleArrival} "></p>
+                            </div>
                             <!-- Attach trainId to the form as a data attribute -->
                             <form id="ticketForm" action="/passengers/ticket/passenger" method="POST"
                                 onsubmit="saveTrainId(this)">
+                                <input type="hidden" name="scheduleId" th:value="${ticket.scheduleId}" />
                                 <input type="hidden" name="trainId" th:value="${ticket.trainId}" />
                                 <input type="hidden" name="trainCode" th:value="${ticket.trainCode}" />
                                 <input type="hidden" name="stationDeparture" th:value="${ticket.stationDeparture}" />

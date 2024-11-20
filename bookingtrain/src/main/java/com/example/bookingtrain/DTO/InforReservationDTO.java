@@ -12,6 +12,33 @@ public class InforReservationDTO {
     private String dateArrivalFormatted;
     private int isAvailable;
     private String totalTime;
+    private String scheduleArrival;
+    private String scheduleDeparture;
+    private int scheduleId;
+
+    public int getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public String getScheduleArrival() {
+        return scheduleArrival;
+    }
+
+    public void setScheduleArrival(String scheduleArrival) {
+        this.scheduleArrival = scheduleArrival;
+    }
+
+    public String getScheduleDeparture() {
+        return scheduleDeparture;
+    }
+
+    public void setScheduleDeparture(String scheduleDeparture) {
+        this.scheduleDeparture = scheduleDeparture;
+    }
 
     public int getTrainId() {
         return trainId;

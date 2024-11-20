@@ -26,8 +26,12 @@
         </div>
         <div class="row justify-content-center">
             <!-- Summary Section -->
-            <div class="summary-item">
+            <div class="summary-item" style="min-height: 550px;">
                 <h5 class="card-title text-center">Train Details</h5>
+                <div class="row mb-2">
+                    <div class="col-6 text-left"><strong>ScheduleId:</strong></div>
+                    <div class="col-6 text-right" th:text="${scheduleId}"></div>
+                </div>
                 <div class="row mb-2">
                     <div class="col-6 text-left"><strong>Train Code:</strong></div>
                     <div class="col-6 text-right" th:text="${trainCode}"></div>
@@ -60,8 +64,8 @@
 
             <!-- Passenger Form Section -->
             <div class="col-md-7">
-                <form action="/tickets/addPassengers" method="POST">
-                    <div class="scrollable-form-container" style="padding-left: 15px">
+                <form action="/tickets/addPassengers" style="min-height: 550px;" method="POST">
+                    <div class="scrollable-form-container" style="padding-left: 15px; min-height: 550px;">
                         <div id="passengerForms">
                             <!-- Initial Passenger Form -->
                             <div class="mb-4" id="passengerForm_1">
