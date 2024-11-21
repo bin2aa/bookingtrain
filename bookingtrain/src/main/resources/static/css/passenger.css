@@ -1,72 +1,98 @@
-.scrollable-form-container {
-    max-height: 550px;
-    overflow-y: auto;
-    padding-right: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+body {
+    background-color: #f8f9fa;
 }
 
-/* Card Styling */
-.summary-card, .summary-item {
-    background-color: #343a40;
+.booking-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.header-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.total-price {
+    background: #4CAF50;
     color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.passenger-form {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.passenger-header {
+    background: #3498db;
+    color: white;
+    padding: 0.75rem;
     border-radius: 8px;
-    margin-bottom: 20px;
-    padding: 15px;
-}
-
-/* Centering text */
-.text-center-custom {
-    text-align: center;
-}
-
-/* Custom styling for form elements */
-.form-control {
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
 }
 
 .btn-custom {
-    border-radius: 30px;
-    font-size: 16px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
 }
 
 .btn-new-passenger {
-    background-color: #6c757d;
+    background-color: #3498db;
     color: white;
 }
 
 .btn-buy-ticket {
-    background-color: #dc3545;
+    background-color: #2ecc71;
     color: white;
 }
 
-/* Title background and padding */
-.header-title {
-    background-color: #dc3545;
+.btn-delete-passenger {
+    background-color: #e74c3c;
+    border: none;
     color: white;
-    padding: 15px;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+
+.form-control {
     border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
 }
 
-/* Adjusting margins and spacing for a cleaner look */
-.mb-4, .mt-4 {
-    margin-bottom: 1.5rem !important;
-    margin-top: 1.5rem !important;
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    border-color: #3498db;
 }
 
-.form-group label {
-    font-weight: bold;
+.train-detail-row {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
 }
 
-/* Customizing footer position */
-.footer {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    background-color: #343a40;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
+.train-detail-label {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.scrollable-form-container {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 1rem;
 }

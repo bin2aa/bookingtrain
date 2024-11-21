@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head">
+    <title>Booking List</title>
+</head>
+
+<body th:replace="/fragments/body :: body">
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">Booking List</h1>
+        <a class="addBookingLink btn btn-primary mb-3" th:href="@{/bookings/newBooking}">Add Booking</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Employee</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th>Schedule</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableContent">
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.bookingId}"></td>
+                    <td th:text="${booking.user?.username}"></td>
+                    <td th:text="${booking.employee?.employeeName}"></td>
+                    <td th:text="${booking.total}"></td>
+                    <td th:text="${#dates.format(booking.dateBooking, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${booking.schedule?.scheduleId}"></td>
+                    <td th:text="${booking.statusBooking == 1 ? 'Active' : 'Inactive'}"></td>
+                    <td>
+                        <a th:href="@{/bookings/editBooking/{bookingId}(bookingId=${booking.bookingId})}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/bookings/deleteBooking/{bookingId}(bookingId=${booking.bookingId})}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

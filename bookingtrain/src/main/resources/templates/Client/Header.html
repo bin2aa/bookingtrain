@@ -21,9 +21,17 @@
                 </h4>
             </a>
         </div>
-        <div style="padding-right: 100px">
-            <!-- <a th:href="@{/signup}" class="btn me-2" style="color: #6E6D72; background-color: #1c1b20">Sign Up</a> -->
-            <a th:href="@{/login}" class="btn" style="color: #6E6D72; background-color: #1c1b20">Login</a>
+        <div style="padding-right: 100px; display: flex; align-items: center;">
+            <!-- Kiểm tra neu nguoi dung đăng nhập -->
+            <div th:if="${session.username != null}" style="margin-right: 15px; color: #C4C5CA;">
+                Welcome, <strong th:text="${session.username}"></strong>
+            </div>
+            <div th:if="${session.username == null}">
+                <a th:href="@{/login}" class="btn" style="color: #6E6D72; background-color: #1c1b20">Login</a>
+            </div>
+            <div th:if="${session.username != null}">
+                <a th:href="@{/logout}" class="btn" style="color: #6E6D72; background-color: #1c1b20">Logout</a>
+            </div>
         </div>
     </header>
     <nav class="d-flex justify-content-between p-4" style="background-color: #323338; margin-top: 50px">

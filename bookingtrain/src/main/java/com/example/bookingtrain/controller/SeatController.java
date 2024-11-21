@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/seats")
 public class SeatController {
@@ -86,9 +88,10 @@ public class SeatController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<DetailSeatDTO>> getAllSeats(@RequestParam int trainId) {
+    public ResponseEntity<List<DetailSeatDTO>> getAllSeats(@RequestParam int trainId, HttpSession session) {
         try {
             List<DetailSeatDTO> seats = seatServiceDTO.findSeatsByTrainId(trainId);
+            session.setAttribute("seats", seats);
             return ResponseEntity.ok(seats); // Return JSON with 200 OK
         } catch (Exception e) {
             e.printStackTrace();
