@@ -24,9 +24,6 @@ public class Passenger {
     private String phone;
 
     @Column(nullable = true)
-    private String identityId;
-
-    @Column(nullable = true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 

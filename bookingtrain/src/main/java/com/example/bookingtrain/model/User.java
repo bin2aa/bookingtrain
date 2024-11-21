@@ -34,4 +34,5 @@ public class User {
 
     @Transient // Thuộc tính này không cần ánh xạ với cột trong cơ sở dữ liệu
     private String repeatPassword; // Thêm thuộc tính này để xác nhận mật khẩu
+
 }

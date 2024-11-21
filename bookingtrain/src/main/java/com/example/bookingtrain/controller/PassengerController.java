@@ -1,6 +1,5 @@
 package com.example.bookingtrain.controller;
 
-import com.example.bookingtrain.DTO.TrainDetailsDTO;
 import com.example.bookingtrain.model.Passenger;
 import com.example.bookingtrain.service.ObjectService;
 import com.example.bookingtrain.service.PassengerService;
@@ -14,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/passengers")
@@ -66,7 +67,6 @@ public class PassengerController {
             exsitingPassenger.setPassengerName(passenger.getPassengerName());
             exsitingPassenger.setDateOfBirth(passenger.getDateOfBirth());
             exsitingPassenger.setPhone(passenger.getPhone());
-            exsitingPassenger.setIdentityId(passenger.getIdentityId());
             exsitingPassenger.setObject(passenger.getObject());
 
             passengerService.save(passenger);
@@ -90,15 +90,27 @@ public class PassengerController {
 
     @PostMapping("/ticket/passenger")
     public String passenger(@RequestParam("trainId") int trainId,
+            @RequestParam("scheduleId") int scheduleId,
             @RequestParam("trainCode") String trainCode,
             @RequestParam("stationDeparture") String stationDeparture,
             @RequestParam("stationArrival") String stationArrival,
             @RequestParam("timeDeparture") String timeDeparture,
             @RequestParam("dateDeparture") String dateDeparture,
             @RequestParam("timeArrival") String timeArrival,
-            @RequestParam("dateArrival") String dateArrival, Model model) {
+            @RequestParam("dateArrival") String dateArrival, Model model, HttpSession session) {
         model.addAttribute("passenger", new Passenger());
 
+        session.setAttribute("trainId", trainId);
+        session.setAttribute("scheduleId", scheduleId);
+        session.setAttribute("trainCode", trainCode);
+        session.setAttribute("stationDeparture", stationDeparture);
+        session.setAttribute("stationArrival", stationArrival);
+        session.setAttribute("timeDeparture", timeDeparture);
+        session.setAttribute("dateDeparture", dateDeparture);
+        session.setAttribute("timeArrival", timeArrival);
+        session.setAttribute("dateArrival", dateArrival);
+
+        model.addAttribute("scheduleId", scheduleId);
         model.addAttribute("trainCode", trainCode);
         model.addAttribute("stationDeparture", stationDeparture);
         model.addAttribute("stationArrival", stationArrival);

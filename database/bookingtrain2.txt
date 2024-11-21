@@ -62,7 +62,6 @@ CREATE TABLE `passengers` (
   `passengerName` varchar(255) DEFAULT NULL,
   `phone` varchar(10) DEFAULT NULL,
   `dateOfBirth` datetime DEFAULT NULL,
-  `identityId` int(11) DEFAULT NULL,
   `objectId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

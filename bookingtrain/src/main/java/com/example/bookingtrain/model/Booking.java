@@ -42,6 +42,6 @@ public class Booking {
     @JoinColumn(name = "scheduleId", insertable = false, updatable = false)
     private Schedule schedule;
 
-    @Column
+    @Column(nullable = true)
     private int statusBooking;
 }
