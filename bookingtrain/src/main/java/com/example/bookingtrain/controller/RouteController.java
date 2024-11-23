@@ -31,7 +31,7 @@ public class RouteController {
 
     @GetMapping
     public String getAllRoutes(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 1;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("routeId").ascending());
         Page<Route> routePage = routeService.getAllRoutes(pageable); // Lấy danh sách routes từ service
 

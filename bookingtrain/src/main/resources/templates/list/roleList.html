@@ -30,7 +30,7 @@
                     <td th:text="${role.roleName}"></td>
                     <td>
                         <a th:href="@{/roles/editRole/{roleId}(roleId=${role.roleId})}"
-                            class="btn btn-warning btn-sm">Edit</a>
+                            class="editRoleLink btn btn-warning btn-sm">Edit</a>
                         <a th:href="@{/roles/deleteRole/{id}(id=${role.roleId})}" class="btn btn-danger btn-sm"
                             onclick="return confirm('Are you sure you want to delete this role?');">Delete</a>
                     </td>

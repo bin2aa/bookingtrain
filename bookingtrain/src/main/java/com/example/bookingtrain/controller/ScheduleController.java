@@ -40,7 +40,7 @@ public class ScheduleController {
     public String showList(@RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
             Model model) {
-        int pageSize = 5;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("scheduleId").ascending());
         Page<Schedule> schedulePage;
 

@@ -30,7 +30,7 @@ public class CoacheController {
 
     @GetMapping("")
     public String showListPage(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 1;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("coacheId").ascending());
         Page<Coache> coachePage = coacheService.getAllCoaches(pageable);
 

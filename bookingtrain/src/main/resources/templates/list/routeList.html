@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <a th:href="@{/routes/editRoute/{routeId}(routeId=${route.routeId})}"
-                            class="btn btn-warning btn-sm">Edit</a>
+                            class="editRouteLink btn btn-warning btn-sm">Edit</a>
                         <a th:href="@{/routes/deleteRoute/{id}(id=${route.routeId})}" class="btn btn-danger btn-sm"
                             onclick="return confirm('Are you sure you want to delete this route?');">Delete</a>
                     </td>

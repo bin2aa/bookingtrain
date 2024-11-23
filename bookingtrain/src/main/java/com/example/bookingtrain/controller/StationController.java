@@ -34,7 +34,7 @@ public class StationController {
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String search,
             Model model) {
-        int pageSize = 1;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("stationId").ascending());
         Page<Station> stationPage;
         if (search != null && !search.isEmpty()) {

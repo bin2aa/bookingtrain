@@ -33,4 +33,5 @@ public class Passenger {
     @ManyToOne
     @JoinColumn(name = "objectId", insertable = false, updatable = false)
     private Object object;
+
 }

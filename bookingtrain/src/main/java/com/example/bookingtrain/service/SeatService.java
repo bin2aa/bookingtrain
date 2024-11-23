@@ -43,4 +43,8 @@ public class SeatService {
     public void deleteSeat(Integer id) {
         seatRepository.deleteById(id);
     }
+
+    public Double findSeatPriceBySeatId(Integer seatId) {
+        return seatRepository.findSeatPriceBySeatId(seatId);
+    }
 }
