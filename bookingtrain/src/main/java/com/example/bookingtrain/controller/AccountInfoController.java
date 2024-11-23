@@ -80,7 +80,7 @@ public class AccountInfoController {
         existingEmployee.setPhone(employee.getPhone());
         existingEmployee.setDateOfBirth(employee.getDateOfBirth());
 
-        User updatedUser = userService.updateUser(user.getUserId(), user);
+        User updatedUser = userService.updateUser(user);
         Employee updatedEmployee = employeeService.updateEmployee(existingEmployee);
 
         model.addAttribute("user", updatedUser);

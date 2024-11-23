@@ -4,6 +4,7 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "bookings")
@@ -25,6 +26,7 @@ public class Booking {
     private Double total;
 
     @Column(nullable = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateBooking;
 
     @Column(nullable = true)

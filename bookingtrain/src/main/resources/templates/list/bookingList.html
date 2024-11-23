@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head"></head>
+
+<body th:replace="/fragments/body :: body">
+
+<div>
+    <div th:fragment="mainContent">
+        <h1 class="mb-4">Booking Information</h1>
+
+        <a class="addBookingLink btn btn-primary mb-3" th:href="@{/bookings/addBooking}">Add New Booking</a>
+
+        <!-- Search Booking -->
+        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+              method="get" action="/bookings">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control bg-light border-0 small"
+                       placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>User Name</th>
+                        <th>Employee Name</th>
+                        <th>Booked Departure</th>
+                        <th>Booked Arrival</th>
+                        <th>Total</th>
+                        <th>Date Booking</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableContent">
+                    <tr th:each="booking : ${bookingList}">
+                        <td th:text="${booking.bookingId}"></td>
+                        <td th:text="${booking.user.username}"></td>
+                        <td th:text="${booking.employee.employeeName}"></td>
+                        <td th:text="${booking.schedule.stationDeparture.stationName}"></td>
+                        <td th:text="${booking.schedule.stationArrival.stationName}"></td>
+                        <td th:text="${booking.total}"></td>
+                        <td th:text="${#dates.format(booking.dateBooking, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="toggle" th:checked="${booking.statusBooking == 1}"
+                                       th:data-booking-id="${booking.bookingId}"
+                                       th:data-status="${booking.statusBooking}">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm"
+                               th:href="@{/bookings/editBooking/{id} (id=${booking.bookingId})}">Edit</a>
+                            <a class="btn btn-danger btn-sm"
+                               th:href="@{/bookings/deleteBooking/{id} (id=${booking.bookingId})}" method="delete"
+                               onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div
+                th:replace="fragments/pagination :: paginationFragment (baseUrl='/bookings', currentPage=${currentPage}, totalPages=${totalPages})">
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

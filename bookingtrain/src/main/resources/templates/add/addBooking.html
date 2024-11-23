@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head"></head>
+
+<body th:replace="/fragments/body :: body">
+
+<div>
+    <div th:fragment="mainContent">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Edit Booking</h6>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/bookings/saveBooking}" th:object="${booking}" method="post">
+                    <input type="hidden" th:field="*{bookingId}">
+
+                    <div class="form-group">
+                        <label for="userId">User</label>
+                        <select id="userId" th:field="*{userId}" class="form-control" required>
+                            <option value="" disabled selected>Select User</option>
+                            <option th:each="user : ${userList}" th:value="${user.userId}" th:text="${user.username}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employeeId">Employee</label>
+                        <select id="employeeId" th:field="*{employeeId}" class="form-control" required>
+                            <option value="" disabled selected>Select User</option>
+                            <option th:each="employee : ${employeeList}" th:value="${employee.employeeId}" th:text="${employee.employeeName}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="total">Total</label>
+                        <input type="number" step="0.01" class="form-control" id="total" th:field="*{total}"
+                               placeholder="Enter Total Amount" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateBooking">Date of Booking</label>
+                        <input type="date" class="form-control" id="dateBooking" th:field="*{dateBooking}"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scheduleId">Schedule ID</label>
+                        <select id="scheduleId" th:field="*{scheduleId}" class="form-control" required>
+                            <option value="" disabled selected>Select User</option>
+                            <option th:each="schedule : ${scheduleList}" th:value="${schedule.scheduleId}" th:text="${schedule.scheduleId}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="statusBooking">Status</label>
+                        <select class="form-control" id="statusBooking" th:field="*{statusBooking}">
+                            <option th:value="1" th:text="'Active'"></option>
+                            <option th:value="0" th:text="'Inactive'"></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a th:href="@{/bookings}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
