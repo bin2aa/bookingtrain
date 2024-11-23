@@ -4,7 +4,12 @@ $(document).ready(function () {
     $(document).on('click', "a.addRoleLink, a.addPermissionLink,\
          a.addRoleOperationLink, a.addUserLink, a.addTrainLink, \
          a.addStationLink, a.addScheduleLink, a.addObjectLink, \
-         a.addEmployeeLink, a.addRouteLink",
+         a.addEmployeeLink, a.addRouteLink,\
+         \
+         a.editRoleLink, a.editPermissionLink,\
+         a.editRoleOperationLink, a.editUserLink, a.editTrainLink, \
+         a.editStationLink, a.editScheduleLink, a.editObjectLink, \
+         a.editEmployeeLink, a.editRouteLink",
         function (e) {
             e.preventDefault();
             var href = $(this).attr("href");
@@ -42,6 +47,40 @@ $(document).ready(function () {
                 containerId = '#addRouteContainer';
             }
 
+            // ---------------------------------------------------------
+
+            if ($(this).hasClass('editRoleOperationLink')) {
+                containerId = '#editRoleOperationContainer';
+            }
+            if ($(this).hasClass('editRoleLink')) {
+                containerId = '#editRoleContainer';
+            }
+            if ($(this).hasClass('editPermissionLink')) {
+                containerId = '#editPermissionContainer';
+            }
+            if ($(this).hasClass('editUserLink')) {
+                containerId = '#editUserContainer';
+            }
+            if ($(this).hasClass('editTrainLink')) {
+                containerId = '#editTrainContainer';
+            }
+            if ($(this).hasClass('editStationLink')) {
+                containerId = '#editStationContainer';
+            }
+            if ($(this).hasClass('editScheduleLink')) {
+                containerId = '#editScheduleContainer';
+            }
+            if ($(this).hasClass('editObjectLink')) {
+                containerId = '#editObjectContainer';
+            }
+            if ($(this).hasClass('editEmployeeLink')) {
+                containerId = '#editEmployeeContainer';
+            }
+            if ($(this).hasClass('editRouteLink')) {
+                containerId = '#editRouteContainer';
+            }
+            
+
             $.ajax({
                 url: href,
                 method: "GET",
@@ -65,7 +104,18 @@ $(document).ready(function () {
             !$(e.target).closest('#addScheduleContainer').length &&
             !$(e.target).closest('#addObjectContainer').length &&
             !$(e.target).closest('#addEmployeeContainer').length &&
-            !$(e.target).closest('#addRouteContainer').length
+            !$(e.target).closest('#addRouteContainer').length &&
+            // ---------------------------------------------------------
+            !$(e.target).closest('#editRoleContainer').length &&
+            !$(e.target).closest('#editRoleOperationContainer').length &&
+            !$(e.target).closest('#editPermissionContainer').length &&
+            !$(e.target).closest('#editUserContainer').length &&
+            !$(e.target).closest('#editTrainContainer').length &&
+            !$(e.target).closest('#editStationContainer').length &&
+            !$(e.target).closest('#editScheduleContainer').length &&
+            !$(e.target).closest('#editObjectContainer').length &&
+            !$(e.target).closest('#editEmployeeContainer').length &&
+            !$(e.target).closest('#editRouteContainer').length
         ) {
             $('#addRoleContainer').hide();
             $('#addRoleOperationContainer').hide();
@@ -77,6 +127,18 @@ $(document).ready(function () {
             $("#addObjectContainer").hide();
             $("#addEmployeeContainer").hide();
             $("#addRouteContainer").hide();
+
+            $("#editRoleContainer").hide();
+            $("#editRoleOperationContainer").hide();
+            $("#editPermissionContainer").hide();
+            $("#editUserContainer").hide();
+            $("#editTrainContainer").hide();
+            $("#editStationContainer").hide();
+            $("#editScheduleContainer").hide();
+            $("#editObjectContainer").hide();
+            $("#editEmployeeContainer").hide();
+            $("#editRouteContainer").hide();
+
             $(".overlay").hide();
         }
     });

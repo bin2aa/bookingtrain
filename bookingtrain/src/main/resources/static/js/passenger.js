@@ -23,16 +23,58 @@ function loadSeats(passengerIndex) {
     }
 }
 
+function calculateAge(dateOfBirth) {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+// Function to fetch price based on age and set objectId
+function fetchPriceByAge(age, passengerIndex) {
+    let objectId;
+    if (age < 18) {
+        objectId = 1; // ID Trẻ Em
+    } else if (age >= 60) {
+        objectId = 3; // ID Người Già
+    } else {
+        objectId = 2; // ID Người Lớn
+    }
+
+    // Set objectId in the form
+    $(`#objectId_${passengerIndex}`).val(objectId);
+
+    $.get(`/objects/price/${objectId}`, function (price) {
+        $(`#price_${passengerIndex}`).text(price + ' VND');
+        calculateTotalPrice(); // Recalculate total price after fetching the price
+    }).fail(function () {
+        alert('Error fetching price. Please try again later.');
+    });
+}
+
 // Function to calculate total price
 function calculateTotalPrice() {
     let totalPrice = 0;
     for (let i = 1; i <= passengerCount; i++) {
         const selectedSeat = $(`#seats_${i}`).find(':selected');
         const seatPrice = parseFloat(selectedSeat.data('price')) || 0;
-        totalPrice += seatPrice;
+        const agePrice = parseFloat($(`#price_${i}`).text()) || 0;
+        totalPrice += seatPrice + agePrice;
     }
     $('#totalPrice').text(totalPrice.toFixed(2));
 }
+
+// Event listener for date of birth change
+$(document).on('change', 'input[id^="dateOfBirth_"]', function () {
+    const passengerIndex = $(this).attr('id').split('_')[1];
+    const dateOfBirth = $(this).val();
+    const age = calculateAge(dateOfBirth);
+    fetchPriceByAge(age, passengerIndex);
+});
 
 // Function to save form data to local storage
 function saveFormData() {
@@ -43,6 +85,7 @@ function saveFormData() {
             dateOfBirth: $(`#dateOfBirth_${i}`).val(),
             phone: $(`#phone_${i}`).val(),
             seatId: $(`#seats_${i}`).val(),
+            objectId: $(`#objectId_${i}`).val()
         });
     }
     localStorage.setItem('passengerData', JSON.stringify(passengerData));
@@ -60,11 +103,10 @@ function loadFormData() {
             $(`#dateOfBirth_${index + 1}`).val(data.dateOfBirth);
             $(`#phone_${index + 1}`).val(data.phone);
             $(`#seats_${index + 1}`).val(data.seatId);
+            $(`#objectId_${index + 1}`).val(data.objectId);
         });
     }
 }
-
-
 
 // Function to add a new passenger form and load seats
 function addPassengerForm() {
@@ -100,6 +142,13 @@ function addPassengerForm() {
                 </select>
             </div>
         </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Price:</label>
+                <span id="price_${passengerCount}">0 VND</span>
+            </div>
+        </div>
+        <input type="hidden" id="objectId_${passengerCount}" name="passengers[${passengerCount - 1}].objectId">
         <button type="button" class="btn btn-danger btn-delete-passenger" onclick="deletePassengerForm(${passengerCount})">Delete</button>
         <hr>
     </div>
@@ -129,6 +178,7 @@ function deletePassengerForm(index) {
         $(`#dateOfBirth_${i}`).attr('id', `dateOfBirth_${i - 1}`).attr('name', `passengers[${i - 2}].dateOfBirth`);
         $(`#phone_${i}`).attr('id', `phone_${i - 1}`).attr('name', `passengers[${i - 2}].phone`);
         $(`#seats_${i}`).attr('id', `seats_${i - 1}`).attr('name', `passengers[${i - 2}].seatId`);
+        $(`#objectId_${i}`).attr('id', `objectId_${i - 1}`).attr('name', `passengers[${i - 2}].objectId`);
     }
 }
 
@@ -175,7 +225,8 @@ $('#buyTicketBtn').on('click', function () {
                     passengerName: $(`#passengerName_${i}`).val(),
                     dateOfBirth: $(`#dateOfBirth_${i}`).val(),
                     phone: $(`#phone_${i}`).val(),
-                    seatId: $(`#seats_${i}`).val()
+                    seatId: $(`#seats_${i}`).val(),
+                    objectId: $(`#objectId_${i}`).val()
                 });
             }
             $('#passengerData').val(JSON.stringify(passengerData));
@@ -218,8 +269,19 @@ function validatePassengerForm() {
 // Initially load available seats for the first passenger and populate form with saved data
 $(document).ready(function () {
     localStorage.removeItem('passengerData'); // Clear saved passenger data on page load
-    loadSeats(1);
-    loadFormData();
-    calculateTotalPrice(); // Calculate total price on page load
-    checkFormValidity();
+    loadSeats(1); // Tải ghế cho hành khách đầu tiên
+
+    // Thêm sự kiện 'change' cho hành khách đầu tiên
+    $('#passengerForm_1 input, #passengerForm_1 select').on('change', function () {
+        saveFormData();          // Lưu dữ liệu vào localStorage
+        calculateTotalPrice();   // Tính lại tổng giá
+    });
+
+    $('#dateOfBirth_1').on('change', function () {
+        const dateOfBirth = $(this).val();
+        const age = calculateAge(dateOfBirth);
+        fetchPriceByAge(age, 1); // Lấy giá cho hành khách đầu tiên
+    });
+
+    calculateTotalPrice(); // Tính tổng giá khi trang tải
 });

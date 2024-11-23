@@ -41,7 +41,7 @@ public class SeatController {
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
         // List<Seat> seatList = seatService.getAllSeats();
-        int pageSize = 1;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("seatId").ascending());
         Page<Seat> seatPage = seatService.getAllSeats(pageable);
         model.addAttribute("currentPage", page);

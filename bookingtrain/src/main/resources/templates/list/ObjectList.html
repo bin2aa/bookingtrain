@@ -27,7 +27,7 @@
                         <td th:text="${object.price}"></td>
                         <td>
                             <a th:href="@{/objects/editObject/{objectId}(objectId=${object.objectId})}"
-                                class="btn btn-warning btn-sm">Edit</a>
+                                class="editObjectLink btn btn-warning btn-sm">Edit</a>
                             <a th:href="@{/objects/deleteObject/{id}(id=${object.objectId})}"
                                 class="btn btn-danger btn-sm"
                                 onclick="return confirm('Are you sure you want to delete this object?');">Delete</a>

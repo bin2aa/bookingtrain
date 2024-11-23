@@ -44,9 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/checkLoginStatus").permitAll()
                         .antMatchers("/tickets/addPassengers").authenticated() // Yêu cầu phải đăng nhập
                         .antMatchers("/payment/create").permitAll()
+                        .antMatchers("/payment/session/saveSeatId").permitAll()
+                        .antMatchers("/objects/price/**").permitAll()
                         .antMatchers("/admin/**").hasAuthority("Admin")
                         // .antMatchers("/**").hasAnyAuthority("Admin", "Staff")
-                        .antMatchers("/**").access("!hasAuthority('User')")
+                        .antMatchers("/**").access("isAuthenticated() and !hasAuthority('User')")
 
                 )
                 // .antMatchers("/**", "/admin/**").hasAuthority("Admin"))

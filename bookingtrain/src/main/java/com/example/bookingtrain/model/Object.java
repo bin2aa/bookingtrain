@@ -21,6 +21,6 @@ public class Object {
     @Column(nullable = false)
     private Integer price;
 
-    @Transient
-    private Integer discount; // Thêm thuộc tính giảm giá, không lưu vào database
+    // @Transient
+    // private Integer discount; // Thêm thuộc tính giảm giá, không lưu vào database
 }

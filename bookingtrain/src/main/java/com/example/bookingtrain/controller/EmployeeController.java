@@ -26,7 +26,7 @@ public class EmployeeController {
 
     @GetMapping
     public String getAllEmployees(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 1;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("employeeId").ascending());
         Page<Employee> employeePage = employeeService.getAllEmployees(pageable);
 

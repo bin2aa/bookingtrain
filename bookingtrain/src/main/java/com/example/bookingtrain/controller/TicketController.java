@@ -37,7 +37,7 @@ public class TicketController {
     public String getAllTickets(@RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
             Model model) {
-        int pageSize = 1;
+        int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("ticketId").ascending());
         Page<Ticket> ticketPage;
 

@@ -4,7 +4,7 @@ import com.example.bookingtrain.model.Object;
 import com.example.bookingtrain.service.PermissionService;
 import com.example.bookingtrain.service.ObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +58,18 @@ public class ObjectController {
     public String deleteObject(@PathVariable Integer id) {
         objectService.deleteObject(id);
         return "redirect:/objects";
+    }
+
+    // Thêm endpoint để lấy giá của đối tượng dựa trên ID
+    @GetMapping("/price/{id}")
+    @ResponseBody
+    public ResponseEntity<Integer> getObjectPriceById(@PathVariable Integer id) {
+        Object object = objectService.getObjectById(id);
+        if (object != null) {
+            return ResponseEntity.ok(object.getPrice());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

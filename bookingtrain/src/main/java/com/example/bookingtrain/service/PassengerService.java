@@ -43,4 +43,8 @@ public class PassengerService implements IPassengerService {
     public void delete(int id) {
         passengerRepository.deleteById(id);
     }
+
+    public Integer findObjectPriceByObjectId(Integer objectId) {
+        return passengerRepository.findObjectPriceByObjectId(objectId);
+    }
 }

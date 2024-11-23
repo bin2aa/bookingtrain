@@ -31,4 +31,8 @@ public class ObjectService {
         objectRepository.deleteById(id);
     }
 
+    public Object getDefaultObjectById(Integer id) {
+        return getObjectById(id);
+    }
+
 }
