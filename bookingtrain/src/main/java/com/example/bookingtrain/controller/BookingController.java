@@ -1,10 +1,7 @@
 package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.*;
-import com.example.bookingtrain.service.BookingService;
-import com.example.bookingtrain.service.EmployeeService;
-import com.example.bookingtrain.service.ScheduleService;
-import com.example.bookingtrain.service.UserService;
+import com.example.bookingtrain.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,13 +21,15 @@ public class BookingController {
     private UserService userService;
     private EmployeeService employeeService;
     private ScheduleService scheduleService;
+    private TicketService ticketService;
 
     @Autowired
-    public BookingController(BookingService bookingService, UserService userService, EmployeeService employeeService, ScheduleService scheduleService) {
+    public BookingController(BookingService bookingService, UserService userService, EmployeeService employeeService, ScheduleService scheduleService, TicketService ticketService) {
         this.bookingService = bookingService;
         this.userService = userService;
         this.employeeService = employeeService;
         this.scheduleService = scheduleService;
+        this.ticketService = ticketService;
     }
 
     @GetMapping("")
@@ -46,32 +45,40 @@ public class BookingController {
             bookingPage = bookingService.getAll(pageable);
         }
 
-        model.addAttribute("bookingList", bookingPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", pageSize);
-        model.addAttribute("search", search);
-        model.addAttribute("baseUrl", "/bookings");
-
-        return "/list/bookingList";
-    }
-
-    @GetMapping("/addBooking")
-    public String showAddForm(Model model) {
         List<User> userList = userService.getAllUsers();
         List<Employee> employeeList = employeeService.getAllEmployees();
         List<Schedule> scheduleList = scheduleService.getAllSchedules();
 
+        model.addAttribute("bookingList", bookingPage.getContent());
+        model.addAttribute("currentPage", bookingPage.getTotalPages());
+        model.addAttribute("totalPages", pageSize);
+        model.addAttribute("search", search);
+        model.addAttribute("baseUrl", "/bookings");
         model.addAttribute("booking", new Booking());
         model.addAttribute("userList", userList);
         model.addAttribute("employeeList", employeeList);
         model.addAttribute("scheduleList", scheduleList);
-        return "add/addBooking";
+
+        return "/list/bookingList";
     }
 
     @PostMapping("/saveBooking")
     public String saveBooking(@ModelAttribute("booking") Booking booking) {
         bookingService.save(booking);
         return "redirect:/bookings/";
+    }
+
+    @GetMapping("/bookingDetails/{id}")
+    public String showBookingDetails(@PathVariable int id, Model model) {
+        Booking booking = bookingService.getById(id);
+        if (booking == null) {
+            return "redirect:/bookings/";
+        }
+        List<Ticket> ticketList = ticketService.searchTicketByBookingId(id);
+
+        model.addAttribute("booking", booking);
+        model.addAttribute("ticketList", ticketList);
+        return "/list/bookingDetails";
     }
 
     @GetMapping("/editBooking/{id}")

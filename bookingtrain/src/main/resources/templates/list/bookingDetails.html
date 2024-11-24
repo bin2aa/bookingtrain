@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/header :: head"></head>
+
+<body th:replace="/fragments/body :: body">
+<div th:fragment="mainContent">
+        <h1 class="mb-4">Booking Details</h1>
+
+        <a th:href="@{/bookings}" class="btn btn-primary mb-3">Back To Booking List</a>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Passenger</th>
+                        <th>Seat</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ticket : ${ticketList}">
+                        <td th:text="${ticket.ticketId}"></td>
+                        <td th:text="${ticket.passenger.passengerName}"></td>
+                        <td th:text="${ticket.seatId}"></td>
+                        <td>
+                            <a th:href="@{/tickets/editTicket/{id} (id=${ticket.ticketId})}"
+                               class="btn btn-primary btn-sm">Edit</a>
+                            <a th:href="@{/tickets/deleteTicket/{id} (id=${ticket.ticketId})}"
+                               class="btn btn-danger btn-sm" onclick="return confirm(`Are you sure want to delete`)">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

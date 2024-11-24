@@ -4,7 +4,7 @@ $(document).ready(function () {
     $(document).on('click', "a.addRoleLink, a.addPermissionLink,\
          a.addRoleOperationLink, a.addUserLink, a.addTrainLink, \
          a.addStationLink, a.addScheduleLink, a.addObjectLink, \
-         a.addEmployeeLink, a.addRouteLink, a.addBookingLink",
+         a.addEmployeeLink, a.addRouteLink",
         function (e) {
             e.preventDefault();
             var href = $(this).attr("href");
@@ -41,9 +41,6 @@ $(document).ready(function () {
             if ($(this).hasClass('addRouteLink')) {
                 containerId = '#addRouteContainer';
             }
-            if ($(this).hasClass('addBookingLink')) {
-                containerId = '#addBookingContainer';
-            }
 
                 $.ajax({
                 url: href,
@@ -68,8 +65,7 @@ $(document).ready(function () {
             !$(e.target).closest('#addScheduleContainer').length &&
             !$(e.target).closest('#addObjectContainer').length &&
             !$(e.target).closest('#addEmployeeContainer').length &&
-            !$(e.target).closest('#addRouteContainer').length &&
-            !$(e.target).closest('#addBookingContainer').length
+            !$(e.target).closest('#addRouteContainer').length
         ) {
             $('#addRoleContainer').hide();
             $('#addRoleOperationContainer').hide();
@@ -81,7 +77,6 @@ $(document).ready(function () {
             $("#addObjectContainer").hide();
             $("#addEmployeeContainer").hide();
             $("#addRouteContainer").hide();
-            $("#addBookingContainer").hide();
             $(".overlay").hide();
         }
     });

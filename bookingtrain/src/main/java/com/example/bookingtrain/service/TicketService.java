@@ -36,6 +36,10 @@ public class TicketService implements ITicketService {
         return repo.findByPassengerNameContaining(passengerName, pageable);
     }
 
+    public List<Ticket> searchTicketByBookingId(int bookingId) {
+        return repo.findByBookingId(bookingId);
+    }
+
     public Ticket save(Ticket ticket) {
         return repo.save(ticket);
     }
