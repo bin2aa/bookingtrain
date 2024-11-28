@@ -1,17 +1,23 @@
 package com.example.bookingtrain.controller;
 
+import com.example.bookingtrain.DTO.PaymentDTO;
 import com.example.bookingtrain.model.Booking;
 import com.example.bookingtrain.model.Employee;
 import com.example.bookingtrain.model.Passenger;
 import com.example.bookingtrain.model.Ticket;
+import com.example.bookingtrain.response.ResponseObject;
 import com.example.bookingtrain.service.BookingService;
 import com.example.bookingtrain.service.EmployeeService;
 import com.example.bookingtrain.service.PassengerService;
+import com.example.bookingtrain.service.PaymentService;
 import com.example.bookingtrain.service.TicketService;
 import com.example.bookingtrain.service.ObjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +37,7 @@ public class PaymentController {
     private final TicketService ticketService;
     private final ObjectMapper objectMapper;
     private final ObjectService objectService;
+    private final PaymentService paymentService;
 
     @Autowired
     public PaymentController(BookingService bookingService,
@@ -38,13 +45,15 @@ public class PaymentController {
             PassengerService passengerService,
             TicketService ticketService,
             ObjectMapper objectMapper,
-            ObjectService objectService) {
+            ObjectService objectService,
+            PaymentService paymentService) {
         this.bookingService = bookingService;
         this.employeeService = employeeService;
         this.passengerService = passengerService;
         this.ticketService = ticketService;
         this.objectMapper = objectMapper;
         this.objectService = objectService;
+        this.paymentService = paymentService;
     }
 
     @PostMapping("/create")
@@ -132,6 +141,24 @@ public class PaymentController {
         session.setAttribute("seatId_" + passengerIndex, seatId);
         return ResponseEntity.ok().build();
     }
+
+    // ------------------ Phần VNPay ------------------
+
+    @GetMapping("/vn-pay")
+    public ResponseObject<PaymentDTO.VNPayResponse> pay(HttpServletRequest request) {
+        return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(request));
+    }
+
+    @GetMapping("/vn-pay-callback")
+    public ResponseObject<PaymentDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request) {
+        String status = request.getParameter("vnp_ResponseCode");
+        if (status.equals("00")) {
+            return new ResponseObject<>(HttpStatus.OK, "Success", new PaymentDTO.VNPayResponse("00", "Success", ""));
+        } else {
+            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
+        }
+    }
+
 }
 
 // package com.example.bookingtrain.controller;

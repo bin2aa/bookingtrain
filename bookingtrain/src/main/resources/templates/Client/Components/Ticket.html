@@ -22,16 +22,16 @@
                         <div class="border p-4 rounded shadow-sm w-100">
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label for="stationDeparture" class="font-weight-bold">Departure:</label>
-                                    <select id="stationDeparture" name="sd" class="form-control" required>
+                                    <label for="scheduleDeparture" class="font-weight-bold">Departure:</label>
+                                    <select id="scheduleDeparture" name="sd" class="form-control" required>
                                         <option value="" disabled selected>Select departure station</option>
                                         <option th:each="station : ${stations}" th:value="${station.stationId}"
                                             th:text="${station.stationName}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="stationArrival" class="font-weight-bold">Arrival:</label>
-                                    <select id="stationArrival" name="sa" class="form-control" required>
+                                    <label for="scheduleArrival" class="font-weight-bold">Arrival:</label>
+                                    <select id="scheduleArrival" name="sa" class="form-control" required>
                                         <option value="" disabled selected>Select arrival station</option>
                                         <option th:each="station : ${stations}" th:value="${station.stationId}"
                                             th:text="${station.stationName}"></option>
@@ -63,7 +63,8 @@
                 <div th:each="ticket : ${tickets}" class="ticket-card tableContent">
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center">
-                            <i class="fa fa-train fa-3x ticket-logo mb-2"></i>
+                            <img th:src="@{'img/trainImg/' + ${ticket.image}}" alt="Train Image"
+                                class="ticket-logo mb-2" style="width: 100px; height: 100px; object-fit: cover;">
                             <h6 th:text="${ticket.trainCode}"></h6>
                         </div>
                         <div class="col-md-8">
@@ -71,7 +72,9 @@
                                 <div class="text-start">
                                     <h6 th:text="'Time: ' + ${ticket.timeDepartureFormatted}"></h6>
                                     <p class="ticket-info" th:text="'Date: ' + ${ticket.dateDepartureFormatted}"></p>
-                                    <p class="ticket-info" th:text="${ticket.stationDeparture}"></p>
+                                    <!-- <p class="ticket-info" th:text="${ticket.stationDeparture}"></p> -->
+                                    <p class="ticket-info"
+                                        th:text="'Scheduled Departure: ' + ${ticket.scheduleDeparture}"></p>
                                 </div>
                                 <div class="text-center">
                                     <div class="total-time" th:text="${ticket.totalTime}"></div>
@@ -80,20 +83,21 @@
                                 <div class="text-end">
                                     <h6 th:text="'Time: ' + ${ticket.timeArrivalFormatted}"></h6>
                                     <p class="ticket-info" th:text="'Date: ' + ${ticket.dateArrivalFormatted}"></p>
-                                    <p class="ticket-info" th:text="${ticket.stationArrival}"></p>
+                                    <!-- <p class="ticket-info" th:text="${ticket.stationArrival}"></p> -->
+                                    <p class="ticket-info" th:text="'Scheduled Arrival: ' + ${ticket.scheduleArrival}">
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2 text-center">
                             <div>
                                 <h6 class="text-center">Route:</h6>
-                                <p class="ticket-info"
-                                    th:text="${ticket.scheduleDeparture} + ' - ' + ${ticket.scheduleArrival} "></p>
+                                <p class="ticket-info" th:text="${ticket.routeName}"></p>
                             </div>
                             <!-- Attach trainId to the form as a data attribute -->
                             <form id="ticketForm" action="/passengers/ticket/passenger" method="POST"
                                 onsubmit="saveTrainId(this)">
-                                <input type="hidden" name="scheduleId" th:value="${ticket.scheduleId}" />   
+                                <input type="hidden" name="scheduleId" th:value="${ticket.scheduleId}" />
                                 <input type="hidden" name="trainId" th:value="${ticket.trainId}" />
                                 <input type="hidden" name="trainCode" th:value="${ticket.trainCode}" />
                                 <input type="hidden" name="stationDeparture" th:value="${ticket.stationDeparture}" />

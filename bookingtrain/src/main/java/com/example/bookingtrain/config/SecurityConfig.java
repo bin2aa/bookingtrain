@@ -1,7 +1,8 @@
 package com.example.bookingtrain.config;
 
+import com.example.bookingtrain.DTO.CustomUserDetails;
+import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.service.CustomUserDetailsService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.example.bookingtrain.DTO.CustomUserDetails;
-import com.example.bookingtrain.model.User;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +30,7 @@ import com.example.bookingtrain.model.User;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,25 +41,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests
-                        .antMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                        .antMatchers("/login", "/register").permitAll()
+                        .antMatchers("/home/**", "/css/**", "/js/**", "/img/**", "/oauth2/**").permitAll()
+
+                        .antMatchers("/login", "/register", "/loginSuccess").permitAll()
+
                         .antMatchers("/stations/client/**").authenticated()
                         .antMatchers("/account/**").authenticated()
-                        .antMatchers("/searchTickets/**").permitAll()
-                        .antMatchers("/passengers/ticket/passenger/**").permitAll()
-                        .antMatchers("/home/**").permitAll()
+                        .antMatchers("/searchTickets/**", "/home/**").permitAll()
                         .antMatchers("/seats/all").permitAll()
                         .antMatchers("/checkLoginStatus").permitAll()
-                        .antMatchers("/tickets/addPassengers").authenticated() // Yêu cầu phải đăng nhập
-                        .antMatchers("/payment/create").permitAll()
-                        .antMatchers("/payment/session/saveSeatId").permitAll()
+                        .antMatchers("/tickets/addPassengers").authenticated()
+                        .antMatchers("/payment/create", "/payment/session/saveSeatId").permitAll()
                         .antMatchers("/objects/price/**").permitAll()
                         .antMatchers("/admin/**").hasAuthority("Admin")
-                        // .antMatchers("/**").hasAnyAuthority("Admin", "Staff")
-                        .antMatchers("/**").access("isAuthenticated() and !hasAuthority('User')")
-
-                )
-                // .antMatchers("/**", "/admin/**").hasAuthority("Admin"))
+                        .antMatchers("/**").access("isAuthenticated() and !hasAuthority('User')"))
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .usernameParameter("email")
@@ -68,7 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             request.getSession().setAttribute("role", role);
                             request.getSession().setAttribute("user", user);
 
-                            // Điều hướng về trang trước đó nếu có
                             String referrer = (String) request.getSession().getAttribute("requestedPage");
                             if (referrer != null) {
                                 request.getSession().removeAttribute("requestedPage");
@@ -82,8 +84,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             response.sendRedirect("/login");
                         })
                         .permitAll())
-                .logout(logout -> logout
-                        .permitAll())
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/login")
+                        // .defaultSuccessUrl("/home")
+                        // .failureUrl("/login?error=true");
+                        .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
+                                .authorizationRequestResolver(
+                                        new CustomAuthorizationRequestResolver(
+                                                clientRegistrationRepository,
+                                                "/oauth2/authorization")))
+                        .defaultSuccessUrl("/loginSuccess", true))
+                .logout(logout -> logout.permitAll())
                 .csrf(csrf -> csrf.disable());
     }
 
@@ -105,8 +116,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
-}
 
+    private static class CustomAuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
+        private final OAuth2AuthorizationRequestResolver defaultResolver;
+
+        public CustomAuthorizationRequestResolver(ClientRegistrationRepository repo,
+                String authorizationRequestBaseUri) {
+            this.defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(repo, authorizationRequestBaseUri);
+        }
+
+        @Override
+        public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
+            OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
+            if (req != null) {
+                req = customizeAuthorizationRequest(req);
+            }
+            return req;
+        }
+
+        @Override
+        public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
+            OAuth2AuthorizationRequest req = defaultResolver.resolve(request, clientRegistrationId);
+            if (req != null) {
+                req = customizeAuthorizationRequest(req);
+            }
+            return req;
+        }
+
+        private OAuth2AuthorizationRequest customizeAuthorizationRequest(OAuth2AuthorizationRequest req) {
+            Map<String, Object> additionalParameters = new HashMap<>();
+            additionalParameters.putAll(req.getAdditionalParameters());
+            additionalParameters.put("prompt", "select_account");
+
+            return OAuth2AuthorizationRequest.from(req)
+                    .additionalParameters(additionalParameters)
+                    .build();
+        }
+    }
+}
 // package com.example.bookingtrain.config;
 
 // import org.springframework.context.annotation.Bean;

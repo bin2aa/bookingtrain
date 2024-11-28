@@ -28,6 +28,12 @@ public class User {
     @Column(nullable = false)
     private Integer roleId;
 
+    @Column(name = "oauth_provider")
+    private String oauthProvider; // "GOOGLE" or "FACEBOOK"
+
+    @Column(name = "oauth_id")
+    private String oauthId; // ID từ OAuth provider
+
     @ManyToOne
     @JoinColumn(name = "roleId", insertable = false, updatable = false)
     private Role role;

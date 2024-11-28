@@ -12,7 +12,7 @@
 
 <body>
     <div class="fixed-top">
-        <div th:replace="/Client/Header :: Header"></div>
+        <div th:replace="Client/Header :: Header"></div>
     </div>
 
     <form th:action="@{/account/updateAccount}" th:object="${user}" method="post">

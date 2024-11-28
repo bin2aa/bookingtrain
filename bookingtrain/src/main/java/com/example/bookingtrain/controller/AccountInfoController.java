@@ -33,7 +33,7 @@ public class AccountInfoController {
     public String accountInfo(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        return "/Client/Components/AccountInfo";
+        return "Client/Components/AccountInfo"; // Sửa đường dẫn template
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -50,6 +50,6 @@ public class AccountInfoController {
         User updatedUser = userService.updateUser(existingUser);
 
         model.addAttribute("user", updatedUser);
-        return "/Client/Components/AccountInfo";
+        return "Client/Components/AccountInfo"; // Sửa đường dẫn template
     }
 }

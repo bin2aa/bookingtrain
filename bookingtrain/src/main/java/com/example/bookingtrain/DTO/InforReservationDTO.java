@@ -15,6 +15,8 @@ public class InforReservationDTO {
     private String scheduleArrival;
     private String scheduleDeparture;
     private int scheduleId;
+    private String image;
+    private String routeName;
 
     public int getScheduleId() {
         return scheduleId;
@@ -118,6 +120,22 @@ public class InforReservationDTO {
 
     public void setDateArrivalFormatted(String dateArrivalFormatted) {
         this.dateArrivalFormatted = dateArrivalFormatted;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
     }
 
 }
