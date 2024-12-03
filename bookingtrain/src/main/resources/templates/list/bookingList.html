@@ -117,11 +117,11 @@
                     <thead>
                     <tr>
                         <th>Booking ID</th>
-                        <th>User Name</th>
-                        <th>Employee Name</th>
+                        <th>Booker Name</th>
                         <th>Booked Departure</th>
                         <th>Booked Arrival</th>
-                        <th>Total</th>
+                        <th>Total Passenger</th>
+                        <th>Total Money</th>
                         <th>Date Booking</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -131,9 +131,9 @@
                     <tr th:each="booking : ${bookingList}">
                         <td th:text="${booking.bookingId}"></td>
                         <td th:text="${booking.user.username}"></td>
-                        <td th:text="${booking.employee.employeeName}"></td>
                         <td th:text="${booking.schedule.stationDeparture.stationName}"></td>
                         <td th:text="${booking.schedule.stationArrival.stationName}"></td>
+                        <td th:text="${numberOfPassenger.get(booking.getBookingId)}"></td>
                         <td th:text="${booking.total}"></td>
                         <td th:text="${#dates.format(booking.dateBooking, 'yyyy-MM-dd')}"></td>
                         <td>

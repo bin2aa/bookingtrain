@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="/fragments/header :: head">
+    <!--  Boostrap   -->
+</head>
+
+<body>
+<div class="fixed-top">
+    <div th:replace="/Client/Header :: Header"></div>
+</div>
+
+<div class="card shadow mt-5 pt-lg-5">
+    <div class="card-header">
+        <h5 class="text-black-50">Booking Details</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Passenger Name</th>
+                <th>Phone Number</th>
+                <th>Train Name</th>
+                <th>Coach Name</th>
+                <th>Seat Type</th>
+                <th>Seat Price</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tr th:each="ticket : ${ticketList}">
+                <td th:text="${ticket.passenger.passengerName}"></td>
+                <td th:text="${ticket.passenger.phone}"></td>
+                <td th:text="${ticket.seat.coache.train.trainName}"></td>
+                <td th:text="${ticket.seat.coache.coacheName}"></td>
+                <td th:text="${ticket.seat.seatType.seatTypeName}"></td>
+                <td th:text="${ticket.seat.seatType.price}"></td>
+                <td>
+                    <a th:href="@{bookings/deleteTicket/{id} (id=${ticket.ticketId})}"
+                       onclick="return confirm('Are you sure you want to delete this ticket?');"
+                        class="btn btn-danger btn-sm">Delete
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/bookings/client}">
+                Back to booking list
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

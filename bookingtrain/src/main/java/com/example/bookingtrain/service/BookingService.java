@@ -34,6 +34,10 @@ public class BookingService implements IBookingService {
         return bookingRepository.findAll(page);
     }
 
+    public Page<Booking> searchByPassengerName(String passenger, Pageable page){
+        return  bookingRepository.findByUserUsername(passenger, page);
+    }
+
     @Override
     public Booking save(Booking book) {
         return bookingRepository.save(book);
@@ -48,5 +52,9 @@ public class BookingService implements IBookingService {
             return true;
         }
         return false;
+    }
+
+    public List<Booking> getByUserId(int userId) {
+        return bookingRepository.findByUserId(userId);
     }
 }

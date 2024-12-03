@@ -34,4 +34,8 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "passengerId", insertable = false, updatable = false)
     private Passenger passenger;
+
+    @ManyToOne
+    @JoinColumn(name = "seatId", insertable = false, updatable = false)
+    private Seat seat;
 }

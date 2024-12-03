@@ -15,8 +15,12 @@
                     <thead>
                     <tr>
                         <th>Ticket ID</th>
-                        <th>Passenger</th>
-                        <th>Seat</th>
+                        <th>Passenger name</th>
+                        <th>Phone Number</th>
+                        <th>Train Name</th>
+                        <th>Couch Name</th>
+                        <th>Seat Type</th>
+                        <th>Seat Price</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -24,7 +28,11 @@
                     <tr th:each="ticket : ${ticketList}">
                         <td th:text="${ticket.ticketId}"></td>
                         <td th:text="${ticket.passenger.passengerName}"></td>
-                        <td th:text="${ticket.seatId}"></td>
+                        <td th:text="${ticket.passenger.phone}"></td>
+                        <td th:text="${ticket.seat.coache.train.trainName}"></td>
+                        <td th:text="${ticket.seat.coache.coacheName}"></td>
+                        <td th:text="${ticket.seat.seatType.seatTypeName}"></td>
+                        <td th:text="${ticket.seat.seatType.price}"></td>
                         <td>
                             <a th:href="@{/tickets/editTicket/{id} (id=${ticket.ticketId})}"
                                class="btn btn-primary btn-sm">Edit</a>

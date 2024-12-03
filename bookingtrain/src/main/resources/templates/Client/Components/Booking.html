@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="/fragments/header :: head">
+    <!--  Boostrap   -->
+</head>
+
+<body>
+<div class="fixed-top">
+    <div th:replace="/Client/Header :: Header"></div>
+</div>
+
+<div class="card shadow mt-5 pt-lg-5">
+    <div class="card-header">
+        <h5 class="text-black-50">Booked</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Station Departure</th>
+                <th>Station Arrival</th>
+                <th>Number Of Passenger</th>
+                <th>Total Price</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tr th:each="booking : ${bookingList}">
+                <td th:text="${booking.schedule.stationDeparture.stationName}"></td>
+                <td th:text="${booking.schedule.stationArrival.stationName}"></td>
+                <td th:text="${numberOfPassenger.get(booking.getBookingId)}"></td>
+                <td th:text="${booking.total}"></td>
+                <td th:text="${#dates.format(booking.dateBooking, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <a class="btn btn-secondary btn-sm"
+                       th:href="@{/bookings/client/details/{id} (id=${booking.bookingId})}"
+                        />Details
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -39,8 +41,7 @@ public class BookingController {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("bookingId").ascending());
         Page<Booking> bookingPage;
         if (search != null && !search.isEmpty()) {
-//            bookingPage = bookingService.searchTrainsByName(search, pageable);
-            bookingPage = bookingService.getAll(pageable);
+            bookingPage = bookingService.searchByPassengerName(search, pageable);
         } else {
             bookingPage = bookingService.getAll(pageable);
         }
@@ -49,15 +50,21 @@ public class BookingController {
         List<Employee> employeeList = employeeService.getAllEmployees();
         List<Schedule> scheduleList = scheduleService.getAllSchedules();
 
+        HashMap<Integer, Integer> numberOfPassenger = new HashMap<Integer, Integer>();
+        for(Booking booking : bookingPage.getContent()) {
+            List<Ticket> ticketList = ticketService.searchTicketByBookingId(booking.getBookingId());
+            numberOfPassenger.put(booking.getBookingId(), ticketList.size());
+        };
         model.addAttribute("bookingList", bookingPage.getContent());
-        model.addAttribute("currentPage", bookingPage.getTotalPages());
-        model.addAttribute("totalPages", pageSize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", bookingPage.getTotalPages());
         model.addAttribute("search", search);
         model.addAttribute("baseUrl", "/bookings");
         model.addAttribute("booking", new Booking());
         model.addAttribute("userList", userList);
         model.addAttribute("employeeList", employeeList);
         model.addAttribute("scheduleList", scheduleList);
+        model.addAttribute("numberOfPassenger", numberOfPassenger);
 
         return "/list/bookingList";
     }
@@ -108,5 +115,31 @@ public class BookingController {
     public String deleteBooking(@PathVariable int id) {
         bookingService.delete(id);
         return "redirect:/bookings/";
+    }
+
+    @GetMapping("/client")
+    public String showClientPage(Model model, HttpSession session) {
+        User user = (User)session.getAttribute("user");
+        List<Booking> bookingList = bookingService.getByUserId(user.getUserId());
+        HashMap<Integer, Integer> numberOfPassenger = new HashMap<Integer, Integer>();
+
+        model.addAttribute("bookingList", bookingList);
+        model.addAttribute("numberOfPassenger", numberOfPassenger);
+        return "/Client/Components/Booking";
+    }
+
+    @GetMapping("/client/details/{id}")
+    public String showClientDetails(@PathVariable int id, Model model) {
+        List<Ticket> ticketList =ticketService.searchTicketByBookingId(id);
+        model.addAttribute("ticketList", ticketList);
+
+        return "/Client/Components/BookingDetails";
+    }
+
+    @GetMapping("/client/deleteTicket/{id}")
+    public String deletetDetails(@PathVariable int id, Model model) {
+        ticketService.delete(id);
+
+        return "/Client/Components/BookingDetails";
     }
 }
