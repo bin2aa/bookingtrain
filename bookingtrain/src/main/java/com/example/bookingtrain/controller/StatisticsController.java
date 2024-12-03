@@ -1,5 +1,6 @@
 package com.example.bookingtrain.controller;
 
+import com.example.bookingtrain.DTO.RevenueStatistic;
 import com.example.bookingtrain.DTO.StationArrivalStatistic;
 import com.example.bookingtrain.DTO.TrainRunStatistic;
 import com.example.bookingtrain.service.StatisticService;
@@ -35,6 +36,12 @@ public class StatisticsController {
     @GetMapping("/arrival-by-station")
     public ResponseEntity<List<StationArrivalStatistic>> getArrivalByStation(@RequestParam int month) {
         List<StationArrivalStatistic> statistics = statisticsService.getArrivalByStation(month);
+        return ResponseEntity.ok(statistics);
+    }
+
+    @GetMapping("/revenue-by-month")
+    public ResponseEntity<List<RevenueStatistic>> getRevenue() {
+        List<RevenueStatistic> statistics = statisticsService.getRevenue();
         return ResponseEntity.ok(statistics);
     }
 

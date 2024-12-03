@@ -3,7 +3,6 @@
 <head>
     <div th:replace="fragments/header :: head"></div>
     <style>
-        /* Basic Layout and Styling */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f6f9;
@@ -16,43 +15,30 @@
             margin: 0 auto;
         }
 
-        .form-group label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-control {
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 200px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Container for the charts */
-        .charts-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .chart-wrapper {
-            width: 100%;
-            max-width: 600px;
+        .chart {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
-        /* Responsive layout for charts */
-        #trainRunsByMonthChart, #arrivalByStationChart {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 400px;
+        .chart h2 {
+            text-align: center;
+            color: #555;
         }
 
-        /* Styling for month selection dropdown */
+        .chart p {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        #revenueByMonthChart {
+            max-height: 300px; /* Giảm chiều cao */
+            border-radius: 5px;
+        }
+
         .month-select-container {
             display: flex;
             justify-content: center;
@@ -69,73 +55,58 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Card for each section */
-        .card {
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
         }
 
-        .card-header {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
+        .chart-wrapper {
+            width: 48%; /* Đảm bảo cả hai chart vừa khung */
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
         }
     </style>
 </head>
 <body th:replace="fragments/body :: body">
-
 <div>
     <div th:fragment="mainContent">
-        <!-- Import axios and Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
         <script>
-            // Define the loadChartData function globally
-            function loadChartData(endpoint, chartId, chartType, labelsKey, dataKey, chartOptions = {}) {
+            // Load Chart Data Function
+            function loadChartData(endpoint, chartId, chartType, labelsKey, dataKey, chartLabel, chartOptions = {}) {
                 axios.get(endpoint)
                     .then(response => {
                         const labels = response.data.map(item => item[labelsKey]);
                         const data = response.data.map(item => item[dataKey]);
 
-                        // Clear the existing chart before creating a new one
                         const ctx = document.getElementById(chartId).getContext('2d');
-
-                        // Check if there is an existing chart instance and destroy it if it exists
                         if (window[chartId] instanceof Chart) {
-                            window[chartId].destroy(); // Destroy the old chart instance if exists
+                            window[chartId].destroy();
                         }
 
-                        // Create a new chart
                         window[chartId] = new Chart(ctx, {
                             type: chartType,
                             data: {
                                 labels: labels,
                                 datasets: [{
-                                    label: 'Count',
+                                    label: chartLabel,
                                     data: data,
-                                    backgroundColor: [
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(54, 162, 235, 0.2)',
-                                        'rgba(255, 206, 86, 0.2)',
-                                        'rgba(231, 233, 237, 0.2)',
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(153, 102, 255, 0.2)',
-                                        'rgba(255, 159, 64, 0.2)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)',
-                                        'rgba(231, 233, 237, 1)',
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(153, 102, 255, 1)',
-                                        'rgba(255, 159, 64, 1)'
-                                    ],
-                                    borderWidth: 1
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 2,
+                                    tension: 0.4,
+                                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                                    pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
+                                    pointRadius: 5,
+                                    pointHoverRadius: 7
                                 }]
                             },
                             options: chartOptions
@@ -144,76 +115,101 @@
                     .catch(error => console.error(error));
             }
 
-            // Hàm gọi API để load dữ liệu khi chọn tháng
+            // Load Charts
             function loadCharts() {
                 const selectedMonth = document.getElementById("monthSelect").value;
 
-                // Tùy chỉnh endpoint theo tháng đã chọn
-                loadChartData(`/statistics/train-runs-by-month?month=${selectedMonth}`, 'trainRunsByMonthChart', 'bar', 'trainCode', 'totalRuns', {
-                    plugins: {
-                        legend: {
-                            display: true
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function (value) {
-                                    return Number.isInteger(value) ? value : '';
-                                },
-                                stepSize: 1
+                // Revenue Chart
+                loadChartData(
+                    '/statistics/revenue-by-month',
+                    'revenueByMonthChart',
+                    'line',
+                    'month',
+                    'revenue',
+                    'Doanh thu (VND)',
+                    {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Doanh thu hàng tháng (VND)',
+                                font: { size: 18, weight: 'bold' },
+                                color: '#444'
+                            },
+                            legend: { display: true, labels: { font: { size: 14 }, color: '#444' } }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#555', font: { size: 12 } }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 200000, color: '#555', font: { size: 12 } },
+                                grid: { color: 'rgba(200, 200, 200, 0.2)', lineWidth: 0.5 }
                             }
                         }
                     }
-                });
+                );
 
-                loadChartData(`/statistics/arrival-by-station?month=${selectedMonth}`, 'arrivalByStationChart', 'pie', 'stationArrivalId', 'arrivalCount', {
-                    plugins: {
-                        legend: {
-                            display: true
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
+                // Train Runs Chart
+                loadChartData(
+                    `/statistics/train-runs-by-month?month=${selectedMonth}`,
+                    'trainRunsByMonthChart',
+                    'bar',
+                    'trainCode',
+                    'totalRuns',
+                    'Số chuyến tàu',
+                    {
+                        plugins: { legend: { display: true } },
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                     }
-                });
+                );
+
+                // Arrival by Station Chart
+                loadChartData(
+                    `/statistics/arrival-by-station?month=${selectedMonth}`,
+                    'arrivalByStationChart',
+                    'bar',
+                    'stationArrivalId',
+                    'arrivalCount',
+                    'Số lượt đến',
+                    {
+                        plugins: { legend: { display: true } }
+                    }
+                );
             }
 
-            // Gọi hàm loadCharts khi trang được tải
-            document.addEventListener("DOMContentLoaded", function () {
-                loadCharts(); // Call loadCharts when the page loads
-            });
+            // Call loadCharts on Page Load
+            document.addEventListener("DOMContentLoaded", loadCharts);
         </script>
 
         <div class="container">
-            <div class="month-select-container">
-                <div class="card">
-                    <div class="card-header">Chọn Tháng</div>
-                    <div class="form-group">
-                        <select id="monthSelect" class="form-control" onchange="loadCharts()">
-                            <option value="1">Tháng 1</option>
-                            <option value="2">Tháng 2</option>
-                            <option value="3">Tháng 3</option>
-                            <option value="4">Tháng 4</option>
-                            <option value="5">Tháng 5</option>
-                            <option value="6">Tháng 6</option>
-                            <option value="7">Tháng 7</option>
-                            <option value="8">Tháng 8</option>
-                            <option value="9">Tháng 9</option>
-                            <option value="10">Tháng 10</option>
-                            <option value="11">Tháng 11</option>
-                            <option value="12">Tháng 12</option>
-                        </select>
-                    </div>
-                </div>
+            <!-- Revenue Chart -->
+            <div class="chart">
+                <h2>Biểu đồ Doanh thu theo Tháng</h2>
+                <p>Biểu đồ thể hiện doanh thu hàng tháng của công ty.</p>
+                <canvas id="revenueByMonthChart"></canvas>
             </div>
 
+            <!-- Month Selector -->
+            <div class="month-select-container">
+                <select id="monthSelect" onchange="loadCharts()">
+                    <option value="1">Tháng 1</option>
+                    <option value="2">Tháng 2</option>
+                    <option value="3">Tháng 3</option>
+                    <option value="4">Tháng 4</option>
+                    <option value="5">Tháng 5</option>
+                    <option value="6">Tháng 6</option>
+                    <option value="7">Tháng 7</option>
+                    <option value="8">Tháng 8</option>
+                    <option value="9">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12">Tháng 12</option>
+                </select>
+            </div>
+
+            <!-- Other Charts -->
             <div class="charts-container">
                 <div class="chart-wrapper">
                     <canvas id="trainRunsByMonthChart"></canvas>

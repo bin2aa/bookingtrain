@@ -1,5 +1,6 @@
 package com.example.bookingtrain.service;
 
+import com.example.bookingtrain.DTO.RevenueStatistic;
 import com.example.bookingtrain.DTO.StationArrivalStatistic;
 import com.example.bookingtrain.DTO.TrainRunStatistic;
 import com.example.bookingtrain.model.Schedule;
@@ -26,5 +27,10 @@ public class StatisticService {
     // Thống kê số lượng lượt đến của các trạm
     public List<StationArrivalStatistic> getArrivalByStation(int month) {
         return statisticRepository.countArrivalByStation(month);
+    }
+
+    public List<RevenueStatistic> getRevenue()
+    {
+        return statisticRepository.revenueByMonth();
     }
 }

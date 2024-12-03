@@ -1,5 +1,6 @@
 package com.example.bookingtrain.repository;
 
+import com.example.bookingtrain.DTO.RevenueStatistic;
 import com.example.bookingtrain.DTO.StationArrivalStatistic;
 import com.example.bookingtrain.DTO.TrainRunStatistic;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,4 +41,19 @@ public interface StatisticRepository extends JpaRepository<Schedule, Integer> {
                 ORDER BY COUNT(*) DESC
             """)
     List<StationArrivalStatistic> countArrivalByStation(int month);
+
+    @Query(value = """
+    SELECT new com.example.bookingtrain.DTO.RevenueStatistic(
+        FUNCTION('MONTH', b.dateBooking),
+        SUM(b.total)
+    )
+    FROM Booking b
+    WHERE b.statusBooking = 1
+    GROUP BY FUNCTION('MONTH', b.dateBooking)
+    ORDER BY FUNCTION('MONTH', b.dateBooking)
+""")
+    List<RevenueStatistic> revenueByMonth();
+
+
+
 }
