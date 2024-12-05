@@ -17,19 +17,21 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Name</th>
+                <th>Booker Name</th>
                 <th>Station Departure</th>
                 <th>Station Arrival</th>
-                <th>Number Of Passenger</th>
+                <th>Passengers</th>
                 <th>Total Price</th>
+                <th>Book Date</th>
                 <th>Action</th>
             </tr>
             </thead>
             <tr th:each="booking : ${bookingList}">
+                <td th:text="${booking.user.username}"></td>
                 <td th:text="${booking.schedule.stationDeparture.stationName}"></td>
                 <td th:text="${booking.schedule.stationArrival.stationName}"></td>
                 <td th:text="${numberOfPassenger.get(booking.getBookingId)}"></td>
-                <td th:text="${booking.total}"></td>
+                <td th:text="${#numbers.formatDecimal(booking.total, 0, 'COMMA', 2, 'POINT')}"></td>
                 <td th:text="${#dates.format(booking.dateBooking, 'yyyy-MM-dd')}"></td>
                 <td>
                     <a class="btn btn-secondary btn-sm"

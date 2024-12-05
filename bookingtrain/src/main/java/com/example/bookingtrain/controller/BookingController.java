@@ -121,7 +121,13 @@ public class BookingController {
     public String showClientPage(Model model, HttpSession session) {
         User user = (User)session.getAttribute("user");
         List<Booking> bookingList = bookingService.getByUserId(user.getUserId());
+
         HashMap<Integer, Integer> numberOfPassenger = new HashMap<Integer, Integer>();
+        for(Booking b : bookingList){
+            List<Ticket> ticketList = ticketService.searchTicketByBookingId(b.getBookingId());
+            int passengerCount = ticketList.size();
+            numberOfPassenger.put(b.getBookingId(), passengerCount);
+        }
 
         model.addAttribute("bookingList", bookingList);
         model.addAttribute("numberOfPassenger", numberOfPassenger);

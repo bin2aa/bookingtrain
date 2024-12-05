@@ -134,7 +134,7 @@
                         <td th:text="${booking.schedule.stationDeparture.stationName}"></td>
                         <td th:text="${booking.schedule.stationArrival.stationName}"></td>
                         <td th:text="${numberOfPassenger.get(booking.getBookingId)}"></td>
-                        <td th:text="${booking.total}"></td>
+                        <td th:text="${#numbers.formatDecimal(booking.total, 0, 'COMMA', 2, 'POINT')}"></td>
                         <td th:text="${#dates.format(booking.dateBooking, 'yyyy-MM-dd')}"></td>
                         <td>
                             <label class="switch">
