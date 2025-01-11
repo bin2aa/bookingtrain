@@ -1,11 +1,11 @@
 package com.example.bookingtrain.utils;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -27,7 +27,6 @@ public class VNPayUtil {
                 sb.append(String.format("%02x", b & 0xff));
             }
             return sb.toString();
-
         } catch (Exception ex) {
             return "";
         }
@@ -60,10 +59,25 @@ public class VNPayUtil {
         return paramsMap.entrySet().stream()
                 .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
                 .sorted(Map.Entry.comparingByKey())
-                .map(entry -> (encodeKey ? URLEncoder.encode(entry.getKey(),
-                        StandardCharsets.US_ASCII)
+                .map(entry -> (encodeKey ? URLEncoder.encode(entry.getKey(), StandardCharsets.US_ASCII)
                         : entry.getKey()) + "=" +
                         URLEncoder.encode(entry.getValue(), StandardCharsets.US_ASCII))
                 .collect(Collectors.joining("&"));
+    }
+
+    public static Map<String, String> getVnPayParams(HttpServletRequest request) {
+        Map<String, String> vnpParams = new HashMap<>();
+        request.getParameterMap().forEach((key, values) -> {
+            if (values.length > 0) {
+                vnpParams.put(key, values[0]);
+            }
+        });
+        return vnpParams;
+    }
+
+    public static boolean validateSignature(Map<String, String> vnpParams, String vnpSecureHash, String secretKey) {
+        String hashData = getPaymentURL(vnpParams, false);
+        String calculatedHash = hmacSHA512(secretKey, hashData);
+        return calculatedHash.equals(vnpSecureHash);
     }
 }

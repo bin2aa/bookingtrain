@@ -5,10 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -29,11 +25,11 @@ public class Schedule {
     private Integer trainId;
 
     @Column(nullable = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private java.util.Date endDeparture;
 
     @Column(nullable = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private java.util.Date startDeparture;
 
     @Column(nullable = true)
@@ -61,4 +57,14 @@ public class Schedule {
     @JoinColumn(name = "stationArrivalId", insertable = false, updatable = false)
     private Station stationArrival;
 
+    @Transient
+    private int passengerCount;
+
+    public void setPassengerCount(int passengerCount) {
+        this.passengerCount = passengerCount;
+    }
+
+    public int getPassengerCount() {
+        return passengerCount;
+    }
 }

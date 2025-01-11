@@ -29,9 +29,8 @@ public class Employee {
     @Column(nullable = true)
     private String address;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 11)
     private String phone;
-
     @Column(nullable = true)
     private Integer userId;
 

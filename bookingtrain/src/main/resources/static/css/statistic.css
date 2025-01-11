@@ -1,0 +1,86 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.chart {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.chart h2 {
+    text-align: center;
+    color: #555;
+}
+
+.chart p {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+}
+
+.chart-container {
+    overflow-x: auto; /* Cho phép cuộn ngang */
+    padding-bottom: 20px;
+}
+
+.chart-container canvas {
+    width: 2000px; /* Đặt chiều rộng lớn hơn để có thể cuộn */
+    max-width: none;
+}
+
+.charts-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.chart-wrapper {
+    width: 48%; /* Đảm bảo cả hai chart vừa khung */
+    margin-bottom: 20px;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* ====================== */
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+.stat-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.stat-title {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 10px;
+}
+.stat-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #2c3e50;
+}
+.revenue {
+    color: #27ae60;
+}

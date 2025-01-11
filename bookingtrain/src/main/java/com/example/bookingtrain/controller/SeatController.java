@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class SeatController {
     @Autowired
     private DetailSeatService seatServiceDTO;
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'seats', 1)")
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page, Model model) {
         // List<Seat> seatList = seatService.getAllSeats();
@@ -52,6 +54,7 @@ public class SeatController {
         return "list/seatList";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'seats', 2)")
     @GetMapping("/addSeat")
     public String showAddPage(Model model) {
         model.addAttribute("seat", new Seat());
@@ -60,12 +63,14 @@ public class SeatController {
         return "add/addSeat";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'seats', 2)")
     @PostMapping("/saveSeat")
     public String addSeat(@ModelAttribute Seat seat) {
         seatService.createSeat(seat);
         return "redirect:/seats";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'seats', 4)")
     @GetMapping("/editSeat/{id}")
     public String showUpdatePage(@PathVariable int id, Model model) {
         Seat seat = seatService.getSeatById(id);
@@ -75,28 +80,45 @@ public class SeatController {
         return "edit/editSeat";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'seats', 4)")
     @PostMapping("/updateSeat")
     public String updateSeat(@ModelAttribute Seat seat) {
         seatService.updateSeat(seat);
         return "redirect:/seats";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'seats', 3)")
     @GetMapping("/deleteSeat/{id}")
     public String deleteSeat(@PathVariable int id) {
         seatService.deleteSeat(id);
         return "redirect:/seats";
     }
 
+    // @GetMapping("/all")
+    // public ResponseEntity<List<DetailSeatDTO>> getAllSeats(@RequestParam int
+    // trainId, HttpSession session) {
+    // try {
+    // List<DetailSeatDTO> seats = seatServiceDTO.findSeatsByTrainId(trainId);
+    // session.setAttribute("seats", seats);
+    // return ResponseEntity.ok(seats); // Return JSON with 200 OK
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    // .body(null); // Return error response if an exception occurs
+    // }
+    // }
     @GetMapping("/all")
-    public ResponseEntity<List<DetailSeatDTO>> getAllSeats(@RequestParam int trainId, HttpSession session) {
+    public ResponseEntity<List<DetailSeatDTO>> getAllSeats(
+            @RequestParam int trainId,
+            @RequestParam int scheduleId,
+            HttpSession session) {
         try {
-            List<DetailSeatDTO> seats = seatServiceDTO.findSeatsByTrainId(trainId);
-            session.setAttribute("seats", seats);
-            return ResponseEntity.ok(seats); // Return JSON with 200 OK
+            List<DetailSeatDTO> availableSeats = seatServiceDTO.findSeatsByTrainId(trainId, scheduleId);
+            session.setAttribute("seats", availableSeats);
+            return ResponseEntity.ok(availableSeats);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return error response if an exception occurs
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

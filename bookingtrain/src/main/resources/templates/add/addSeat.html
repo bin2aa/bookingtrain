@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="/fragments/header :: head">
+<head>
     <title>Add Seat</title>
 </head>
 
-<body th:replace="/fragments/body :: body">
+<body>
 
     <div th:fragment="mainContent">
         <h1 class="mb-4">Add Seat</h1>
@@ -17,7 +17,8 @@
             <div class="form-group">
                 <label for="coacheId">Coache</label>
                 <select id="coacheId" th:field="*{coacheId}" class="form-control" required>
-                    <option th:each="coache : ${coacheList}" th:value="${coache.coacheId}" th:text="${coache.coacheName}">
+                    <option th:each="coache : ${coacheList}" th:value="${coache.coacheId}"
+                        th:text="${coache.coacheName}">
                     </option>
                 </select>
             </div>

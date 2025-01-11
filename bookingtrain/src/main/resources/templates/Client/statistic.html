@@ -1,229 +1,259 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <div th:replace="fragments/header :: head"></div>
-    <style>
-        /* Basic Layout and Styling */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 90%;
-            margin: 0 auto;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-control {
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 200px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Container for the charts */
-        .charts-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .chart-wrapper {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
-
-        /* Responsive layout for charts */
-        #trainRunsByMonthChart, #arrivalByStationChart {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 400px;
-        }
-
-        /* Styling for month selection dropdown */
-        .month-select-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .month-select-container select {
-            font-size: 16px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            width: 150px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Card for each section */
-        .card {
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card-header {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/statistic.css">
 </head>
+
 <body th:replace="fragments/body :: body">
+    <div>
+        <div th:fragment="mainContent">
+            
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+            <script>
+                // Hàm tải dữ liệu biểu đồ
+                function loadChartData(endpoint, chartId, chartType, labelsKey, dataKey, chartLabel, chartOptions = {}) {
+                    axios.get(endpoint)
+                        .then(response => {
+                            const labels = response.data.map(item => `${item.year}-${item.month}-${item.day}`);
+                            const data = response.data.map(item => item[dataKey]);
 
-<div>
-    <div th:fragment="mainContent">
-        <!-- Import axios and Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        <script>
-            // Define the loadChartData function globally
-            function loadChartData(endpoint, chartId, chartType, labelsKey, dataKey, chartOptions = {}) {
-                axios.get(endpoint)
-                    .then(response => {
-                        const labels = response.data.map(item => item[labelsKey]);
-                        const data = response.data.map(item => item[dataKey]);
-
-                        // Clear the existing chart before creating a new one
-                        const ctx = document.getElementById(chartId).getContext('2d');
-
-                        // Check if there is an existing chart instance and destroy it if it exists
-                        if (window[chartId] instanceof Chart) {
-                            window[chartId].destroy(); // Destroy the old chart instance if exists
-                        }
-
-                        // Create a new chart
-                        window[chartId] = new Chart(ctx, {
-                            type: chartType,
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Count',
-                                    data: data,
-                                    backgroundColor: [
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(54, 162, 235, 0.2)',
-                                        'rgba(255, 206, 86, 0.2)',
-                                        'rgba(231, 233, 237, 0.2)',
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(153, 102, 255, 0.2)',
-                                        'rgba(255, 159, 64, 0.2)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)',
-                                        'rgba(231, 233, 237, 1)',
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(153, 102, 255, 1)',
-                                        'rgba(255, 159, 64, 1)'
-                                    ],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: chartOptions
-                        });
-                    })
-                    .catch(error => console.error(error));
-            }
-
-            // Hàm gọi API để load dữ liệu khi chọn tháng
-            function loadCharts() {
-                const selectedMonth = document.getElementById("monthSelect").value;
-
-                // Tùy chỉnh endpoint theo tháng đã chọn
-                loadChartData(`/statistics/train-runs-by-month?month=${selectedMonth}`, 'trainRunsByMonthChart', 'bar', 'trainCode', 'totalRuns', {
-                    plugins: {
-                        legend: {
-                            display: true
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function (value) {
-                                    return Number.isInteger(value) ? value : '';
-                                },
-                                stepSize: 1
+                            const ctx = document.getElementById(chartId).getContext('2d');
+                            if (window[chartId] instanceof Chart) {
+                                window[chartId].destroy();
                             }
-                        }
-                    }
-                });
 
-                loadChartData(`/statistics/arrival-by-station?month=${selectedMonth}`, 'arrivalByStationChart', 'pie', 'stationArrivalId', 'arrivalCount', {
-                    plugins: {
-                        legend: {
-                            display: true
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
-                    }
-                });
-            }
+                            window[chartId] = new Chart(ctx, {
+                                type: chartType,
+                                data: {
+                                    labels: labels,
+                                    datasets: [chartLabel].map((label, index) => ({
+                                        label: label,
+                                        data: data,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 2,
+                                        tension: 0.4,
+                                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                                        pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
+                                        pointRadius: 5,
+                                        pointHoverRadius: 7
+                                    }))
+                                },
+                                options: {
+                                    scales: {
+                                        x: {
+                                            ticks: {
+                                                maxRotation: 0, // Không cho phép xoay nhãn
+                                                maxTicksLimit: 6 // Giới hạn số lượng nhãn tối đa là 6
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: chartLabel
+                                        },
+                                        zoom: {
+                                            pan: {
+                                                enabled: true, // Cho phép kéo qua kéo lại trên trục x
+                                                mode: 'x' // Chỉ kéo qua kéo lại trên trục x
+                                            },
+                                            zoom: {
+                                                wheel: {
+                                                    enabled: true // Cho phép phóng to / thu nhỏ bằng cách cuộn chuột
+                                                },
+                                                // pinch: {
+                                                //     enabled: true // Cho phép phóng to / thu nhỏ bằng cách chạm và kéo trên thiết bị cảm ứng
+                                                // },
+                                                mode: 'x' // Chỉ phóng to / thu nhỏ trên trục x
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        })
+                        .catch(error => console.error(error));
+                }
 
-            // Gọi hàm loadCharts khi trang được tải
-            document.addEventListener("DOMContentLoaded", function () {
-                loadCharts(); // Call loadCharts when the page loads
-            });
-        </script>
+                // Hàm tải dữ liệu biểu đồ kết hợp
+                function loadCombinedChartData() {
+                    const endpoints = [
+                        '/statistics/tickets-by-year-month',
+                        '/statistics/routes-by-run-and-train',
+                        '/statistics/train-runs-by-day-month-year'
+                    ];
 
-        <div class="container">
-            <div class="month-select-container">
-                <div class="card">
-                    <div class="card-header">Chọn Tháng</div>
-                    <div class="form-group">
-                        <select id="monthSelect" class="form-control" onchange="loadCharts()">
-                            <option value="1">Tháng 1</option>
-                            <option value="2">Tháng 2</option>
-                            <option value="3">Tháng 3</option>
-                            <option value="4">Tháng 4</option>
-                            <option value="5">Tháng 5</option>
-                            <option value="6">Tháng 6</option>
-                            <option value="7">Tháng 7</option>
-                            <option value="8">Tháng 8</option>
-                            <option value="9">Tháng 9</option>
-                            <option value="10">Tháng 10</option>
-                            <option value="11">Tháng 11</option>
-                            <option value="12">Tháng 12</option>
-                        </select>
+                    Promise.all(endpoints.map(endpoint => axios.get(endpoint)))
+                        .then(responses => {
+                            const labels = responses[0].data.map(item => `${item.year}-${item.month}`);
+                            const ticketData = responses[0].data.map(item => item.ticketCount);
+                            const routeData = responses[1].data.map(item => item.runCount);
+                            const trainRunData = responses[2].data.map(item => item.count);
+
+                            const ctx = document.getElementById('combinedChart').getContext('2d');
+                            if (window.combinedChart instanceof Chart) {
+                                window.combinedChart.destroy();
+                            }
+
+                            window.combinedChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: labels,
+                                    datasets: [
+                                        {
+                                            label: 'Số lượng vé',
+                                            data: ticketData,
+                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 2,
+                                            tension: 0.4,
+                                            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                                            pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
+                                            pointRadius: 5,
+                                            pointHoverRadius: 7
+                                        },
+                                        {
+                                            label: 'Số lần chạy',
+                                            data: routeData,
+                                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                                            borderColor: 'rgba(255, 206, 86, 1)',
+                                            borderWidth: 2,
+                                            tension: 0.4,
+                                            pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+                                            pointHoverBackgroundColor: 'rgba(75, 192, 192, 1)',
+                                            pointRadius: 5,
+                                            pointHoverRadius: 7
+                                        },
+                                        {
+                                            label: 'Số lần chạy tàu',
+                                            data: trainRunData,
+                                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                            borderColor: 'rgba(153, 102, 255, 1)',
+                                            borderWidth: 2,
+                                            tension: 0.4,
+                                            pointBackgroundColor: 'rgba(153, 102, 255, 1)',
+                                            pointHoverBackgroundColor: 'rgba(255, 159, 64, 1)',
+                                            pointRadius: 5,
+                                            pointHoverRadius: 7
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        x: {
+                                            ticks: {
+                                                maxRotation: 0, // Không cho phép xoay nhãn
+                                                maxTicksLimit: 6 // Giới hạn số lượng nhãn tối đa là 6
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: 'Thống kê kết hợp'
+                                        },
+                                        zoom: {
+                                            pan: {
+                                                enabled: true, // Cho phép kéo qua kéo lại trên trục x
+                                                mode: 'x' // Chỉ kéo qua kéo lại trên trục x
+                                            },
+                                            zoom: {
+                                                wheel: {
+                                                    enabled: true // Cho phép phóng to / thu nhỏ bằng cách cuộn chuột
+                                                },
+                                                // pinch: {
+                                                //     enabled: true // Cho phép phóng to / thu nhỏ bằng cách chạm và kéo trên thiết bị cảm ứng
+                                                // },
+                                                mode: 'x' // Chỉ phóng to / thu nhỏ trên trục x
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        })
+                        .catch(error => console.error(error));
+                }
+
+                // Tải các biểu đồ
+                function loadCharts() {
+                    // Biểu đồ Doanh thu
+                    loadChartData(
+                        '/statistics/revenue-by-day-month-year',
+                        'revenueByDayMonthYearChart',
+                        'line',
+                        'date',
+                        'revenue',
+                        'Doanh thu (VND)'
+                    );
+                    // Biểu đồ Kết hợp
+                    loadCombinedChartData();
+                }
+
+                // Gọi hàm loadCharts khi tải trang
+                document.addEventListener("DOMContentLoaded", loadCharts);
+            </script>
+
+            <div class="container">
+                <!-- Biểu đồ Doanh thu -->
+                <div class="chart">
+                    <h2>Biểu đồ Doanh thu theo Ngày, Tháng, Năm</h2>
+                    <p>Biểu đồ này hiển thị doanh thu hàng ngày của công ty.</p>
+                    <div class="chart-container">
+                        <canvas id="revenueByDayMonthYearChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ Kết hợp -->
+                <div class="chart">
+                    <h2>Biểu đồ Kết hợp</h2>
+                    <p>Biểu đồ này kết hợp số lượng vé và số lần chạy.</p>
+                    <div class="chart-container">
+                        <canvas id="combinedChart"></canvas>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="trainRunsByMonthChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="charts-container">
-                <div class="chart-wrapper">
-                    <canvas id="trainRunsByMonthChart"></canvas>
+            <h2 class="text-center mb-4">Thống Kê Tổng Quan</h2>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Số Nhân Viên</div>
+                    <div class="stat-value" th:text="${totalEmployees}">0</div>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="arrivalByStationChart"></canvas>
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Số Hành Khách</div>
+                    <div class="stat-value" th:text="${totalPassengers}">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Số Chuyến Tàu</div>
+                    <div class="stat-value" th:text="${totalSchedules}">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Số Vé Đang Hoạt Động</div>
+                    <div class="stat-value" th:text="${activeTickets}">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Doanh Thu</div>
+                    <div class="stat-value revenue" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' VND'">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Số Tàu Hoạt Động</div>
+                    <div class="stat-value" th:text="${activeTrains}">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tổng Số Tuyến Đường Hoạt Động</div>
+                    <div class="stat-value" th:text="${activeRoutes}">0</div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>

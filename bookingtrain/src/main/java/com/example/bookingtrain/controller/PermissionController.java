@@ -63,4 +63,5 @@ public class PermissionController {
         permissionService.deletePermission(id);
         return "redirect:/permissions";
     }
+
 }

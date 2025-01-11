@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class TrainController {
         this.stationService = stationService;
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 1)")
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String search,
             Model model) {
@@ -49,17 +51,18 @@ public class TrainController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", trainPage.getTotalPages());
         model.addAttribute("baseUrl", "/trains");
-        model.addAttribute("search", search); // Thêm tham số search vào model để giữ lại giá trị tìm kiếm
-
+        model.addAttribute("search", search);
         return "list/trainList";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 2)")
     @GetMapping("/addTrain")
     public String showAddForm(Model model) {
         model.addAttribute("train", new Train());
         return "add/addTrain";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 2)")
     @PostMapping("/saveTrain")
     public String saveTrain(@ModelAttribute("train") Train train,
             @RequestParam("imageFile") MultipartFile multipartFile,
@@ -80,6 +83,7 @@ public class TrainController {
         return "redirect:/trains";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 4)")
     @GetMapping("/editTrain/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Train train = trainService.getById(id);
@@ -90,6 +94,7 @@ public class TrainController {
         return "redirect:/trains";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 4)")
     @PostMapping("/editJson")
     @ResponseBody
     public String editTrainStatus(@RequestBody Map<String, Integer> payload) {
@@ -105,6 +110,7 @@ public class TrainController {
         return "success";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 4)")
     @PostMapping("/updateTrain")
     public String updateTrain(@ModelAttribute("train") Train train,
             @RequestParam("imageFile") MultipartFile multipartFile,
@@ -136,6 +142,7 @@ public class TrainController {
         return "redirect:/trains";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'trains', 3)")
     @GetMapping("/deleteTrain/{id}")
     public String deleteTrain(@PathVariable("id") Integer id) {
         trainService.delete(id);

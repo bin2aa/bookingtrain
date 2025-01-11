@@ -4,12 +4,12 @@ $(document).ready(function () {
     $(document).on('click', "a.addRoleLink, a.addPermissionLink,\
          a.addRoleOperationLink, a.addUserLink, a.addTrainLink, \
          a.addStationLink, a.addScheduleLink, a.addObjectLink, \
-         a.addEmployeeLink, a.addRouteLink,\
+         a.addEmployeeLink, a.addRouteLink, a.addSeatLink, a.addSeatTypeLink,\
          \
          a.editRoleLink, a.editPermissionLink,\
          a.editRoleOperationLink, a.editUserLink, a.editTrainLink, \
          a.editStationLink, a.editScheduleLink, a.editObjectLink, \
-         a.editEmployeeLink, a.editRouteLink",
+         a.editEmployeeLink, a.editRouteLink, a.editSeatLink, a.editSeatTypeLink",
         function (e) {
             e.preventDefault();
             var href = $(this).attr("href");
@@ -46,8 +46,14 @@ $(document).ready(function () {
             if ($(this).hasClass('addRouteLink')) {
                 containerId = '#addRouteContainer';
             }
+            if ($(this).hasClass('addSeatLink')) {
+                containerId = '#addSeatContainer';
+            }
+            if ($(this).hasClass('addSeatTypeLink')) {
+                containerId = '#addSeatTypeContainer';
+            }
 
-            // ---------------------------------------------------------
+            // ===============================
 
             if ($(this).hasClass('editRoleOperationLink')) {
                 containerId = '#editRoleOperationContainer';
@@ -79,7 +85,12 @@ $(document).ready(function () {
             if ($(this).hasClass('editRouteLink')) {
                 containerId = '#editRouteContainer';
             }
-            
+            if ($(this).hasClass('editSeatLink')) {
+                containerId = '#editSeatContainer';
+            }
+            if ($(this).hasClass('editSeatTypeLink')) {
+                containerId = '#editSeatTypeContainer';
+            }
 
             $.ajax({
                 url: href,
@@ -88,16 +99,14 @@ $(document).ready(function () {
                     // var content = $(data).find(contentClass).html();
                     $(containerId).html(data).show();
                     $(".overlay").show();
-
                 }
             });
         });
 
-
     $(document).on('click', function (e) {
         if (!$(e.target).closest('#addRoleContainer').length &&
-            !$(e.target).closest('#addRoleOperationContainer').length &&
             !$(e.target).closest('#addPermissionContainer').length &&
+            !$(e.target).closest('#addRoleOperationContainer').length &&
             !$(e.target).closest('#addUserContainer').length &&
             !$(e.target).closest('#addTrainContainer').length &&
             !$(e.target).closest('#addStationContainer').length &&
@@ -105,9 +114,11 @@ $(document).ready(function () {
             !$(e.target).closest('#addObjectContainer').length &&
             !$(e.target).closest('#addEmployeeContainer').length &&
             !$(e.target).closest('#addRouteContainer').length &&
-            // ---------------------------------------------------------
-            !$(e.target).closest('#editRoleContainer').length &&
+            !$(e.target).closest('#addSeatContainer').length &&
+            !$(e.target).closest('#addSeatTypeContainer').length &&
+            // ===============================
             !$(e.target).closest('#editRoleOperationContainer').length &&
+            !$(e.target).closest('#editRoleContainer').length &&
             !$(e.target).closest('#editPermissionContainer').length &&
             !$(e.target).closest('#editUserContainer').length &&
             !$(e.target).closest('#editTrainContainer').length &&
@@ -115,11 +126,13 @@ $(document).ready(function () {
             !$(e.target).closest('#editScheduleContainer').length &&
             !$(e.target).closest('#editObjectContainer').length &&
             !$(e.target).closest('#editEmployeeContainer').length &&
-            !$(e.target).closest('#editRouteContainer').length
-        ) {
-            $('#addRoleContainer').hide();
-            $('#addRoleOperationContainer').hide();
+            !$(e.target).closest('#editRouteContainer').length &&
+            !$(e.target).closest('#editSeatContainer').length &&
+            !$(e.target).closest('#editSeatTypeContainer').length) {
+            $(".overlay").hide();
+            $("#addRoleContainer").hide();
             $("#addPermissionContainer").hide();
+            $("#addRoleOperationContainer").hide();
             $("#addUserContainer").hide();
             $("#addTrainContainer").hide();
             $("#addStationContainer").hide();
@@ -127,9 +140,11 @@ $(document).ready(function () {
             $("#addObjectContainer").hide();
             $("#addEmployeeContainer").hide();
             $("#addRouteContainer").hide();
-
-            $("#editRoleContainer").hide();
+            $("#addSeatContainer").hide();
+            $("#addSeatTypeContainer").hide();
+            // ===============================
             $("#editRoleOperationContainer").hide();
+            $("#editRoleContainer").hide();
             $("#editPermissionContainer").hide();
             $("#editUserContainer").hide();
             $("#editTrainContainer").hide();
@@ -138,10 +153,8 @@ $(document).ready(function () {
             $("#editObjectContainer").hide();
             $("#editEmployeeContainer").hide();
             $("#editRouteContainer").hide();
-
-            $(".overlay").hide();
+            $("#editSeatContainer").hide();
+            $("#editSeatTypeContainer").hide();
         }
     });
-
-
 });

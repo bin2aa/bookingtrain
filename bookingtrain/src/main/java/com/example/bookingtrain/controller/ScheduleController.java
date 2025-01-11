@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,28 +37,40 @@ public class ScheduleController {
         this.routeService = routeService;
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 1)")
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer status,
             Model model) {
         int pageSize = 8;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("scheduleId").ascending());
         Page<Schedule> schedulePage;
 
-        if (search != null && !search.isEmpty()) {
+        if (status != null) {
+            schedulePage = scheduleService.searchSchedulesByStatus(status, pageable);
+        } else if (search != null && !search.isEmpty()) {
             schedulePage = scheduleService.searchSchedulesByTrainName(search, pageable);
         } else {
             schedulePage = scheduleService.getAllSchedules(pageable);
         }
 
-        model.addAttribute("scheduleList", schedulePage.getContent());
+        List<Schedule> schedules = schedulePage.getContent();
+        for (Schedule schedule : schedules) {
+            int passengerCount = scheduleService.getPassengerCount(schedule.getScheduleId());
+            schedule.setPassengerCount(passengerCount);
+        }
+
+        model.addAttribute("scheduleList", schedules);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", schedulePage.getTotalPages());
         model.addAttribute("baseUrl", "/schedules");
         model.addAttribute("search", search);
+        model.addAttribute("status", status);
         return "list/scheduleList";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 2)")
     @GetMapping("/newSchedule")
     public String showAddPage(Model model) {
         var departureList = stationService.getAll();
@@ -75,6 +88,7 @@ public class ScheduleController {
         return "add/addSchedule";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 2)")
     @PostMapping("/saveSchedule")
     public String saveSchedule(@ModelAttribute("schedule") Schedule schedule, Model model) {
         if (schedule.getStationDepartureId().equals(schedule.getStationArrivalId())) {
@@ -97,6 +111,7 @@ public class ScheduleController {
         return "redirect:/schedules";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication,'schedules', 4)")
     @PostMapping("/updateSchedule")
     public String updateSchedule(@ModelAttribute("schedule") Schedule schedule, Model model) {
         if (schedule.getStationDepartureId().equals(schedule.getStationArrivalId())) {
@@ -119,6 +134,7 @@ public class ScheduleController {
         return "redirect:/schedules";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 4)")
     @GetMapping("/editSchedule/{id}")
     public String showEditPage(@PathVariable int id, Model model) {
         Schedule schedule = scheduleService.getScheduleById(id);
@@ -137,6 +153,7 @@ public class ScheduleController {
         return "edit/editSchedule";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 4)")
     @PostMapping("/editJson")
     @ResponseBody
     public String editScheduleStatus(@RequestBody Map<String, Integer> payload) {
@@ -152,9 +169,25 @@ public class ScheduleController {
         return "success";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 3)")
     @GetMapping("/deleteSchedule/{id}")
     public String deleteSchedule(@PathVariable int id) {
         scheduleService.deleteSchedule(id);
         return "redirect:/schedules";
     }
+
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 1)")
+    @GetMapping("/getPassengerCount/{id}")
+    @ResponseBody
+    public int getPassengerCount(@PathVariable int id) {
+        return scheduleService.getPassengerCount(id);
+    }
+
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'schedules', 1)")
+    @GetMapping("/getPassengerNames/{id}")
+    @ResponseBody
+    public List<String> getPassengerNames(@PathVariable int id) {
+        return scheduleService.getPassengerNames(id);
+    }
+
 }

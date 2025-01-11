@@ -44,4 +44,8 @@ public class BookingService implements IBookingService {
         return false;
     }
 
+    public List<Booking> getBookingsByUserId(Integer userId) {
+        return bookingRepository.findByUserId(userId);
+    }
+
 }

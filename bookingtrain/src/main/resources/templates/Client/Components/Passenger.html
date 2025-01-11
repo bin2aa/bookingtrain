@@ -10,6 +10,32 @@
     <link rel="stylesheet" href="/css/passenger.css">
 
 </head>
+<style>
+    .pricing-card {
+        transition: transform 0.2s;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .pricing-icon {
+        color: #007bff;
+    }
+
+    .price-amount {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #28a745;
+    }
+
+    .currency {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+</style>
 
 <body>
     <!-- Header -->
@@ -32,6 +58,44 @@
         </div>
 
         <div class="row">
+            <!-- --------------------------------- -->
+            <div class="container mt-4">
+                <h4 class="text-center mb-4">
+                    <i class="fas fa-ticket-alt me-2"></i>Ticket Pricing
+                </h4>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div th:each="object : ${objects}" class="col-md-4 mb-3">
+                                <div class="card h-100 pricing-card">
+                                    <div class="card-body text-center">
+                                        <div class="pricing-icon mb-3">
+                                            <i th:class="${
+                                            object.objectName == 'Trẻ Em' ? 'fas fa-child' :
+                                            object.objectName == 'Người Lớn' ? 'fas fa-user' :
+                                            'fas fa-user-friends'
+                                        }" style="font-size: 2rem;"></i>
+                                        </div>
+                                        <h5 class="card-title" th:text="${object.objectName}">Ticket Type</h5>
+                                        <p class="card-text pricing">
+                                            <span class="price-amount"
+                                                th:text="${#numbers.formatDecimal(object.price, 0, 'COMMA', 0, 'POINT')}">0</span>
+                                            <span class="currency">VND</span>
+                                        </p>
+                                        <small class="text-muted" th:switch="${object.objectName}">
+                                            <span th:case="'Trẻ Em'">For children under 12 years old</span>
+                                            <span th:case="'Người Lớn'">Standard adult ticket</span>
+                                            <span th:case="'Người Già'">For seniors over 60 years old</span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- --------------------------------- -->
+
             <!-- Summary Section -->
             <div class="col-md-4">
                 <div class="summary-card">
@@ -160,11 +224,70 @@
                         <button type="button" id="addPassengerBtn" class="btn btn-new-passenger btn-custom">
                             <i class="fas fa-plus me-2"></i>Add New Passenger
                         </button>
-                        <button type="button" id="buyTicketBtn" class="btn btn-buy-ticket btn-custom">
+                        <!-- <button type="button" id="buyTicketBtn" class="btn btn-buy-ticket btn-custom">
                             <i class="fas fa-shopping-cart me-2"></i>Buy Ticket
+                        </button> -->
+                        <button type="button" id="vnpayBtn" class="btn btn-primary">
+                            <i class="fas fa-credit-card me-2"></i>Pay with VNPay
                         </button>
                     </div>
                 </form>
+                <!-- VNPay Payment Form -->
+                <!-- <button id="vnpayBtn" class="btn btn-primary">Pay with VNPay</button> -->
+                <!-- VNPay Payment Form -->
+                <form id="vnpayForm" action="/payment/vn-pay" method="GET" style="display: none;">
+                    <input type="hidden" name="amount" id="vnpayAmount">
+                    <input type="hidden" name="bankCode" id="vnpayBankCode">
+                    <input type="hidden" name="totalPrice" id="totalPriceInput">
+                    <input type="hidden" name="seatId" id="seatId">
+                    <input type="hidden" name="scheduleId" id="scheduleId" value="${scheduleId}">
+                    <input type="hidden" name="passengerData" id="passengerData">
+                </form>
+
+
+                <script>
+                    document.getElementById('vnpayBtn').addEventListener('click', function () {
+                        $.get('/checkLoginStatus', function (isLoggedIn) {
+                            // Nếu chưa đăng nhập, hiển thị thông báo ngay lập tức
+                            if (!isLoggedIn) {
+                                $('#notificationMessage').text('Please log in to purchase tickets.');
+                                $('#notificationModal').modal('show');
+                                return; // Dừng xử lý tiếp
+                            }
+                            // Validate form before proceeding to payment
+                            if (validatePassengerForm() && validateDuplicateSeats()) {
+                                const totalPrice = parseFloat(document.getElementById('totalPrice').textContent);
+                                document.getElementById('vnpayAmount').value = totalPrice * 100; // Convert to smallest currency unit
+                                document.getElementById('totalPriceInput').value = totalPrice;
+
+                                // Collect passenger data
+                                const passengerData = [];
+                                for (let i = 1; i <= passengerCount; i++) {
+                                    passengerData.push({
+                                        passengerName: document.getElementById(`passengerName_${i}`).value,
+                                        dateOfBirth: document.getElementById(`dateOfBirth_${i}`).value,
+                                        phone: document.getElementById(`phone_${i}`).value,
+                                        seatId: document.getElementById(`seats_${i}`).value,
+                                        objectId: document.getElementById(`objectId_${i}`).value
+                                    });
+                                }
+                                document.getElementById('passengerData').value = JSON.stringify(passengerData);
+
+                                // Save totalPrice and passengerData to session
+                                $.post('/payment/session/saveTotalPriceAndPassengerData', {
+                                    totalPrice: totalPrice,
+                                    passengerData: JSON.stringify(passengerData)
+                                }, function () {
+                                    // Submit the form after saving to session
+                                    document.getElementById('vnpayForm').submit();
+                                });
+                            } else {
+                                $('#notificationMessage').text('Vui lòng điền đầy đủ thông tin và chọn ghế hợp lệ.');
+                                $('#notificationModal').modal('show');
+                            }
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>
@@ -191,41 +314,40 @@
     </div>
 
     <!-- Payment Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <!-- <div class="modal fade" id="paymentModal">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="paymentModalLabel">
-                        <i class="fas fa-credit-card me-2"></i>Payment Details
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Total Price: <span id="paymentTotalPrice"></span> VND</h5>
                     <form id="paymentForm" action="/payment/create" method="POST">
-                        <input type="hidden" name="totalPrice" id="totalPriceInput">
-                        <input type="hidden" name="seatId" id="seatId">
-                        <input type="hidden" name="scheduleId" id="scheduleId" value="${scheduleId}">
+                        <input type="hidden" name="totalPrice" id="totalPriceInput" value="0">
+                        <input type="hidden" name="scheduleId" th:value="${scheduleId}">
                         <input type="hidden" name="passengerData" id="passengerData">
-
-                        <!-- Payment Method Dropdown -->
-                        <div class="form-group mt-3">
-                            <label for="paymentMethod">Payment Method:</label>
+                        
+                        <div class="mb-3">
+                            <h5>Total Price: <span id="paymentTotalPrice">0</span> VND</h5>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method:</label>
                             <select id="paymentMethod" name="paymentMethod" class="form-control" required>
                                 <option value="">-- Choose a payment method --</option>
                                 <option value="credit_card">Credit Card</option>
                                 <option value="paypal">PayPal</option>
+                                <option value="vnpay">VNPay</option>
                                 <option value="bank_transfer">Bank Transfer</option>
                             </select>
                         </div>
-
-                        <button type="submit" class="btn btn-primary mt-3">Confirm Payment</button>
+                        
+                        <button type="submit" class="btn btn-primary">Confirm Payment</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Footer -->
     <div class="footer mt-4">

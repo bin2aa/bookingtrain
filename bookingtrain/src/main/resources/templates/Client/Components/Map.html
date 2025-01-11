@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style> /* shit code -->
+        /* Style for sidepanel */
+        .sidepanel {
+            height: 500px;
+            width: 0;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            margin-top: 69px
+        }
+
+        .sidepanel a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidepanel a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidepanel .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* Style for open button */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            position: fixed; /* Fixed to the screen */
+            top: 20px; /* Adjust as needed */
+            z-index: 1000; /* Above the map */
+            margin-top: 210px;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        /* Style for map */
+        #map {
+            height: 500px;
+            width: 100%;
+            position: relative; /* Map stays below the sidepanel and button */
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="~{Client/Header :: Header}"></nav>
+
+    <div>
+    <button class="openbtn" onclick="openNav()">☰</button>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <p style="color: #f5f5f5"><strong>Tên Ga:</strong> <span th:text="${station.stationName}">Tên Ga</span></p>
+        <p style="color: #f5f5f5"><strong>Địa Chỉ:</strong> <span th:text="${station.description}">Địa Chỉ</span></p>
+    </div>
+    </div>
+
+    <!-- Show Map -->
+    <div id="map" style="height: 500px; width: 100%;"></div>
+
+</body>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script th:inline="javascript"> // inject thymeleaf
+    // Lấy giá trị từ model thông qua Thymeleaf
+    const latitude = /*[[${station.latitude}]]*/ 0;
+    const longitude = /*[[${station.longitude}]]*/ 0;
+    const stationName = /*[[${station.stationName}]]*/ "Vị trí station";
+
+    console.log("Hii Hii:", latitude);
+    console.log("Haa Haa:", longitude);
+
+    // Khởi tạo bản đồ với giá trị controller, zoom = 13%
+    const map = L.map('map').setView([latitude, longitude], 13);
+
+    // Thêm lớp bản đồ từ OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Thêm marker
+    L.marker([latitude, longitude]).addTo(map)
+        .bindPopup(stationName)
+        .openPopup();
+
+    // Side bar
+    function openNav() {
+        document.getElementById("mySidepanel").style.width = "275px";
+        document.getElementById("mySidepanel").style.height = "500px";
+        document.getElementById("mySidepanel").style.borderRadius = "15px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+    }
+</script>
+</html>

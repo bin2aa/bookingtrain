@@ -25,16 +25,14 @@
                                     <label for="scheduleDeparture" class="font-weight-bold">Departure:</label>
                                     <select id="scheduleDeparture" name="sd" class="form-control" required>
                                         <option value="" disabled selected>Select departure station</option>
-                                        <option th:each="station : ${stations}" th:value="${station.stationId}"
-                                            th:text="${station.stationName}"></option>
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="scheduleArrival" class="font-weight-bold">Arrival:</label>
                                     <select id="scheduleArrival" name="sa" class="form-control" required>
                                         <option value="" disabled selected>Select arrival station</option>
-                                        <option th:each="station : ${stations}" th:value="${station.stationId}"
-                                            th:text="${station.stationName}"></option>
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
@@ -42,7 +40,7 @@
                                     <input type="date" id="dateStart" name="da" class="form-control" required>
                                 </div>
                             </div>
-
+                        
                             <div class="text-center mt-4">
                                 <button type="submit" class="btn btn-primary px-5 ms-3">Search Tickets</button>
                             </div>
@@ -51,108 +49,98 @@
                 </div>
             </div>
 
-            <div class="col-md-12">
-                <h3 class="mb-4">Tickets Found</h3>
-
-                <!-- Display message if no tickets are found -->
-                <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-warning text-center">
-                    No tickets found for the selected route.
-                </div>
-
-                <!-- Loop to display each ticket result -->
-                <div th:each="ticket : ${tickets}" class="ticket-card tableContent">
-                    <div class="row align-items-center">
-                        <div class="col-md-2 text-center">
-                            <img th:src="@{'img/trainImg/' + ${ticket.image}}" alt="Train Image"
-                                class="ticket-logo mb-2" style="width: 100px; height: 100px; object-fit: cover;">
-                            <h6 th:text="${ticket.trainCode}"></h6>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="d-flex justify-content-around align-items-center">
-                                <div class="text-start">
-                                    <h6 th:text="'Time: ' + ${ticket.timeDepartureFormatted}"></h6>
-                                    <p class="ticket-info" th:text="'Date: ' + ${ticket.dateDepartureFormatted}"></p>
-                                    <!-- <p class="ticket-info" th:text="${ticket.stationDeparture}"></p> -->
-                                    <p class="ticket-info"
-                                        th:text="'Scheduled Departure: ' + ${ticket.scheduleDeparture}"></p>
-                                </div>
-                                <div class="text-center">
-                                    <div class="total-time" th:text="${ticket.totalTime}"></div>
-                                    <i class="fa fa-arrow-right fa-2x"></i>
-                                </div>
-                                <div class="text-end">
-                                    <h6 th:text="'Time: ' + ${ticket.timeArrivalFormatted}"></h6>
-                                    <p class="ticket-info" th:text="'Date: ' + ${ticket.dateArrivalFormatted}"></p>
-                                    <!-- <p class="ticket-info" th:text="${ticket.stationArrival}"></p> -->
-                                    <p class="ticket-info" th:text="'Scheduled Arrival: ' + ${ticket.scheduleArrival}">
-                                    </p>
-                                </div>
+            <div th:each="ticket : ${tickets}" class="ticket-card tableContent">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        <img th:src="@{'img/trainImg/' + ${ticket.image}}" alt="Train Image"
+                            class="ticket-logo mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                        <h6 th:text="${ticket.trainCode}"></h6>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-around align-items-center">
+                            <div class="text-start">
+                                <!-- <h1 th:text="'Scheduale ID: ' + ${ticket.scheduleId}"></h1> -->
+                                <h6 th:text="'Time: ' + ${ticket.timeDepartureFormatted}"></h6>
+                                <p class="ticket-info" th:text="'Date: ' + ${ticket.dateDepartureFormatted}"></p>
+                                <!-- Thêm thông tin 'Scheduled Departure' -->
+                                <p class="ticket-info" th:text="'Station Departure: ' + ${ticket.stationDeparture}"></p>
+                            </div>
+                            <div class="text-center">
+                                <div class="total-time" th:text="${ticket.totalTime}"></div>
+                                <i class="fa fa-arrow-right fa-2x"></i>
+                            </div>
+                            <div class="text-end">
+                                <h6 th:text="'Time: ' + ${ticket.timeArrivalFormatted}"></h6>
+                                <p class="ticket-info" th:text="'Date: ' + ${ticket.dateArrivalFormatted}"></p>
+                                <!-- Thêm thông tin 'Scheduled Arrival' -->
+                                <p class="ticket-info" th:text="'Station Arrival: ' + ${ticket.stationArrival}"></p>
                             </div>
                         </div>
-                        <div class="col-md-2 text-center">
-                            <div>
-                                <h6 class="text-center">Route:</h6>
-                                <p class="ticket-info" th:text="${ticket.routeName}"></p>
-                            </div>
-                            <!-- Attach trainId to the form as a data attribute -->
-                            <form id="ticketForm" action="/passengers/ticket/passenger" method="POST"
-                                onsubmit="saveTrainId(this)">
-                                <input type="hidden" name="scheduleId" th:value="${ticket.scheduleId}" />
-                                <input type="hidden" name="trainId" th:value="${ticket.trainId}" />
-                                <input type="hidden" name="trainCode" th:value="${ticket.trainCode}" />
-                                <input type="hidden" name="stationDeparture" th:value="${ticket.stationDeparture}" />
-                                <input type="hidden" name="stationArrival" th:value="${ticket.stationArrival}" />
-                                <input type="hidden" name="timeDeparture" th:value="${ticket.timeDepartureFormatted}" />
-                                <input type="hidden" name="dateDeparture" th:value="${ticket.dateDepartureFormatted}" />
-                                <input type="hidden" name="timeArrival" th:value="${ticket.timeArrivalFormatted}" />
-                                <input type="hidden" name="dateArrival" th:value="${ticket.dateArrivalFormatted}" />
-                                <button type="submit" class="btn btn-primary">Buy Now</button>
-                            </form>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <div>
+                            <h6 class="text-center">Route:</h6>
+                            <p class="ticket-info" th:text="${ticket.routeName}"></p>
                         </div>
+                        <!-- Attach trainId to the form as a data attribute -->
+                        <form id="ticketForm" action="/passengers/ticket/passenger" method="POST" onsubmit="saveTrainId(this)">
+                            <input type="hidden" name="scheduleId" th:value="${ticket.scheduleId}" />
+                            <input type="hidden" name="trainId" th:value="${ticket.trainId}" />
+                            <input type="hidden" name="trainCode" th:value="${ticket.trainCode}" />
+                            <input type="hidden" name="stationDeparture" th:value="${ticket.stationDeparture}" />
+                            <input type="hidden" name="stationArrival" th:value="${ticket.stationArrival}" />
+                            <input type="hidden" name="timeDeparture" th:value="${ticket.timeDepartureFormatted}" />
+                            <input type="hidden" name="dateDeparture" th:value="${ticket.dateDepartureFormatted}" />
+                            <input type="hidden" name="timeArrival" th:value="${ticket.timeArrivalFormatted}" />
+                            <input type="hidden" name="dateArrival" th:value="${ticket.dateArrivalFormatted}" />
+                            <button type="submit" class="btn btn-primary">Buy Now</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="d-flex justify-content-center mt-4">
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{${baseUrl}(sd=${sd}, sa=${sa}, da=${da}, page=${currentPage - 1})}"
-                        aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                    th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{${baseUrl}(sd=${sd}, sa=${sa}, da=${da}, page=${i})}"
-                        th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{${baseUrl}(sd=${sd}, sa=${sa}, da=${da}, page=${currentPage + 1})}"
-                        aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <div class="fixed-bottom">
-        <div th:replace="/Client/Footer :: Footer"></div>
-    </div>
+            
+            <!-- <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{${baseUrl}(sd=${sd}, sa=${sa}, da=${da}, page=${currentPage - 1})}"
+                                aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                            th:classappend="${i == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{${baseUrl}(sd=${sd}, sa=${sa}, da=${da}, page=${i})}"
+                                th:text="${i + 1}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{${baseUrl}(sd=${sd}, sa=${sa}, da=${da}, page=${currentPage + 1})}"
+                                aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div> -->
+            <div class="fixed-bottom">
+                <div th:replace="/Client/Footer :: Footer"></div>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/pagination.js"></script>
-    <script>
-        // Function to save the trainId to localStorage
-        function saveTrainId(form) {
-            // Get the trainId value from the form's hidden input
-            var trainId = form.querySelector('input[name="trainId"]').value;
-
-            // Save trainId to localStorage
-            localStorage.setItem('trainId', trainId);
-        }
-    </script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="/js/pagination.js"></script>
+            <script>
+                // Function to save the trainId to localStorage
+                function saveTrainId(form) {
+                    // Get the trainId value from the form's hidden input
+                    const trainId = form.querySelector('input[name="trainId"]').value;
+                    const scheduleId = form.querySelector('input[name="scheduleId"]').value;
+                    // Save trainId to localStorage
+                    localStorage.setItem('trainId', trainId);
+                    localStorage.setItem('scheduleId', scheduleId);
+                }
+            </script>
 
 </body>
 

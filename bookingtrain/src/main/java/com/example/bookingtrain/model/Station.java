@@ -30,4 +30,13 @@ public class Station {
 
     @Column(nullable = true)
     private String image;
+
+    @Column(nullable = true)
+    private Double latitude;
+
+    @Column(nullable = true)
+    private Double longitude;
+
+    @Column(nullable = true)
+    private String address;
 }

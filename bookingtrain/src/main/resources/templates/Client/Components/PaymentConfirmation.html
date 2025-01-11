@@ -1,0 +1,134 @@
+<!-- PaymentConfirmation.html -->
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Nhận Thanh Toán</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Xác Nhận Thanh Toán</h2>
+
+        <div id="paymentStatus" class="alert" role="alert"></div>
+
+        <div id="paymentDetails" style="display: none;" class="mt-4">
+            <h3>Chi Tiết Đặt Vé</h3>
+            <div class="card p-3 mb-3">
+                <div class="booking-info">
+                    <h4>Thông Tin Chuyến Đi</h4>
+                    <p><strong>Mã Đặt Vé:</strong> <span id="bookingId"></span></p>
+                    <p><strong>Ngày Đặt:</strong> <span id="bookingDate"></span></p>
+                    <!-- <p><strong>Ga Đi:</strong> <span id="departureStation"></span></p> -->
+                    <!-- <p><strong>Ga Đến:</strong> <span id="arrivalStation"></span></p> -->
+                    <!-- <p><strong>Tuyến Đường:</strong> <span id="routeInfo"></span></p> -->
+                    <!-- <p><strong>Thời Gian Khởi Hành:</strong> <span id="departureTime"></span></p> -->
+                </div>
+
+                <div class="price-info mt-3">
+                    <h4>Thông Tin Thanh Toán</h4>
+                    <p><strong>Tổng Tiền:</strong> <span id="totalPrice"></span> VNĐ</p>
+                </div>
+
+                <div class="passenger-info mt-3">
+                    <h4>Thông Tin Hành Khách</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Họ Tên</th>
+                                    <th>Ngày Sinh</th>
+                                    <th>Số Điện Thoại</th>
+                                    <th>Số Ghế</th>
+                                </tr>
+                            </thead>
+                            <tbody id="passengerList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="qr-code mt-3 text-center">
+                    <h4>QR Code</h4>
+                    <img id="qrCodeImage" src="" alt="QR Code">
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2">
+                <button onclick="generatePDF()" class="btn btn-secondary">
+                    In Vé
+                </button>
+                <a href="/home" class="btn btn-primary">
+                    Về Trang Chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            const totalPrice = /*[[${totalPrice}]]*/ 0;
+            const passengerDataJson = /*[[${passengerDataJson}]]*/ '[]';
+            const bookingDetails = /*[[${bookingDetails}]]*/ null;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const vnpResponseCode = urlParams.get('vnp_ResponseCode');
+
+            if (vnpResponseCode) {
+                const paymentStatus = $('#paymentStatus');
+                const paymentDetails = $('#paymentDetails');
+
+                if (vnpResponseCode === '00') {
+                    paymentStatus.addClass('alert-success')
+                        .text('Thanh toán thành công!');
+
+                    // Hiển thị thông tin đặt vé
+                    if (bookingDetails) {
+                        $('#bookingId').text(bookingDetails.bookingId);
+                        $('#bookingDate').text(new Date(bookingDetails.dateBooking).toLocaleString('vi-VN'));
+                        $('#departureStation').text(bookingDetails.departureStation);
+                        $('#arrivalStation').text(bookingDetails.arrivalStation);
+                        $('#routeInfo').text(bookingDetails.routeInfo);
+                        $('#departureTime').text(new Date(bookingDetails.departureTime).toLocaleString('vi-VN'));
+                        $('#qrCodeImage').attr('src', 'data:image/png;base64,' + bookingDetails.qrCodeBase64);
+                    }
+
+                    // Hiển thị tổng tiền
+                    $('#totalPrice').text(Number(totalPrice).toLocaleString('vi-VN'));
+
+                    // Hiển thị thông tin hành khách
+                    const passengerData = JSON.parse(passengerDataJson);
+                    const passengerList = $('#passengerList');
+
+                    passengerData.forEach(passenger => {
+                        passengerList.append(`
+                            <tr>
+                                <td>${passenger.passengerName}</td>
+                                <td>${passenger.dateOfBirth}</td>
+                                <td>${passenger.phone}</td>
+                                <td>${passenger.seatId}</td>
+                            </tr>
+                        `);
+                    });
+
+                    paymentDetails.show();
+                } else {
+                    paymentStatus.addClass('alert-danger')
+                        .text('Thanh toán thất bại. Vui lòng thử lại.');
+                }
+            }
+        });
+
+        function generatePDF() {
+            const element = document.body;
+            html2pdf().from(element).save();
+        }
+    </script>
+</body>
+
+</html>

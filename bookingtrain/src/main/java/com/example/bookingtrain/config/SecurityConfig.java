@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 
@@ -37,24 +38,82 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public SpringSecurityDialect springSecurityDialect() {
+        return new SpringSecurityDialect();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests
-                        .antMatchers("/home/**", "/css/**", "/js/**", "/img/**", "/oauth2/**").permitAll()
-
+                        .antMatchers("/home/**", "/css/**", "/js/**", "/img/**", "/logo/**", "/oauth2/**").permitAll()
+                        .antMatchers("/stations/client/stations").permitAll()
+                        .antMatchers("/passengers/ticket/passenger").permitAll()
+                        .antMatchers("/stations/client/stations/map/**").permitAll()
+                        // .antMatchers("/passengers/ticket/passenger").authenticated()
                         .antMatchers("/login", "/register", "/loginSuccess").permitAll()
 
                         .antMatchers("/stations/client/**").authenticated()
+                        .antMatchers("/bookings/details/**").authenticated()
+                        .antMatchers("/bookings/myBookings").permitAll()
+                        .antMatchers("/forgot-password").permitAll()
+                        .antMatchers("/reset-password").permitAll()
                         .antMatchers("/account/**").authenticated()
                         .antMatchers("/searchTickets/**", "/home/**").permitAll()
                         .antMatchers("/seats/all").permitAll()
                         .antMatchers("/checkLoginStatus").permitAll()
-                        .antMatchers("/tickets/addPassengers").authenticated()
+                        .antMatchers("/tickets/addPassengers", "/account/editEmployee").authenticated()
                         .antMatchers("/payment/create", "/payment/session/saveSeatId").permitAll()
                         .antMatchers("/objects/price/**").permitAll()
+                        .antMatchers("/payment/vn-pay", "/payment/vn-pay-callback",
+                                "/payment/session/saveTotalPriceAndPassengerData")
+                        .authenticated()
                         .antMatchers("/admin/**").hasAuthority("Admin")
-                        .antMatchers("/**").access("isAuthenticated() and !hasAuthority('User')"))
+                        .antMatchers("/roles/**", "/roleOperations/**", "/permissions/**", "/statusRoleOperations/**")
+                        .hasAuthority("Admin")
+                        .antMatchers("/**").access("isAuthenticated() and !hasAuthority('User')")
+
+                        // ===============================================
+
+                        .antMatchers("/users/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'users', 1)")
+
+                        .antMatchers("/bookings/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'bookings', 1)")
+
+                        .antMatchers("/trains/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'trains', 1)")
+
+                        .antMatchers("/coaches/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'coaches', 1)")
+
+                        .antMatchers("/employees/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'employees', 1)")
+
+                        .antMatchers("/objects/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'objects', 1)")
+
+                        .antMatchers("/passengers/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'passengers', 1)")
+
+                        .antMatchers("/routes/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'routes', 1)")
+
+                        .antMatchers("/schedules/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'schedules', 1)")
+
+                        .antMatchers("/seats/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'seats', 1)")
+
+                        .antMatchers("/seattypes/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'seattypes', 1)")
+
+                        .antMatchers("/stations/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'stations', 1)")
+
+                        .antMatchers("/tickets/**")
+                        .access("@roleOperationService.hasPermission(authentication, 'tickets', 1)"))
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .usernameParameter("email")

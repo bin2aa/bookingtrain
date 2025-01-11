@@ -4,14 +4,19 @@ import com.example.bookingtrain.DTO.PaymentDTO;
 import com.example.bookingtrain.model.Booking;
 import com.example.bookingtrain.model.Employee;
 import com.example.bookingtrain.model.Passenger;
+import com.example.bookingtrain.model.Schedule;
 import com.example.bookingtrain.model.Ticket;
+import com.example.bookingtrain.model.User;
 import com.example.bookingtrain.response.ResponseObject;
 import com.example.bookingtrain.service.BookingService;
+import com.example.bookingtrain.service.EmailService;
 import com.example.bookingtrain.service.EmployeeService;
 import com.example.bookingtrain.service.PassengerService;
 import com.example.bookingtrain.service.PaymentService;
 import com.example.bookingtrain.service.TicketService;
 import com.example.bookingtrain.service.ObjectService;
+import com.example.bookingtrain.service.UserService;
+import com.example.bookingtrain.utils.QRCodeGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +25,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/payment")
@@ -38,6 +50,12 @@ public class PaymentController {
     private final ObjectMapper objectMapper;
     private final ObjectService objectService;
     private final PaymentService paymentService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public PaymentController(BookingService bookingService,
@@ -57,80 +75,83 @@ public class PaymentController {
     }
 
     @PostMapping("/create")
-    public String createPayment(@RequestParam Double totalPrice,
-            @RequestParam("passengerData") String passengerDataJson,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-        try {
-            // Validate user login
-            Integer userId = (Integer) session.getAttribute("userId");
-            if (userId == null) {
-                return "redirect:/login";
-            }
+    public Map<String, Object> createPayment(Integer userId, Integer scheduleId, Double totalPrice,
+            String passengerDataJson, HttpSession session) throws Exception {
+        // Create booking
+        Employee employee = employeeService.findByUserId(userId);
+        Integer employeeId = employee != null ? employee.getEmployeeId() : null;
+        Booking booking = new Booking();
+        booking.setUserId(userId);
+        booking.setEmployeeId(employeeId);
+        booking.setScheduleId(scheduleId);
+        booking.setTotal(totalPrice);
+        booking.setDateBooking(new Date());
+        booking.setStatusBooking(1);
+        Booking savedBooking = bookingService.save(booking);
 
-            // Get schedule ID from session
-            Integer scheduleId = (Integer) session.getAttribute("scheduleId");
-            if (scheduleId == null) {
-                redirectAttributes.addFlashAttribute("error", "Schedule ID not found");
-                return "redirect:/home";
-            }
+        // Parse passenger data
+        List<Passenger> passengers = objectMapper.readValue(passengerDataJson,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Passenger.class));
 
-            // Get employee ID if exists
-            Employee employee = employeeService.findByUserId(userId);
-            Integer employeeId = employee != null ? employee.getEmployeeId() : null;
+        // Save passengers and create tickets
+        for (int i = 0; i < passengers.size(); i++) {
+            Passenger passenger = passengers.get(i);
+            Passenger savedPassenger = passengerService.save(passenger);
 
-            // Create booking
-            Booking booking = new Booking();
-            booking.setUserId(userId);
-            booking.setEmployeeId(employeeId);
-            booking.setScheduleId(scheduleId);
-            booking.setTotal(totalPrice);
-            booking.setDateBooking(new Date());
-            booking.setStatusBooking(1);
+            // Get seatId from session using passenger index
+            Integer seatId = (Integer) session.getAttribute("seatId_" + (i + 1));
 
-            // Save booking
-            Booking savedBooking = bookingService.save(booking);
+            Ticket ticket = new Ticket();
+            ticket.setBookingId(savedBooking.getBookingId());
+            ticket.setPassengerId(savedPassenger.getPassengerId());
+            ticket.setSeatId(seatId);
+            ticket.setIsActive(1);
 
-            // Parse passenger data
-            List<Passenger> passengers = objectMapper.readValue(passengerDataJson,
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, Passenger.class));
-
-            // Save passengers and create tickets
-            for (int i = 0; i < passengers.size(); i++) {
-
-                Passenger passenger = passengers.get(i);
-
-                Passenger savedPassenger = passengerService.save(passenger);
-
-                // Get seatId from session using passenger index
-                Integer seatId = (Integer) session.getAttribute("seatId_" + (i + 1));
-
-                Ticket ticket = new Ticket();
-                ticket.setBookingId(savedBooking.getBookingId());
-                ticket.setPassengerId(savedPassenger.getPassengerId());
-                ticket.setSeatId(seatId);
-                ticket.setIsActive(1);
-
-                ticketService.save(ticket);
-            }
-
-            // Clear schedule and seatId from session
-            session.removeAttribute("scheduleId");
-            for (int i = 0; i < passengers.size(); i++) {
-                session.removeAttribute("seatId_" + (i + 1));
-            }
-
-            // Add success message
-            redirectAttributes.addFlashAttribute("success",
-                    "Payment successful! Booking ID: " + savedBooking.getBookingId());
-
-            return "redirect:/home";
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error",
-                    "Payment failed: " + e.getMessage());
-            return "redirect:/home";
+            ticketService.save(ticket);
         }
+
+        // Clear schedule and seatId from session
+        session.removeAttribute("scheduleId");
+        for (int i = 0; i < passengers.size(); i++) {
+            session.removeAttribute("seatId_" + (i + 1));
+        }
+
+        // Generate QR code
+        String qrContent = "Booking ID: " + savedBooking.getBookingId() + "\n" +
+                "Total Price: " + totalPrice + "\n" +
+                "Date: " + new Date();
+        byte[] qrCodeImage = QRCodeGenerator.generateQRCodeImage(qrContent, 200, 200);
+        String qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeImage);
+
+        // Send email with order information and QR code
+        User user = userService.getUserById(userId);
+        String emailContent = "Dear " + user.getUsername() + ",\n\n" +
+                "Your booking has been successfully created. Here are the details:\n" +
+                "Booking ID: " + savedBooking.getBookingId() + "\n" +
+                "Total Price: " + totalPrice + "\n" +
+                "Date: " + new Date() + "\n\n" +
+                "Thank you for choosing our service.\n\n" +
+                "Best regards,\n" +
+                "Booking Train Team";
+
+        emailService.sendEmailWithAttachment(user.getEmail(), "Booking Confirmation", emailContent, qrCodeImage,
+                "booking_qr_code.png");
+
+        // Create booking details for view
+        Map<String, Object> bookingDetails = new HashMap<>();
+        bookingDetails.put("bookingId", booking.getBookingId());
+        bookingDetails.put("dateBooking", booking.getDateBooking());
+        Schedule schedule = savedBooking.getSchedule();
+        if (schedule != null) {
+            bookingDetails.put("departureStation", schedule.getStationDeparture().getStationName());
+            bookingDetails.put("arrivalStation", schedule.getStationArrival().getStationName());
+            bookingDetails.put("routeInfo", schedule.getRoute().getRouteName());
+            bookingDetails.put("departureTime", schedule.getStartDeparture());
+        }
+        bookingDetails.put("totalPrice", booking.getTotal());
+        bookingDetails.put("qrCodeBase64", qrCodeBase64);
+
+        return bookingDetails;
     }
 
     @PostMapping("/session/saveSeatId")
@@ -145,188 +166,140 @@ public class PaymentController {
     // ------------------ Phần VNPay ------------------
 
     @GetMapping("/vn-pay")
-    public ResponseObject<PaymentDTO.VNPayResponse> pay(HttpServletRequest request) {
-        return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(request));
+    public RedirectView pay(HttpServletRequest request) {
+        PaymentDTO.VNPayResponse response = paymentService.createVnPayPayment(request);
+        return new RedirectView(response.getPaymentUrl());
+    }
+
+    // @GetMapping("/vn-pay")
+    // public ResponseObject<PaymentDTO.VNPayResponse> pay(HttpServletRequest
+    // request) {
+    // return new ResponseObject<>(HttpStatus.OK, "Success",
+    // paymentService.createVnPayPayment(request));
+    // }
+
+    // @GetMapping("/vn-pay-callback")
+    // public ModelAndView payCallbackHandler(HttpServletRequest request) {
+    // String status = request.getParameter("vnp_ResponseCode");
+    // if (status != null && status.equals("00")) {
+    // return new ModelAndView("Client/Components/PaymentConfirmation");
+    // } else {
+    // ModelAndView modelAndView = new
+    // ModelAndView("Client/Components/PaymentConfirmation");
+    // modelAndView.addObject("status", status);
+    // modelAndView.addObject("message", "Payment failed. Please try again.");
+    // return modelAndView;
+    // }
+    // }
+
+    // @GetMapping("/vn-pay-callback")
+    // public ModelAndView payCallbackHandler(HttpServletRequest request,
+    // HttpSession session,
+    // RedirectAttributes redirectAttributes) {
+    // String status = request.getParameter("vnp_ResponseCode");
+    // if (status != null && status.equals("00")) {
+    // // Lấy các tham số cần thiết từ session hoặc request
+    // Double totalPrice = (Double) session.getAttribute("totalPrice");
+    // String passengerDataJson = (String)
+    // session.getAttribute("passengerDataJson");
+
+    // // Gọi lại hàm createPayment
+    // return new ModelAndView(createPayment(totalPrice, passengerDataJson, session,
+    // redirectAttributes));
+    // } else {
+    // ModelAndView modelAndView = new
+    // ModelAndView("Client/Components/PaymentConfirmation");
+    // modelAndView.addObject("status", status);
+    // modelAndView.addObject("message", "Payment failed. Please try again.");
+    // return modelAndView;
+    // }
+    // }
+
+    @PostMapping("/session/saveTotalPriceAndPassengerData")
+    @ResponseBody
+    public ResponseEntity<?> saveTotalPriceAndPassengerData(@RequestParam Double totalPrice,
+            @RequestParam String passengerData, HttpSession session) {
+        session.setAttribute("totalPrice", totalPrice);
+        session.setAttribute("passengerDataJson", passengerData);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/vn-pay-callback")
-    public ResponseObject<PaymentDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request) {
+    public ModelAndView payCallbackHandler(HttpServletRequest request, HttpSession session,
+            RedirectAttributes redirectAttributes) {
         String status = request.getParameter("vnp_ResponseCode");
-        if (status.equals("00")) {
-            return new ResponseObject<>(HttpStatus.OK, "Success", new PaymentDTO.VNPayResponse("00", "Success", ""));
-        } else {
-            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
+        ModelAndView modelAndView = new ModelAndView("Client/Components/PaymentConfirmation");
+        try {
+            if (status != null && status.equals("00")) {
+                Double totalPrice = (Double) session.getAttribute("totalPrice");
+                String passengerDataJson = (String) session.getAttribute("passengerDataJson");
+                Integer userId = (Integer) session.getAttribute("userId");
+                Integer scheduleId = (Integer) session.getAttribute("scheduleId");
+                if (userId == null || scheduleId == null) {
+                    throw new RuntimeException("Missing session data");
+                }
+
+                // Call createPayment method
+                Map<String, Object> bookingDetails = createPayment(userId, scheduleId, totalPrice, passengerDataJson,
+                        session);
+
+                modelAndView.addObject("bookingDetails", bookingDetails);
+                modelAndView.addObject("totalPrice", totalPrice);
+                modelAndView.addObject("passengerDataJson", passengerDataJson);
+            } else {
+                modelAndView.addObject("status", status);
+                modelAndView.addObject("message", "Payment failed. Please try again.");
+            }
+        } catch (Exception e) {
+            modelAndView.addObject("status", "error");
+            modelAndView.addObject("message", "An error occurred: " + e.getMessage());
         }
+        return modelAndView;
     }
 
+    // @GetMapping("/vn-pay-callback")
+    // public ModelAndView payCallbackHandler(HttpServletRequest request,
+    // HttpSession session,
+    // RedirectAttributes redirectAttributes) {
+    // String status = request.getParameter("vnp_ResponseCode");
+    // if (status != null && status.equals("00")) {
+    // // Lấy các tham số cần thiết từ session hoặc request
+    // Double totalPrice = (Double) session.getAttribute("totalPrice");
+    // String passengerDataJson = (String)
+    // session.getAttribute("passengerDataJson");
+
+    // // Gọi lại hàm createPayment
+    // return new ModelAndView(createPayment(totalPrice, passengerDataJson, session,
+    // redirectAttributes));
+    // } else {
+    // ModelAndView modelAndView = new
+    // ModelAndView("Client/Components/PaymentConfirmation");
+    // modelAndView.addObject("status", status);
+    // modelAndView.addObject("message", "Payment failed. Please try again.");
+    // return modelAndView;
+    // }
+    // }
+
+    // @GetMapping("/vn-pay-callback")
+    // public ResponseObject<PaymentDTO.VNPayResponse>
+    // payCallbackHandler(HttpServletRequest request) {
+    // String status = request.getParameter("vnp_ResponseCode");
+    // if (status.equals("00")) {
+    // PaymentDTO.VNPayResponse vnPayResponse = new PaymentDTO.VNPayResponse(
+    // "00",
+    // "Success",
+    // "Client/Components/PaymentConfirmation");
+
+    // return new ResponseObject<>(
+    // HttpStatus.OK,
+    // "Success",
+    // vnPayResponse);
+    // } else {
+    // return new ResponseObject<>(
+    // HttpStatus.BAD_REQUEST,
+    // "Failed",
+    // null);
+    // }
+    // }
+
 }
-
-// package com.example.bookingtrain.controller;
-
-// import com.example.bookingtrain.model.Booking;
-// import com.example.bookingtrain.model.Employee;
-// import com.example.bookingtrain.model.Passenger;
-// import com.example.bookingtrain.model.Ticket;
-// import com.example.bookingtrain.service.BookingService;
-// import com.example.bookingtrain.service.EmployeeService;
-// import com.example.bookingtrain.service.PassengerService;
-// import com.example.bookingtrain.service.TicketService;
-// import com.example.bookingtrain.service.ObjectService;
-// import com.example.bookingtrain.service.SeatService;
-// import com.fasterxml.jackson.databind.ObjectMapper;
-
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.stereotype.Controller;
-// import org.springframework.web.bind.annotation.*;
-// import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-// import javax.servlet.http.HttpSession;
-// import java.time.LocalDate;
-// import java.time.Period;
-// import java.util.Date;
-// import java.util.List;
-
-// @Controller
-// @RequestMapping("/payment")
-// public class PaymentController {
-
-// private final BookingService bookingService;
-// private final EmployeeService employeeService;
-// private final PassengerService passengerService;
-// private final TicketService ticketService;
-// private final ObjectMapper objectMapper;
-// private final ObjectService objectService;
-// private final SeatService seatService;
-
-// @Autowired
-// public PaymentController(BookingService bookingService,
-// EmployeeService employeeService,
-// PassengerService passengerService,
-// TicketService ticketService,
-// ObjectMapper objectMapper,
-// ObjectService objectService,
-// SeatService seatService) {
-// this.bookingService = bookingService;
-// this.employeeService = employeeService;
-// this.passengerService = passengerService;
-// this.ticketService = ticketService;
-// this.objectMapper = objectMapper;
-// this.objectService = objectService;
-// this.seatService = seatService;
-// }
-
-// @PostMapping("/create")
-// public String createPayment(@RequestParam("passengerData") String
-// passengerDataJson,
-// HttpSession session,
-// RedirectAttributes redirectAttributes) {
-// try {
-// // Validate user login
-// Integer userId = (Integer) session.getAttribute("userId");
-// if (userId == null) {
-// return "redirect:/login";
-// }
-
-// // Get schedule ID from session
-// Integer scheduleId = (Integer) session.getAttribute("scheduleId");
-// if (scheduleId == null) {
-// redirectAttributes.addFlashAttribute("error", "Schedule ID not found");
-// return "redirect:/home";
-// }
-
-// // Get employee ID if exists
-// Employee employee = employeeService.findByUserId(userId);
-// Integer employeeId = employee != null ? employee.getEmployeeId() : null;
-
-// // Parse passenger data
-// List<Passenger> passengers = objectMapper.readValue(passengerDataJson,
-// objectMapper.getTypeFactory().constructCollectionType(List.class,
-// Passenger.class));
-
-// double totalPrice = 0;
-
-// // Calculate total price based on passengers
-// for (int i = 0; i < passengers.size(); i++) {
-// Passenger passenger = passengers.get(i);
-
-// // Get seatId from session using passenger index
-// Integer seatId = (Integer) session.getAttribute("seatId_" + (i + 1));
-// double seatPrice = seatService.findSeatPriceBySeatId(seatId);
-
-// // Determine object price based on age
-// int age = Period.between(passenger.getDateOfBirth(),
-// LocalDate.now()).getYears();
-// int objectPrice = 0;
-// if (age < 18) {
-// objectPrice = objectService.getObjectById(1).getPrice(); // Giá của đối tượng
-// Trẻ Em
-// } else if (age >= 60) {
-// objectPrice = objectService.getObjectById(3).getPrice(); // Giá của đối tượng
-// Người Già
-// } else {
-// objectPrice = objectService.getObjectById(2).getPrice(); // Giá của đối tượng
-// Người Lớn
-// }
-
-// double finalPrice = objectPrice + seatPrice;
-// totalPrice += finalPrice;
-// }
-
-// // Create booking
-// Booking booking = new Booking();
-// booking.setUserId(userId);
-// booking.setEmployeeId(employeeId);
-// booking.setScheduleId(scheduleId);
-// booking.setTotal(totalPrice);
-// booking.setDateBooking(new Date());
-// booking.setStatusBooking(1);
-
-// // Save booking
-// Booking savedBooking = bookingService.save(booking);
-
-// // Save passengers and create tickets
-// for (int i = 0; i < passengers.size(); i++) {
-// Passenger passenger = passengers.get(i);
-// Passenger savedPassenger = passengerService.save(passenger);
-
-// // Get seatId from session using passenger index
-// Integer seatId = (Integer) session.getAttribute("seatId_" + (i + 1));
-
-// Ticket ticket = new Ticket();
-// ticket.setBookingId(savedBooking.getBookingId());
-// ticket.setPassengerId(savedPassenger.getPassengerId());
-// ticket.setSeatId(seatId);
-// ticket.setIsActive(1);
-
-// ticketService.save(ticket);
-// }
-
-// // Clear schedule and seatId from session
-// session.removeAttribute("scheduleId");
-// for (int i = 0; i < passengers.size(); i++) {
-// session.removeAttribute("seatId_" + (i + 1));
-// }
-
-// // Add success message
-// redirectAttributes.addFlashAttribute("success",
-// "Payment successful! Booking ID: " + savedBooking.getBookingId());
-
-// return "redirect:/home";
-
-// } catch (Exception e) {
-// redirectAttributes.addFlashAttribute("error",
-// "Payment failed: " + e.getMessage());
-// return "redirect:/home";
-// }
-// }
-
-// @PostMapping("/session/saveSeatId")
-// @ResponseBody
-// public ResponseEntity<?> saveSeatId(@RequestParam Integer passengerIndex,
-// @RequestParam Integer seatId,
-// HttpSession session) {
-// session.setAttribute("seatId_" + passengerIndex, seatId);
-// return ResponseEntity.ok().build();
-// }
-// }

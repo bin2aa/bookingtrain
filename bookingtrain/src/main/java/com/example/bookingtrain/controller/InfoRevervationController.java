@@ -24,16 +24,16 @@ public class InfoRevervationController {
 
     @GetMapping("/searchTickets")
     public String searchTickets(
-            @RequestParam("sd") Long sd,
-            @RequestParam("sa") Long sa,
-            @RequestParam("da") String da,
+            @RequestParam("sd") Long sd, // Departure station ID
+            @RequestParam("sa") Long sa, // Arrival station ID
+            @RequestParam("da") String da, // Departure date
             @RequestParam(defaultValue = "0") int page,
             Model model) {
 
-        int pageSize = 5; // Number of tickets per page
+        int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<InforReservationDTO> ticketsPage = reservationService
-                .getReservationsWithPagination(sd, sa, da, pageable);
+                .getReservationsWithPagination(sd, sa, da, pageable); // Chú ý thứ tự tham số ở đây
 
         List<Station> stations = stationService.getAll();
 
@@ -43,11 +43,11 @@ public class InfoRevervationController {
         model.addAttribute("totalPages", ticketsPage.getTotalPages());
         model.addAttribute("baseUrl", "/searchTickets");
 
-        // Add search parameters for pagination links
         model.addAttribute("sd", sd);
         model.addAttribute("sa", sa);
         model.addAttribute("da", da);
 
         return "Client/Components/Ticket";
     }
+
 }

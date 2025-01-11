@@ -1,29 +1,22 @@
 package com.example.bookingtrain.DTO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class StationArrivalStatistic {
     private String stationArrivalId;
+    private int year;
+    private int month;
+    private int day;
     private long arrivalCount;
 
-    // Constructor
-    public StationArrivalStatistic(String stationArrivalId, long arrivalCount) {
+    public StationArrivalStatistic(String stationArrivalId, int year, int month, int day, long arrivalCount) {
         this.stationArrivalId = stationArrivalId;
-        this.arrivalCount = arrivalCount;
-    }
-
-    // Getters and Setters
-    public String getStationArrivalId() {
-        return stationArrivalId;
-    }
-
-    public void setStationArrivalId(String stationArrivalId) {
-        this.stationArrivalId = stationArrivalId;
-    }
-
-    public long getArrivalCount() {
-        return arrivalCount;
-    }
-
-    public void setArrivalCount(long arrivalCount) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
         this.arrivalCount = arrivalCount;
     }
 }

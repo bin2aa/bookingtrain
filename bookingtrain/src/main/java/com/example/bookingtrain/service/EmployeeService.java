@@ -44,7 +44,7 @@ public class EmployeeService {
     }
 
     public Employee findByUserId(Integer userId) {
-        return employeeRepository.findByUserId(userId);
+        return employeeRepository.findByUserId(userId).orElse(null);
     }
 
 }

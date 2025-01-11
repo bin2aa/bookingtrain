@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class ScheduleService {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public List<Schedule> getAllSchedules() {
         return scheduleRepository.findAll();
@@ -52,5 +56,17 @@ public class ScheduleService {
 
     public void deleteSchedule(Integer id) {
         scheduleRepository.deleteById(id);
+    }
+
+    public int getPassengerCount(int scheduleId) {
+        return scheduleRepository.countPassengersByScheduleId(scheduleId, jdbcTemplate);
+    }
+
+    public List<String> getPassengerNames(int scheduleId) {
+        return scheduleRepository.findPassengerNamesByScheduleId(scheduleId);
+    }
+
+    public Page<Schedule> searchSchedulesByStatus(int status, Pageable pageable) {
+        return scheduleRepository.findByStatus(status, pageable);
     }
 }

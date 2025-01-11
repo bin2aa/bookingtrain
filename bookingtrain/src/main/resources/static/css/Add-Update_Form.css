@@ -8,6 +8,8 @@
 #addRouteContainer,
 #addObjectContainer,
 #addEmployeeContainer,
+#addSeatContainer,
+#addSeatTypeContainer,
 /* ------------------------- */
 #editRoleContainer,
 #editUserContainer,
@@ -18,7 +20,9 @@
 #editScheduleContainer,
 #editRouteContainer,
 #editObjectContainer,
-#editEmployeeContainer
+#editEmployeeContainer,
+#editSeatContainer,
+#editSeatTypeContainer
  {
     position: fixed;
     top: 50%;

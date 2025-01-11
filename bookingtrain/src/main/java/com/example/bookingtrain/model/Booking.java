@@ -1,5 +1,7 @@
 package com.example.bookingtrain.model;
 
+import java.util.List;
+
 import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,4 +46,7 @@ public class Booking {
 
     @Column(nullable = true)
     private int statusBooking;
+
+    @OneToMany(mappedBy = "booking")
+    private List<Ticket> tickets;
 }

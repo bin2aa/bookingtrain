@@ -55,6 +55,9 @@ public class StationService implements IStationService {
             existingStation.setStatusStation(updatedStation.getStatusStation());
             existingStation.setDescription(updatedStation.getDescription());
             existingStation.setImage(updatedStation.getImage());
+            existingStation.setLatitude(updatedStation.getLatitude());
+            existingStation.setLongitude(updatedStation.getLongitude());
+            existingStation.setAddress(updatedStation.getAddress());
             return stationRepository.saveAndFlush(existingStation);
         }
         return null;

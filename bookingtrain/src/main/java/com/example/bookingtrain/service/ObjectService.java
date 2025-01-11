@@ -35,4 +35,16 @@ public class ObjectService {
         return getObjectById(id);
     }
 
+    public void initializeDefaultObjects() {
+        if (objectRepository.findById(1).isEmpty()) {
+            objectRepository.save(new Object(1, "Trẻ Em", 50000));
+        }
+        if (objectRepository.findById(2).isEmpty()) {
+            objectRepository.save(new Object(2, "Người Lớn", 100000));
+        }
+        if (objectRepository.findById(3).isEmpty()) {
+            objectRepository.save(new Object(3, "Người Già", 70000));
+        }
+    }
+
 }

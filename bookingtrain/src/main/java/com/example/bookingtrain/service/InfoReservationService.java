@@ -9,16 +9,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class InfoReservationService {
+
     @Autowired
-    public InfoReservationRepository infoReservationRepository;
+    private InfoReservationRepository reservationRepository;
 
-    public Page<InforReservationDTO> getReservationsWithPagination(
-            Long stationDepartureId,
-            Long stationArrivalId,
-            String travelDate,
-            Pageable pageable) {
-        return infoReservationRepository.findAvailableSeatsByStationsWithPagination(
-                stationDepartureId, stationArrivalId, travelDate, pageable);
+    public Page<InforReservationDTO> getReservationsWithPagination(Long sd, Long sa, String da, Pageable pageable) {
+        return reservationRepository.findAvailableSeatsByStationsWithPagination(sd, sa, da, pageable);
     }
-
 }

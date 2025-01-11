@@ -9,7 +9,7 @@
 <body>
     <h1>Add New permission</h1>
     <div class="addPermission">
-        <form th:action="@{/permissions/savePermission}" th:object="${permission}" method="post">
+        <form th:action="@{/permissions/addPermission}" th:object="${permission}" method="post">
             <div>
                 <label for="permissionName">permission Name:</label>
                 <input type="text" id="permissionName" th:field="*{permissionName}" required>

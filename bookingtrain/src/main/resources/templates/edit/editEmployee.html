@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="/fragments/header :: head">
+<head >
     <title>Edit Employee</title>
 </head>
 
-<body th:replace="/fragments/body :: body">
+<body >
     <div th:fragment="mainContent">
         <h1 class="mb-4">Edit Employee</h1>
         <form th:action="@{/employees/edit}" th:object="${employee}" method="post" class="needs-validation" novalidate>

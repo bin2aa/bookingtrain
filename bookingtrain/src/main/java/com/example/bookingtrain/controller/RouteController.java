@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class RouteController {
     @Autowired
     private TrainService trainService;
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 1)")
     @GetMapping
     public String getAllRoutes(@RequestParam(defaultValue = "0") int page, Model model) {
         int pageSize = 8;
@@ -43,6 +45,7 @@ public class RouteController {
         return "list/routeList";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 2)")
     @GetMapping("/newRoute")
     public String addRouteForm(Model model) {
         model.addAttribute("route", new Route());
@@ -51,12 +54,14 @@ public class RouteController {
         return "add/addRoute";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 2)")
     @PostMapping("/addRoute")
     public String addRoute(@ModelAttribute Route route) {
         routeService.createRoute(route);
         return "redirect:/routes";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 4)")
     @GetMapping("/editRoute/{routeId}")
     public String editRouteForm(@PathVariable Integer routeId, Model model) {
         Route route = routeService.getRouteById(routeId);
@@ -66,12 +71,14 @@ public class RouteController {
         return "edit/editRoute";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 4)")
     @PostMapping("/edit")
     public String editRoute(@ModelAttribute Route route) {
         routeService.updateRoute(route);
         return "redirect:/routes";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 4)")
     @PostMapping("/editJson")
     @ResponseBody
     public String editRouteStatus(@RequestBody Map<String, Integer> payload) {
@@ -87,6 +94,7 @@ public class RouteController {
         return "success";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'routes', 3)")
     @GetMapping("/deleteRoute/{id}")
     public String deleteRoute(@PathVariable Integer id) {
         routeService.deleteRoute(id);

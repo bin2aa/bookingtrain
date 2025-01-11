@@ -14,9 +14,13 @@ public class DetailSeatService {
     @Autowired
     DetailSeatRepository detailSeatRepository;
 
-    public List<DetailSeatDTO> findSeatsByTrainId(int trainId) {
-        log.info(detailSeatRepository.findSeatsByTrainId(trainId).toString());
-        return detailSeatRepository.findSeatsByTrainId(trainId);
+    // public List<DetailSeatDTO> findSeatsByTrainId(int trainId) {
+    // log.info(detailSeatRepository.findSeatsByTrainId(trainId).toString());
+    // return detailSeatRepository.findSeatsByTrainId(trainId);
+    // }
+
+    public List<DetailSeatDTO> findSeatsByTrainId(int trainId, int scheduleId) {
+        return detailSeatRepository.findAvailableSeatsByTrainAndSchedule(trainId, scheduleId);
     }
 
 }

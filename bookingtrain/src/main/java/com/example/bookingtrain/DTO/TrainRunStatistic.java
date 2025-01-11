@@ -1,36 +1,20 @@
 package com.example.bookingtrain.DTO;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class TrainRunStatistic {
-    // Getters and Setters
+    private int day;
     private int month;
     private int year;
-    private String trainCode;
-    private long totalRuns;
+    private long count;
 
-    // Constructor
-    public TrainRunStatistic(int month, int year, String trainCode, long totalRuns) {
+    public TrainRunStatistic(int day, int month, int year, long count) {
+        this.day = day;
         this.month = month;
         this.year = year;
-        this.trainCode = trainCode;
-        this.totalRuns = totalRuns;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public void setTrainId(String trainCode) {
-        this.trainCode = trainCode;
-    }
-
-    public void setTotalRuns(long totalRuns) {
-        this.totalRuns = totalRuns;
+        this.count = count;
     }
 }

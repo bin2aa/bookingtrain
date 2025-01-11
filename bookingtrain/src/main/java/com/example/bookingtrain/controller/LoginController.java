@@ -1,5 +1,7 @@
 package com.example.bookingtrain.controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.bookingtrain.model.User;
+import com.example.bookingtrain.service.EmailService;
 import com.example.bookingtrain.service.UserService;
 
 import org.springframework.ui.Model;
@@ -23,6 +28,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/login")
     public String login(Model model, HttpSession session) {
@@ -144,5 +152,53 @@ public class LoginController {
     @ResponseBody
     public Integer getUserId(HttpSession session) {
         return (Integer) session.getAttribute("userId");
+    }
+
+    // Trong LoginController.java
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy tài khoản với địa chỉ email này.");
+            return "redirect:/login";
+        }
+
+        // Tạo token đặt lại mật khẩu và lưu nó
+        String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+
+        // Gửi email
+        String resetUrl = "http://localhost:8080/reset-password?token=" + token;
+        emailService.sendPasswordResetEmail(user.getEmail(), resetUrl);
+
+        redirectAttributes.addFlashAttribute("message", "Một liên kết đặt lại mật khẩu đã được gửi đến email của bạn.");
+        return "redirect:/login";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        String result = userService.validatePasswordResetToken(token);
+        if (result != null) {
+            model.addAttribute("error", "Token không hợp lệ hoặc đã hết hạn.");
+            return "redirect:/login";
+        }
+        model.addAttribute("token", token);
+        return "login/reset-password"; // Đảm bảo đường dẫn này đúng với vị trí của file reset-password.html
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam("token") String token, @RequestParam("password") String password,
+            RedirectAttributes redirectAttributes) {
+        String result = userService.validatePasswordResetToken(token);
+        if (result != null) {
+            redirectAttributes.addFlashAttribute("error", "Token không hợp lệ hoặc đã hết hạn.");
+            return "redirect:/login";
+        }
+
+        User user = userService.getUserByPasswordResetToken(token);
+        userService.changeUserPassword(user, password);
+
+        redirectAttributes.addFlashAttribute("message", "Mật khẩu của bạn đã được đặt lại thành công.");
+        return "redirect:/login";
     }
 }

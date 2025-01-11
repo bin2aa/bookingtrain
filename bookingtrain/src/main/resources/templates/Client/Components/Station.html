@@ -4,46 +4,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách Các Ga</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Hệ Thống Ga Tàu</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Mono:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <style>
+        :root {
+            --primary-dark: #0F1020;
+            --primary-blue: #1B2845;
+            --neon-cyan: #00FFFF;
+            --neon-purple: #8A4FFF;
+            --text-primary: #E0E0E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        .space-header {
+            background: rgba(27, 40, 69, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .station-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .station-card {
-            transition: transform 0.3s ease;
+            background: linear-gradient(145deg, rgba(27, 40, 69, 0.8), rgba(15, 16, 32, 0.8));
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(138, 79, 255, 0.2);
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .station-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--neon-cyan), var(--neon-purple));
         }
 
         .station-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: rotateX(10deg) rotateY(10deg) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--neon-purple);
+        }
+
+        .station-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(0.8);
+            transition: transform 0.5s ease;
+        }
+
+        .station-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .station-details {
+            padding: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .station-details h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .station-details h3::before {
+            content: '🚉';
+            font-size: 1.5rem;
+        }
+
+        .station-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .station-info p {
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .station-info p::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--neon-cyan), var(--neon-purple));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .station-info p:hover::after {
+            transform: scaleX(1);
+        }
+
+        .status-active {
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-inactive {
+            color: #FF4136;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: -50px auto 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-input {
+            background: rgba(27, 40, 69, 0.7);
+            border: 2px solid var(--neon-cyan);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            border-color: var(--neon-purple);
+        }
+
+        @media (max-width: 768px) {
+            .station-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .station-card {
+                margin-bottom: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="fixed-top w-100">
-        <div th:replace="Client/Header :: Header"></div>
-    </div>
-    <div class="container my-5">
-        <h1 class="text-center mb-5">Danh Sách Các Ga</h1>
-        <div class="row" id="stationGrid">
-            <!-- Sử dụng Thymeleaf để lặp qua danh sách các ga và hiển thị -->
-            <div th:each="station : ${stations}" class="col-md-4 mb-4">
-                <div class="card station-card">
-                    <img th:src="@{/img/stationImg/{image}(image=${station.image})}" class="card-img-top"
-                        th:alt="${station.stationName}">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${station.stationName}">Tên Ga</h5>
-                        <p class="card-text">Mã Ga: <span th:text="${station.stationCode}">Mã Ga</span></p>
-                        <p class="card-text">Trạng Thái: <span
-                                th:text="${station.statusStation == 1 ? 'Đang hoạt động' : 'Không hoạt động'}">Trạng
-                                Thái</span></p>
-                        <p class="card-text">Mô Tả: <span
-                                th:text="${station.description != null ? station.description : 'Không có mô tả'}">Mô
-                                Tả</span></p>
+    <nav th:replace="~{Client/Header :: Header}"></nav>
+    <header class="space-header">
+        <div class="container">
+            <h1 class="header-title animate__animated animate__fadeInDown">
+                Hệ Thống Ga Tàu
+            </h1>
+            <p class="lead animate__animated animate__fadeInUp text-light">
+                Khám Phá Các Ga Tàu Tiên Tiến
+            </p>
+        </div>
+    </header>
+
+    <!-- <div class="container search-container">
+        <input type="text" class="form-control search-input" placeholder="Tìm kiếm ga tàu...">
+    </div> -->
+
+    <main class="container">
+        <div class="station-grid">
+            <div th:each="station : ${stations}" class="station-card">
+                <img th:src="@{/img/stationImg/{image}(image=${station.image})}" th:alt="${station.stationName}"
+                    loading="lazy">
+                <div class="station-details">
+                    <a th:href="@{/stations/client/stations/map/{id} (id=${station.stationId})}">
+                        <h3 th:text="${station.stationName}">Tên Ga</h3>
+                    </a>
+                    <div class="station-info">
+                        <p>
+                            <strong>Mã Ga:</strong>
+                            <span th:text="${station.stationCode}">Mã Ga</span>
+                        </p>
+                        <p>
+                            <strong>Trạng Thái:</strong>
+                            <span th:text="${station.statusStation == 1 ? 'Đang hoạt động' : 'Không hoạt động'}"
+                                th:class="${station.statusStation == 1 ? 'status-active' : 'status-inactive'}">
+                                Trạng Thái
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Mô Tả:</strong>
+                            <span th:text="${station.description != null ? station.description : 'Không có mô tả'}">
+                                Mô Tả
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

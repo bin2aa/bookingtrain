@@ -1,10 +1,8 @@
 package com.example.bookingtrain.config;
 
 import org.springframework.context.annotation.Configuration;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 import com.example.bookingtrain.utils.VNPayUtil;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

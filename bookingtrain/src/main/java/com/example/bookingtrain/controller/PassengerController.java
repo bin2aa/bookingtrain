@@ -2,12 +2,14 @@ package com.example.bookingtrain.controller;
 
 import com.example.bookingtrain.model.Passenger;
 import com.example.bookingtrain.service.ObjectService;
+
 import com.example.bookingtrain.service.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,7 @@ public class PassengerController {
         this.objectService = objectService;
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'passengers', 1)")
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
@@ -118,6 +121,9 @@ public class PassengerController {
         model.addAttribute("dateDeparture", dateDeparture);
         model.addAttribute("timeArrival", timeArrival);
         model.addAttribute("dateArrival", dateArrival);
+
+        List<com.example.bookingtrain.model.Object> objects = objectService.getAllObjects();
+        model.addAttribute("objects", objects);
 
         return "Client/Components/Passenger";
     }

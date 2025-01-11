@@ -31,6 +31,7 @@ public class StationController {
         this.stationService = stationService;
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 1)")
     @GetMapping("")
     public String showList(@RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String search,
             Model model) {
@@ -52,12 +53,14 @@ public class StationController {
         return "list/stationList";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 2)")
     @GetMapping("/addStation")
     public String showAddForm(Model model) {
         model.addAttribute("station", new Station());
         return "add/addStation";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 2)")
     @PostMapping("/saveStation")
     public String saveStation(@ModelAttribute("station") Station station,
             @RequestParam("imageFile") MultipartFile multipartFile,
@@ -80,6 +83,7 @@ public class StationController {
         return "redirect:/stations";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 4)")
     @GetMapping("/editStation/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Station station = stationService.getById(id);
@@ -90,6 +94,7 @@ public class StationController {
         return "redirect:/stations";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 4)")
     @PostMapping("/editJson")
     @ResponseBody
     public String editStationStatus(@RequestBody Map<String, Integer> payload) {
@@ -105,6 +110,7 @@ public class StationController {
         return "success";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 4)")
     @PostMapping("/updateStation")
     public String updateStation(@ModelAttribute("station") Station station,
             @RequestParam("imageFile") MultipartFile multipartFile,
@@ -133,6 +139,7 @@ public class StationController {
         return "redirect:/stations";
     }
 
+    @PreAuthorize("@roleOperationService.hasPermission(authentication, 'stations', 3)")
     @GetMapping("/deleteStation/{id}")
     public String deleteStation(@PathVariable("id") Integer id) {
         stationService.deleteStation(id);
@@ -140,12 +147,19 @@ public class StationController {
     }
 
     // Ai dang nhap duoc thi vo duoc
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     @GetMapping("/client/stations")
     public String showStationList(Model model) {
         List<Station> stations = stationService.getAll();
         model.addAttribute("stations", stations);
         return "Client/Components/Station";
+    }
+
+    @GetMapping("/client/stations/map/{id}")
+    public String showMap(@PathVariable("id") int stationId, Model model) {
+        Station station = stationService.getById(stationId);
+        model.addAttribute("station", station);
+        return "/Client/Components/Map";
     }
 
 }
